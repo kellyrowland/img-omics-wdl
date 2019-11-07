@@ -54,14 +54,50 @@ workflow metagenomeAnnotation {
   }
 
   scatter(n in setup.n_splits) {
-#    call annotate {
-#      input:
-#        split_index=split,
-#    }
-     call test {
-       input:
-         val=n
-     }
+#     call test {
+#       input:
+#         val=n,
+#         dir=imgap_input_dir,
+#         fasta=imgap_input_fasta
+#     }
+    # structural annotation
+    if(sa_execute && sa_pre_qc_execute) {
+      call pre_qc {
+        input:
+          qc_bin = sa_pre_qc_bin,
+          project_type = imgap_project_type,
+          val=n,
+          dir=imgap_input_dir,
+          input_fasta = imgap_input_fasta,
+          project_id = imgap_project_id,
+          rename = sa_pre_qc_rename
+      }
+    }
+    if(sa_execute && sa_trnascan_se_execute) {
+      call trnascan_se {
+        input:
+      }
+    }
+    if(sa_execute && sa_rfam_execute) {
+      call rfam {
+        input:
+      }
+    }
+    if(sa_execute && sa_crt_execute) {
+      call crt {
+        input:
+      }
+    }
+    if(sa_execute && sa_prodigal_execute) {
+      call prodigal {
+        input:
+      }
+    }
+    if(sa_execute && sa_genemark_execute) {
+      call genemark {
+        input:
+      }
+    }
   }
 
   # structural annotation
@@ -100,9 +136,11 @@ workflow metagenomeAnnotation {
 
 task test {
   Int val
+  String dir
+  String fasta
 
   command {
-    echo ${val}
+    head -n 5 ${dir}${val}/${fasta}
   }
 }
 
@@ -122,14 +160,16 @@ task setup {
 
 task pre_qc {
 
-  File qc_bin
+  File   qc_bin
   String project_type
-  File input_fasta
+  Int    val
+  String dir
+  File   input_fasta
   String project_id
   String rename = "yes"
 
   command {
-    ${qc_bin} ${project_type} ${input_fasta} ${project_id} ${rename}
+    ${qc_bin} ${project_type} ${dir}${val}/${input_fasta} ${project_id} ${rename}
   }
   output {
     File fasta = "${project_id}_contigs.fna"
