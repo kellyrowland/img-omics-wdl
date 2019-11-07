@@ -1,5 +1,5 @@
 {
-  "metagenomeAnnotation.setup.conda_env": "String (optional, default = \"imgap\")",
+  "metagenomeAnnotation.setup.conda_env": "imgap",
   "metagenomeAnnotation.num_splits": 9,
   "metagenomeAnnotation.imgap_input_dir": "/global/projectb/scratch/rowlandk/metagenome-annotation/splits/",
   "metagenomeAnnotation.imgap_input_fasta": "Ga0399893_contigs.fna",

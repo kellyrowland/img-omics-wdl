@@ -57,7 +57,6 @@ workflow metagenomeAnnotation {
 #    call annotate {
 #      input:
 #        split_index=split,
-#        bin=annotate_bin,
 #    }
      call test {
        input:
