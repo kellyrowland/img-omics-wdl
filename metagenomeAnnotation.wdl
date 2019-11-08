@@ -13,15 +13,21 @@ workflow metagenomeAnnotation {
   File    sa_pre_qc_bin
   String  sa_pre_qc_rename
   File    sa_post_qc_bin
-  Boolean sa_trnascan_se
+  Boolean sa_trnascan_se_execute
+  File    sa_trnascan_se_bin
   Boolean sa_rfam_execute
+  File    sa_rfam_bin
   File    sa_rfam_cm
   File    sa_rfam_claninfo_tsv
   File    sa_rfam_feature_lookup_tsv
   Boolean sa_crt_execute
+  File    sa_crt_bin
   Boolean sa_prodigal_execute
+  File    sa_prodigal_bin
   Boolean sa_genemark_execute
+  File    sa_genemark_bin
   Boolean sa_gff_and_fasta_stats_execute
+  File    sa_gff_and_fasta_stats_bin
   # functional annotation
   Boolean fa_execute
   File    fa_bin
