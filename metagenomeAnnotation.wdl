@@ -98,25 +98,21 @@ workflow metagenomeAnnotation {
         input:
       }
     }
-  }
-
-  # structural annotation
-  if(sa_execute && sa_pre_qc_execute) {
- #   call pre_qc {
- #     input:
- #       qc_bin = sa_pre_qc_bin,
- #       project_type = imgap_project_type,
- #       input_fasta = imgap_input_fasta,
- #       project_id = imgap_project_id,
- #       rename = sa_pre_qc_rename
- #   }
-  }
-
-  if(sa_execute) {
- #   call structural_annotation {
- #     input:
- #       sa_bin = sa_bin
- #   }
+    if(sa_execute) {
+      call gff_merge {
+        input:
+      }
+    }
+    if(sa_prodigal_execute || sa_genemark_execute) {
+      call fasta_merge {
+        input:
+      }
+    }
+    if(sa_execute && sa_gff_and_fasta_stats_execute) {
+      call gff_and_fasta_stats {
+        input:
+      }
+    }
   }
 
   if(sa_execute && imgap_project_type == "isolate") {
