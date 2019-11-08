@@ -26,6 +26,8 @@ workflow metagenomeAnnotation {
   File    sa_prodigal_bin
   Boolean sa_genemark_execute
   File    sa_genemark_bin
+  File    sa_gff_merge_bin
+  File    sa_fasta_merge_bin
   Boolean sa_gff_and_fasta_stats_execute
   File    sa_gff_and_fasta_stats_bin
   # functional annotation
