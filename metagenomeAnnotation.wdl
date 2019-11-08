@@ -97,7 +97,8 @@ workflow metagenomeAnnotation {
           input_fasta = imgap_input_fasta,
           cm = sa_rfam_cm,
           claninfo_tsv = sa_rfam_claninfo_tsv,
-          feature_lookup_tsv = sa_rfam_feature_lookup_tsv
+          feature_lookup_tsv = sa_rfam_feature_lookup_tsv,
+          threads = additional_threads
       }
     }
     if(sa_execute && sa_crt_execute) {
@@ -126,20 +127,23 @@ workflow metagenomeAnnotation {
     if(sa_execute) {
       call gff_merge {
         input:
-          bin = sa_gff_merge_bin
+          bin = sa_gff_merge_bin,
+          input_fasta = imgap_input_fasta
       }
     }
     if(sa_prodigal_execute || sa_genemark_execute) {
       call fasta_merge {
         input:
-          bin = sa_fasta_merge_bin
+          bin = sa_fasta_merge_bin,
+          input_fasta = imgap_input_fasta,
+          final_gff = gff_merge.final_gff
       }
     }
     if(sa_execute && sa_gff_and_fasta_stats_execute) {
       call gff_and_fasta_stats {
         input:
-          bin = sa_gff_and_fasta_stats_bin
-          input_fasta = imgap_input_fasta
+          bin = sa_gff_and_fasta_stats_bin,
+          input_fasta = imgap_input_fasta,
           final_gff = gff_merge.final_gff
       }
     }
@@ -220,6 +224,7 @@ task trnascan_se {
 task rfam {
 
   File bin
+  File input_fasta
   File cm
   File claninfo_tsv
   File feature_lookup_tsv
