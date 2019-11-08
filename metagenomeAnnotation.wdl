@@ -72,10 +72,10 @@ workflow metagenomeAnnotation {
     if(sa_execute && sa_pre_qc_execute) {
       call pre_qc {
         input:
-          qc_bin = sa_pre_qc_bin,
+          bin = sa_pre_qc_bin,
           project_type = imgap_project_type,
-          val=n,
-          dir=imgap_input_dir,
+          val = n,
+          dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
           project_id = imgap_project_id,
           rename = sa_pre_qc_rename
@@ -84,41 +84,63 @@ workflow metagenomeAnnotation {
     if(sa_execute && sa_trnascan_se_execute) {
       call trnascan_se {
         input:
+          bin = sa_trnascan_se_bin,
+          input_fasta = imgap_input_fasta,
+          project_type = imgap_project_type,
+          threads = additional_threads
       }
     }
     if(sa_execute && sa_rfam_execute) {
       call rfam {
         input:
+          bin = sa_rfam_bin,
+          input_fasta = imgap_input_fasta,
+          cm = sa_rfam_cm,
+          claninfo_tsv = sa_rfam_claninfo_tsv,
+          feature_lookup_tsv = sa_rfam_feature_lookup_tsv
       }
     }
     if(sa_execute && sa_crt_execute) {
       call crt {
         input:
+          bin = sa_crt_bin,
+          input_fasta = imgap_input_fasta
       }
     }
     if(sa_execute && sa_prodigal_execute) {
       call prodigal {
         input:
+          bin = sa_prodigal_bin,
+          input_fasta = imgap_input_fasta,
+          project_type = imgap_project_type,
       }
     }
     if(sa_execute && sa_genemark_execute) {
       call genemark {
         input:
+          bin = sa_genemark_bin,
+          input_fasta = imgap_input_fasta,
+          project_type = imgap_project_type,
       }
     }
     if(sa_execute) {
       call gff_merge {
         input:
+          bin = sa_gff_merge_bin
       }
     }
     if(sa_prodigal_execute || sa_genemark_execute) {
       call fasta_merge {
         input:
+          bin = sa_fasta_merge_bin
       }
     }
     if(sa_execute && sa_gff_and_fasta_stats_execute) {
       call gff_and_fasta_stats {
         input:
+          bin = sa_gff_and_fasta_stats_bin
+          input_fasta = imgap_input_fasta
+          final_gff = gff_merge.final_gff
       }
     }
   }
@@ -164,7 +186,7 @@ task setup {
 
 task pre_qc {
 
-  File   qc_bin
+  File   bin
   String project_type
   Int    val
   String dir
@@ -173,7 +195,7 @@ task pre_qc {
   String rename = "yes"
 
   command {
-    ${qc_bin} ${project_type} ${dir}${val}/${input_fasta} ${project_id} ${rename}
+    ${bin} ${project_type} ${dir}${val}/${input_fasta} ${project_id} ${rename}
   }
   output {
     File fasta = "${project_id}_contigs.fna"
@@ -182,13 +204,13 @@ task pre_qc {
 
 task trnascan_se {
 
-  File   trna_bin
+  File   bin
   File   input_fasta
   String project_type
   Int    threads
 
   command {
-    ${trna_bin} ${input_fasta} ${project_type} ${threads}
+    ${bin} ${input_fasta} ${project_type} ${threads}
   }
   output {
     File trna_log = stdout()
