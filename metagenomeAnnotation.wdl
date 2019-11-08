@@ -310,8 +310,8 @@ task fasta_merge {
     ${bin} ${final_gff} ${genemark_proteins} ${prodigal_proteins} 1> ${input_fasta}_proteins.faa
   }
   output {
-    File final_genes = ${input_fasta}_genes.fna
-    File final_proteins = ${input_fasta}_proteins.faa
+    File final_genes = "basename(input_fasta)_genes.fna"
+    File final_proteins = "basename(input_fasta)_proteins.faa"
   }
 }
 
@@ -335,7 +335,7 @@ task post_qc {
     ${qc_bin} ${input_fasta} "${input_fasta}_structural_annotation.gff"
   }
   output {
-    File out = "${input_fasta}_structural_annotation.gff"
+    File out = "basename(input_fasta)_structural_annotation.gff"
   }
 }
 
