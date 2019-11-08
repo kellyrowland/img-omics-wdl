@@ -172,12 +172,127 @@ task pre_qc {
   }
 }
 
-task structural_annotation {
+task trnascan_se {
 
-  File sa_bin 
+  File   trna_bin
+  File   input_fasta
+  String project_type
+  Int    threads
 
   command {
-    ${sa_bin}
+    ${trna_bin} ${input_fasta} ${project_type} ${threads}
+  }
+  output {
+    File trna_log = stdout()
+  }
+}
+
+task rfam {
+
+  File bin
+  File cm
+  File claninfo_tsv
+  File feature_lookup_tsv
+  Int  threads
+
+  command {
+    ${bin} ${input_fasta} ${cm} ${claninfo_tsv} ${feature_lookup_tsv}
+  }
+  output {
+    File rfam_log = stdout()
+  }
+}
+
+task crt {
+
+  File bin
+  File input_fasta
+
+  command {
+    ${bin} ${input_fasta}
+  }
+  output {
+    File crt_log = stdout()
+  }
+}
+
+task prodigal {
+
+  File   bin
+  File   input_fasta
+  String project_type
+
+  command {
+    ${bin} ${input_fasta} ${project_type}
+  }
+  output {
+    File prodigal_log = stdout()
+  }
+}
+
+task genemark {
+
+  File   bin
+  File   input_fasta
+  String project_type
+
+  command {
+    ${bin} ${input_fasta} ${project_type}
+  }
+  output {
+    File genemark_log = stdout()
+  }
+}
+
+task gff_merge {
+
+  File  bin
+  File  input_fasta
+  File? misc_and_regulatory_gff
+  File? rrna_gff
+  File? trna_gff
+  File? ncrna_tmrna_gff
+  File? crt_gff
+  File? genemark_gff
+  File? prodigal_gff
+
+  command {
+    ${bin} -f ${input_fasta} ${"-a " + misc_and_regulatory_gff + " " + rrna_gff} \
+    ${trna_gff} ${ncrna_tmrna_gff} ${crt_gff} ${genemark_gff} ${prodigal_gff}
+  }
+  output {
+    File final_gff = stdout()
+  }
+}
+
+task fasta_merge {
+
+  File  bin
+  File  input_fasta
+  File  final_gff
+  File? genemark_genes
+  File? genemark_proteins
+  File? prodigal_genes
+  File? prodigal_proteins
+
+  command {
+    ${bin} ${final_gff} ${genemark_genes} ${prodigal_genes} 1> ${input_fasta}_genes.fna
+    ${bin} ${final_gff} ${genemark_proteins} ${prodigal_proteins} 1> ${input_fasta}_proteins.faa
+  }
+  output {
+    File final_genes = ${input_fasta}_genes.fna
+    File final_proteins = ${input_fasta}_proteins.faa
+  }
+}
+
+task gff_and_fasta_stats {
+
+  File bin
+  File input_fasta
+  File final_gff
+
+  command {
+    ${bin} ${input_fasta} ${final_gff}
   }
 }
 
