@@ -86,6 +86,7 @@ workflow metagenomeAnnotation {
         input:
           bin = sa_trnascan_se_bin,
           input_fasta = imgap_input_fasta,
+          project_id = imgap_project_id,
           project_type = imgap_project_type,
           threads = additional_threads
       }
@@ -210,14 +211,17 @@ task trnascan_se {
 
   File   bin
   File   input_fasta
+  String project_id
   String project_type
   Int    threads
 
   command {
-    ${bin} ${input_fasta} ${project_type} ${threads}
+    ${bin} ${input_fasta} ${project_type} ${threads} &> ${project_id}_trna.log
   }
   output {
-    File trna_log = stdout()
+    File trna_gff = "${project_id}_trna.gff"
+    File trna_log = "${project_id}_trna.log"
+    File trna_out = "${project_id}_trnascan_general.out"
   }
 }
 
