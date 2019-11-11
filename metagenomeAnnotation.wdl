@@ -194,12 +194,13 @@ task test {
 }
 
 task setup {
-  String conda_env="imgap"
-  Int splits
+  String conda_env= "/global/projectb/sandbox/omics/gbp/conda/envs/imgap"
+  Int    splits
 
   command {
     module load python/3.7-anaconda-2019.07 hmmer/3.1b2 parallel
     source activate ${conda_env}
+    export PATH=/global/dna/projectdirs/microbial/omics/bin:$PATH
     python -c 'for i in range(${splits}): print(i+1)'
   }
   output {
