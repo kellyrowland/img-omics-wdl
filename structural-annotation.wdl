@@ -14,6 +14,7 @@ workflow annotate {
   File    post_qc_bin
   Boolean trnascan_se_execute
   File    trnascan_se_bin
+  File    trnascan_pick_and_transform_to_gff_bin
   Boolean rfam_execute
   File    rfam_bin
   File    rfam_cm
@@ -44,6 +45,7 @@ workflow annotate {
     call trnascan.trnascan {
       input:
         trnascan_se_bin = trnascan_se_bin,
+        pick_and_transform_to_gff_bin = trnascan_pick_and_transform_to_gff_bin,
         imgap_input_fasta = imgap_input_fasta,
         imgap_project_id = imgap_project_id,
         imgap_project_type = imgap_project_type,
@@ -95,7 +97,7 @@ workflow annotate {
       project_id = imgap_project_id,
       misc_and_regulatory_gff = rfam.misc_bind_misc_feature_regulatory_gff,
       rrna_gff = rfam.rrna_gff,
-      trna_gff = trnascan.gff, 
+      trna_gff = trnascan.gff,
       ncrna_tmrna_gff = rfam.ncrna_tmrna_gff,
       crt_gff = crt.gff, 
       genemark_gff = genemark.gff,

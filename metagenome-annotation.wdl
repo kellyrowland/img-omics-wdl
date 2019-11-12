@@ -17,6 +17,7 @@ workflow metagenome_annotation {
   File    sa_post_qc_bin
   Boolean sa_trnascan_se_execute
   File    sa_trnascan_se_bin
+  File    sa_trnascan_pick_and_transform_to_gff_bin
   Boolean sa_rfam_execute
   File    sa_rfam_bin
   File    sa_rfam_cm
@@ -81,6 +82,7 @@ workflow metagenome_annotation {
           post_qc_bin = sa_post_qc_bin,
           trnascan_se_execute = sa_trnascan_se_execute,
           trnascan_se_bin = sa_trnascan_se_bin,
+          trnascan_pick_and_transform_to_gff_bin = sa_trnascan_pick_and_transform_to_gff_bin,
           rfam_execute = sa_rfam_execute,
           rfam_bin = sa_rfam_bin,
           rfam_cm = sa_rfam_cm,
