@@ -1,3 +1,5 @@
+import "trnascan.wdl" as trnascan
+
 workflow annotate {
 
   Int    num_splits
@@ -57,15 +59,15 @@ workflow annotate {
       }
     }
     if(trnascan_se_execute) {
-      call trnascan_se {
+      call trnascan.trnascan {
         input:
-          bin = trnascan_se_bin,
-          val = n,
-          dir = imgap_input_dir,
-          input_fasta = imgap_input_fasta,
-          project_id = imgap_project_id,
-          project_type = imgap_project_type,
-          threads = additional_threads
+          trnascan_se_bin = trnascan_se_bin,
+          n = n,
+          imgap_input_dir = imgap_input_dir,
+          imgap_input_fasta = imgap_input_fasta,
+          imgap_project_id = imgap_project_id,
+          imgap_project_type = imgap_project_type,
+          additional_threads = additional_threads
       }
     }
     if(rfam_execute) {
@@ -123,7 +125,7 @@ workflow annotate {
         project_id = imgap_project_id,
         misc_and_regulatory_gff = rfam.misc_bind_misc_feature_regulatory_gff,
         rrna_gff = rfam.rrna_gff,
-        trna_gff = trnascan_se.gff, 
+        trna_gff = trnascan.gff, 
         ncrna_tmrna_gff = rfam.ncrna_tmrna_gff,
         crt_gff = crt.gff, 
         genemark_gff = genemark.gff,
@@ -202,26 +204,6 @@ task pre_qc {
   }
   output {
     File fasta = "${project_id}_contigs.fna"
-  }
-}
-
-task trnascan_se {
-
-  File   bin
-  Int    val
-  String dir
-  String input_fasta
-  String project_id
-  String project_type
-  Int    threads
-
-  command {
-    ${bin} ${dir}${val}/${input_fasta} ${project_type} ${threads} &> ${project_id}_trna.log
-  }
-  output {
-    File log = "${project_id}_trna.log"
-    File gff = "${project_id}_trna.gff"
-    File out = "${project_id}_trnascan_general.out"
   }
 }
 
