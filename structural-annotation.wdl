@@ -1,4 +1,4 @@
-workflow metagenomeAnnotation {
+workflow annotate {
 
   Int    num_splits
   String imgap_input_dir
@@ -7,54 +7,28 @@ workflow metagenomeAnnotation {
   String imgap_project_type
   Int additional_threads
   # structural annotation
-  Boolean sa_execute
-  File    sa_bin
-  Boolean sa_pre_qc_execute
-  File    sa_pre_qc_bin
-  String  sa_pre_qc_rename
-  File    sa_post_qc_bin
-  Boolean sa_trnascan_se_execute
-  File    sa_trnascan_se_bin
-  Boolean sa_rfam_execute
-  File    sa_rfam_bin
-  File    sa_rfam_cm
-  File    sa_rfam_claninfo_tsv
-  File    sa_rfam_feature_lookup_tsv
-  Boolean sa_crt_execute
-  File    sa_crt_bin
-  Boolean sa_prodigal_execute
-  File    sa_prodigal_bin
-  Boolean sa_genemark_execute
-  File    sa_genemark_bin
-  File    sa_gff_merge_bin
-  File    sa_fasta_merge_bin
-  Boolean sa_gff_and_fasta_stats_execute
-  File    sa_gff_and_fasta_stats_bin
-  # functional annotation
-  Boolean fa_execute
-  File    fa_bin
-  String  fa_product_names_mapping_dir
-  Boolean fa_ko_ec_execute
-  File    fa_ko_ec_img_nr_db
-  File    fa_ko_ec_md5_mapping
-  File    fa_ko_ec_taxon_to_phylo_mapping
-  Boolean fa_cath_funfam_execute
-  File    fa_cath_funfam_db
-  Boolean fa_pfam_execute
-  File    fa_pfam_db
-  File    fa_pfam_claninfo_tsv
-  Boolean fa_superfamily_excute
-  File    fa_superfamily_db
-  Boolean fa_cog_execute
-  File    fa_cog_db
-  Boolean fa_tigrfam_execute
-  File    fa_tigrfam_db
-  Boolean fa_smart_execute
-  File    fa_smart_db
-  Boolean fa_signalp_execute
-  String  fa_signalp_gram_stain
-  Boolean fa_tmhmm_execute
-  File    fa_tmhmm_model
+  File    bin
+  Boolean pre_qc_execute
+  File    pre_qc_bin
+  String  pre_qc_rename
+  File    post_qc_bin
+  Boolean trnascan_se_execute
+  File    trnascan_se_bin
+  Boolean rfam_execute
+  File    rfam_bin
+  File    rfam_cm
+  File    rfam_claninfo_tsv
+  File    rfam_feature_lookup_tsv
+  Boolean crt_execute
+  File    crt_bin
+  Boolean prodigal_execute
+  File    prodigal_bin
+  Boolean genemark_execute
+  File    genemark_bin
+  File    gff_merge_bin
+  File    fasta_merge_bin
+  Boolean gff_and_fasta_stats_execute
+  File    gff_and_fasta_stats_bin
 
   call setup {
     input:
@@ -70,22 +44,22 @@ workflow metagenomeAnnotation {
 #         fasta=imgap_input_fasta
 #     }
     # structural annotation
-    if(sa_execute && sa_pre_qc_execute) {
+    if(pre_qc_execute) {
       call pre_qc {
         input:
-          bin = sa_pre_qc_bin,
+          bin = pre_qc_bin,
           project_type = imgap_project_type,
           val = n,
           dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
           project_id = imgap_project_id,
-          rename = sa_pre_qc_rename
+          rename = pre_qc_rename
       }
     }
-    if(sa_execute && sa_trnascan_se_execute) {
+    if(trnascan_se_execute) {
       call trnascan_se {
         input:
-          bin = sa_trnascan_se_bin,
+          bin = trnascan_se_bin,
           val = n,
           dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
@@ -94,34 +68,34 @@ workflow metagenomeAnnotation {
           threads = additional_threads
       }
     }
-    if(sa_execute && sa_rfam_execute) {
+    if(rfam_execute) {
       call rfam {
         input:
-          bin = sa_rfam_bin,
+          bin = rfam_bin,
           val = n,
           dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
           project_id = imgap_project_id,
-          cm = sa_rfam_cm,
-          claninfo_tsv = sa_rfam_claninfo_tsv,
-          feature_lookup_tsv = sa_rfam_feature_lookup_tsv,
+          cm = rfam_cm,
+          claninfo_tsv = rfam_claninfo_tsv,
+          feature_lookup_tsv = rfam_feature_lookup_tsv,
           threads = additional_threads
       }
     }
-    if(sa_execute && sa_crt_execute) {
+    if(crt_execute) {
       call crt {
         input:
-          bin = sa_crt_bin,
+          bin = crt_bin,
           val = n,
           dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
           project_id = imgap_project_id
       }
     }
-    if(sa_execute && sa_prodigal_execute) {
+    if(prodigal_execute) {
       call prodigal {
         input:
-          bin = sa_prodigal_bin,
+          bin = prodigal_bin,
           val = n,
           dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
@@ -129,10 +103,10 @@ workflow metagenomeAnnotation {
           project_type = imgap_project_type
       }
     }
-    if(sa_execute && sa_genemark_execute) {
+    if(genemark_execute) {
       call genemark {
         input:
-          bin = sa_genemark_bin,
+          bin = genemark_bin,
           val = n,
           dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
@@ -140,27 +114,25 @@ workflow metagenomeAnnotation {
           project_type = imgap_project_type
       }
     }
-    if(sa_execute) {
-      call gff_merge {
-        input:
-          bin = sa_gff_merge_bin,
-          val = n,
-          dir = imgap_input_dir,
-          input_fasta = imgap_input_fasta,
-          project_id = imgap_project_id,
-          misc_and_regulatory_gff = rfam.misc_bind_misc_feature_regulatory_gff,
-          rrna_gff = rfam.rrna_gff,
-          trna_gff = trnascan_se.gff, 
-          ncrna_tmrna_gff = rfam.ncrna_tmrna_gff,
-          crt_gff = crt.gff, 
-          genemark_gff = genemark.gff,
-          prodigal_gff = prodigal.gff
-      }
+    call gff_merge {
+      input:
+        bin = gff_merge_bin,
+        val = n,
+        dir = imgap_input_dir,
+        input_fasta = imgap_input_fasta,
+        project_id = imgap_project_id,
+        misc_and_regulatory_gff = rfam.misc_bind_misc_feature_regulatory_gff,
+        rrna_gff = rfam.rrna_gff,
+        trna_gff = trnascan_se.gff, 
+        ncrna_tmrna_gff = rfam.ncrna_tmrna_gff,
+        crt_gff = crt.gff, 
+        genemark_gff = genemark.gff,
+        prodigal_gff = prodigal.gff
     }
-    if(sa_prodigal_execute || sa_genemark_execute) {
+    if(prodigal_execute || genemark_execute) {
       call fasta_merge {
         input:
-          bin = sa_fasta_merge_bin,
+          bin = fasta_merge_bin,
           val = n,
           dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
@@ -172,10 +144,10 @@ workflow metagenomeAnnotation {
           prodigal_proteins = prodigal.proteins
       }
     }
-    if(sa_execute && sa_gff_and_fasta_stats_execute) {
+    if(gff_and_fasta_stats_execute) {
       call gff_and_fasta_stats {
         input:
-          bin = sa_gff_and_fasta_stats_bin,
+          bin = gff_and_fasta_stats_bin,
           val = n,
           dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
@@ -185,19 +157,13 @@ workflow metagenomeAnnotation {
     }
   }
 
-  if(sa_execute && imgap_project_type == "isolate") {
+  if(imgap_project_type == "isolate") {
 #    call post_qc {
 #      input:
-#        qc_bin = sa_post_qc_bin
+#        qc_bin = post_qc_bin
 #    }
   }
 
-  if(fa_execute) {
-#    call functional_annotation {
-#      input:
-#        fa_bin = fa_bin
-#    }
-  }
 }
 
 task test {
@@ -211,13 +177,9 @@ task test {
 }
 
 task setup {
-  String conda_env= "/global/projectb/sandbox/omics/gbp/conda/envs/imgap"
   Int    splits
 
   command {
-    module load python/3.7-anaconda-2019.07 hmmer/3.1b2 parallel
-    source activate ${conda_env}
-    export PATH=/global/dna/projectdirs/microbial/omics/bin:$PATH
     python -c 'for i in range(${splits}): print(i+1)'
   }
   output {
@@ -423,34 +385,3 @@ task post_qc {
     File out = "${project_id}_structural_annotation.gff"
   }
 }
-
-task functional_annotation {
-  File    fa_bin
-  String  product_names_mapping_dir
-  Boolean ko_ec_execute
-  File    ko_ec_img_nr_db
-  File    ko_ec_md5_mapping
-  File    ko_ec_taxon_to_phylo_mapping
-  Boolean cath_funfam_execute
-  File    cath_funfam_db
-  Boolean pfam_execute
-  File    pfam_db
-  File    pfam_claninfo_tsv
-  Boolean superfamily_excute
-  File    superfamily_db
-  Boolean cog_execute
-  File    cog_db
-  Boolean tigrfam_execute
-  File    tigrfam_db
-  Boolean smart_execute
-  File    smart_db
-  Boolean signalp_execute
-  String  signalp_gram_stain
-  Boolean tmhmm_execute
-  File    tmhmm_model
-
-  command {
-    ${fa_bin}
-  }
-}
-
