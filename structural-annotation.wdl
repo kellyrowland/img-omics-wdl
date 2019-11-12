@@ -2,9 +2,7 @@ import "trnascan.wdl" as trnascan
 
 workflow annotate {
 
-  Int    num_splits
-  String imgap_input_dir
-  String imgap_input_fasta
+  File   imgap_input_fasta
   String imgap_project_id
   String imgap_project_type
   Int additional_threads
@@ -32,134 +30,102 @@ workflow annotate {
   Boolean gff_and_fasta_stats_execute
   File    gff_and_fasta_stats_bin
 
-  call setup {
-    input:
-      splits=num_splits
-  }
-
-  scatter(n in setup.n_splits) {
-
-#     call test {
-#       input:
-#         val=n,
-#         dir=imgap_input_dir,
-#         fasta=imgap_input_fasta
-#     }
-    # structural annotation
-    if(pre_qc_execute) {
-      call pre_qc {
-        input:
-          bin = pre_qc_bin,
-          project_type = imgap_project_type,
-          val = n,
-          dir = imgap_input_dir,
-          input_fasta = imgap_input_fasta,
-          project_id = imgap_project_id,
-          rename = pre_qc_rename
-      }
-    }
-    if(trnascan_se_execute) {
-      call trnascan.trnascan {
-        input:
-          trnascan_se_bin = trnascan_se_bin,
-          n = n,
-          imgap_input_dir = imgap_input_dir,
-          imgap_input_fasta = imgap_input_fasta,
-          imgap_project_id = imgap_project_id,
-          imgap_project_type = imgap_project_type,
-          additional_threads = additional_threads
-      }
-    }
-    if(rfam_execute) {
-      call rfam {
-        input:
-          bin = rfam_bin,
-          val = n,
-          dir = imgap_input_dir,
-          input_fasta = imgap_input_fasta,
-          project_id = imgap_project_id,
-          cm = rfam_cm,
-          claninfo_tsv = rfam_claninfo_tsv,
-          feature_lookup_tsv = rfam_feature_lookup_tsv,
-          threads = additional_threads
-      }
-    }
-    if(crt_execute) {
-      call crt {
-        input:
-          bin = crt_bin,
-          val = n,
-          dir = imgap_input_dir,
-          input_fasta = imgap_input_fasta,
-          project_id = imgap_project_id
-      }
-    }
-    if(prodigal_execute) {
-      call prodigal {
-        input:
-          bin = prodigal_bin,
-          val = n,
-          dir = imgap_input_dir,
-          input_fasta = imgap_input_fasta,
-          project_id = imgap_project_id,
-          project_type = imgap_project_type
-      }
-    }
-    if(genemark_execute) {
-      call genemark {
-        input:
-          bin = genemark_bin,
-          val = n,
-          dir = imgap_input_dir,
-          input_fasta = imgap_input_fasta,
-          project_id = imgap_project_id,
-          project_type = imgap_project_type
-      }
-    }
-    call gff_merge {
+  if(pre_qc_execute) {
+    call pre_qc {
       input:
-        bin = gff_merge_bin,
-        val = n,
-        dir = imgap_input_dir,
+        bin = pre_qc_bin,
+        project_type = imgap_project_type,
         input_fasta = imgap_input_fasta,
         project_id = imgap_project_id,
-        misc_and_regulatory_gff = rfam.misc_bind_misc_feature_regulatory_gff,
-        rrna_gff = rfam.rrna_gff,
-        trna_gff = trnascan.gff, 
-        ncrna_tmrna_gff = rfam.ncrna_tmrna_gff,
-        crt_gff = crt.gff, 
-        genemark_gff = genemark.gff,
-        prodigal_gff = prodigal.gff
+        rename = pre_qc_rename
     }
-    if(prodigal_execute || genemark_execute) {
-      call fasta_merge {
-        input:
-          bin = fasta_merge_bin,
-          val = n,
-          dir = imgap_input_dir,
-          input_fasta = imgap_input_fasta,
-          project_id = imgap_project_id,
-          final_gff = gff_merge.final_gff,
-          genemark_genes = genemark.genes,
-          genemark_proteins = genemark.proteins,
-          prodigal_genes = prodigal.genes,
-          prodigal_proteins = prodigal.proteins
-      }
+  }
+  if(trnascan_se_execute) {
+    call trnascan.trnascan {
+      input:
+        trnascan_se_bin = trnascan_se_bin,
+        imgap_input_fasta = imgap_input_fasta,
+        imgap_project_id = imgap_project_id,
+        imgap_project_type = imgap_project_type,
+        additional_threads = additional_threads
     }
-    if(gff_and_fasta_stats_execute) {
-      call gff_and_fasta_stats {
-        input:
-          bin = gff_and_fasta_stats_bin,
-          val = n,
-          dir = imgap_input_dir,
-          input_fasta = imgap_input_fasta,
-          project_id = imgap_project_id,
-          final_gff = gff_merge.final_gff
-      }
+  }
+  if(rfam_execute) {
+    call rfam {
+      input:
+        bin = rfam_bin,
+        input_fasta = imgap_input_fasta,
+        project_id = imgap_project_id,
+        cm = rfam_cm,
+        claninfo_tsv = rfam_claninfo_tsv,
+        feature_lookup_tsv = rfam_feature_lookup_tsv,
+        threads = additional_threads
+    }
+  }
+  if(crt_execute) {
+    call crt {
+      input:
+        bin = crt_bin,
+        input_fasta = imgap_input_fasta,
+        project_id = imgap_project_id
+    }
+  }
+  if(prodigal_execute) {
+    call prodigal {
+      input:
+        bin = prodigal_bin,
+        input_fasta = imgap_input_fasta,
+        project_id = imgap_project_id,
+        project_type = imgap_project_type
+    }
+  }
+  if(genemark_execute) {
+    call genemark {
+      input:
+        bin = genemark_bin,
+        input_fasta = imgap_input_fasta,
+        project_id = imgap_project_id,
+        project_type = imgap_project_type
+    }
+  }
+  call gff_merge {
+    input:
+      bin = gff_merge_bin,
+      input_fasta = imgap_input_fasta,
+      project_id = imgap_project_id,
+      misc_and_regulatory_gff = rfam.misc_bind_misc_feature_regulatory_gff,
+      rrna_gff = rfam.rrna_gff,
+      trna_gff = trnascan.gff, 
+      ncrna_tmrna_gff = rfam.ncrna_tmrna_gff,
+      crt_gff = crt.gff, 
+      genemark_gff = genemark.gff,
+      prodigal_gff = prodigal.gff
+  }
+  if(prodigal_execute || genemark_execute) {
+    call fasta_merge {
+      input:
+        bin = fasta_merge_bin,
+        input_fasta = imgap_input_fasta,
+        project_id = imgap_project_id,
+        final_gff = gff_merge.final_gff,
+        genemark_genes = genemark.genes,
+        genemark_proteins = genemark.proteins,
+        prodigal_genes = prodigal.genes,
+        prodigal_proteins = prodigal.proteins
+    }
+  }
+  if(gff_and_fasta_stats_execute) {
+    call gff_and_fasta_stats {
+      input:
+        bin = gff_and_fasta_stats_bin,
+        input_fasta = imgap_input_fasta,
+        project_id = imgap_project_id,
+        final_gff = gff_merge.final_gff
     }
   }
 
-  if(imgap_project_type == "isolate") {
+
+if(imgap_project_type == "isolate") {
 #    call post_qc {
 #      input:
 #        qc_bin = post_qc_bin
@@ -168,39 +134,16 @@ workflow annotate {
 
 }
 
-task test {
-  Int val
-  String dir
-  String fasta
-
-  command {
-    head -n 5 ${dir}${val}/${fasta}
-  }
-}
-
-task setup {
-  Int    splits
-
-  command {
-    python -c 'for i in range(${splits}): print(i+1)'
-  }
-  output {
-    Array[Int] n_splits = read_lines(stdout())
-  }
-}
-
 task pre_qc {
 
   File   bin
   String project_type
-  Int    val
-  String dir
-  String input_fasta
+  File   input_fasta
   String project_id
   String rename = "yes"
 
   command {
-    ${bin} ${project_type} ${dir}${val}/${input_fasta} ${project_id} ${rename}
+    ${bin} ${project_type} ${input_fasta} ${project_id} ${rename}
   }
   output {
     File fasta = "${project_id}_contigs.fna"
@@ -210,9 +153,7 @@ task pre_qc {
 task rfam {
 
   File   bin
-  Int    val
-  String dir
-  String input_fasta
+  File   input_fasta
   String project_id
   File   cm
   File   claninfo_tsv
@@ -220,7 +161,7 @@ task rfam {
   Int    threads
 
   command {
-    ${bin} ${dir}${val}/${input_fasta} ${cm} ${claninfo_tsv} ${feature_lookup_tsv} ${threads} &> ${project_id}_rfam.log
+    ${bin} ${input_fasta} ${cm} ${claninfo_tsv} ${feature_lookup_tsv} ${threads} &> ${project_id}_rfam.log
   }
   output {
     File log = "${project_id}_rfam.log"
@@ -234,13 +175,11 @@ task rfam {
 task crt {
 
   File   bin
-  Int    val
-  String dir
-  String input_fasta
+  File   input_fasta
   String project_id
 
   command {
-    ${bin} ${dir}${val}/${input_fasta}  &> ${project_id}_crt.log
+    ${bin} ${input_fasta}  &> ${project_id}_crt.log
   }
   output {
     File log = "${project_id}_crt.log"
@@ -253,14 +192,12 @@ task crt {
 task prodigal {
 
   File   bin
-  Int    val
-  String dir
-  String input_fasta
+  File   input_fasta
   String project_id
   String project_type
 
   command {
-    ${bin} ${dir}${val}/${input_fasta} ${project_type} &> ${project_id}_prodigal.log
+    ${bin} ${input_fasta} ${project_type} &> ${project_id}_prodigal.log
   }
   output {
     File log = "${project_id}_prodigal.log"
@@ -274,14 +211,12 @@ task prodigal {
 task genemark {
 
   File   bin
-  Int    val
-  String dir
-  String input_fasta
+  File   input_fasta
   String project_id
   String project_type
 
   command {
-    ${bin} ${dir}${val}/${input_fasta} ${project_type} &> ${project_id}_genemark.log
+    ${bin} ${input_fasta} ${project_type} &> ${project_id}_genemark.log
   }
   output {
     File log = "${project_id}_genemark.log"
@@ -294,9 +229,7 @@ task genemark {
 task gff_merge {
 
   File   bin
-  Int    val
-  String dir
-  String input_fasta
+  File   input_fasta
   String project_id
   File?  misc_and_regulatory_gff
   File?  rrna_gff
@@ -307,8 +240,9 @@ task gff_merge {
   File?  prodigal_gff
 
   command {
-    ${bin} -f ${dir}${val}/${input_fasta} ${"-a " + misc_and_regulatory_gff + " " + rrna_gff} \
-    ${trna_gff} ${ncrna_tmrna_gff} ${crt_gff} ${genemark_gff} ${prodigal_gff} 1> ${project_id}_structural_annotation.gff
+    ${bin} -f ${input_fasta} ${"-a " + misc_and_regulatory_gff + " " + rrna_gff} \
+    ${trna_gff} ${ncrna_tmrna_gff} ${crt_gff} \
+    ${genemark_gff} ${prodigal_gff} 1> ${project_id}_structural_annotation.gff
   }
   output {
     File final_gff = "${project_id}_structural_annotation.gff"
@@ -318,9 +252,7 @@ task gff_merge {
 task fasta_merge {
 
   File   bin
-  Int    val
-  String dir
-  String input_fasta
+  File   input_fasta
   String project_id
   File   final_gff
   File?  genemark_genes
@@ -329,8 +261,8 @@ task fasta_merge {
   File?  prodigal_proteins
 
   command {
-    ${bin} ${final_gff} ${genemark_genes} ${prodigal_genes} 1> ${input_fasta}_genes.fna
-    ${bin} ${final_gff} ${genemark_proteins} ${prodigal_proteins} 1> ${input_fasta}_proteins.faa
+    ${bin} ${final_gff} ${genemark_genes} ${prodigal_genes} 1> ${project_id}_genes.fna
+    ${bin} ${final_gff} ${genemark_proteins} ${prodigal_proteins} 1> ${project_id}_proteins.faa
   }
   output {
     File final_genes = "${project_id}_genes.fna"
@@ -341,27 +273,23 @@ task fasta_merge {
 task gff_and_fasta_stats {
 
   File   bin
-  Int    val
-  String dir
-  String input_fasta
+  File   input_fasta
   String project_id
   File   final_gff
 
   command {
-    ${bin} ${dir}${val}/${input_fasta} ${final_gff}
+    ${bin} ${input_fasta} ${final_gff}
   }
 }
 
 task post_qc {
 
   File   qc_bin
-  Int    val
-  String dir
-  String input_fasta
+  File   input_fasta
   String project_id
 
   command {
-    ${qc_bin} ${dir}${val}/${input_fasta} "${project_id}_structural_annotation.gff"
+    ${qc_bin} ${input_fasta} "${project_id}_structural_annotation.gff"
   }
   output {
     File out = "${project_id}_structural_annotation.gff"

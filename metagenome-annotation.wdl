@@ -58,39 +58,46 @@ workflow metagenome_annotation {
   Boolean fa_tmhmm_execute
   File    fa_tmhmm_model
 
-  if(sa_execute) {
-    call sa.annotate {
-      input:
-        num_splits = num_splits,
-        imgap_project_id = imgap_project_id,
-        imgap_input_dir = imgap_input_dir,
-        additional_threads = additional_threads,
-        imgap_project_type = imgap_project_type,
-        imgap_input_fasta = imgap_input_fasta,
-        bin = sa_bin,
-        pre_qc_execute = sa_pre_qc_execute,
-        pre_qc_bin = sa_pre_qc_bin,
-        pre_qc_rename = sa_pre_qc_rename,
-        post_qc_bin = sa_post_qc_bin,
-        trnascan_se_execute = sa_trnascan_se_execute,
-        trnascan_se_bin = sa_trnascan_se_bin,
-        rfam_execute = sa_rfam_execute,
-        rfam_bin = sa_rfam_bin,
-        rfam_cm = sa_rfam_cm,
-        rfam_claninfo_tsv = sa_rfam_claninfo_tsv,
-        rfam_feature_lookup_tsv = sa_rfam_feature_lookup_tsv,
-        crt_execute = sa_crt_execute,
-        crt_bin = sa_crt_bin,
-        prodigal_execute = sa_prodigal_execute,
-        prodigal_bin = sa_prodigal_bin,
-        genemark_execute = sa_genemark_execute,
-        genemark_bin = sa_genemark_bin,
-        gff_merge_bin = sa_gff_merge_bin,
-        fasta_merge_bin = sa_fasta_merge_bin,
-        gff_and_fasta_stats_execute = sa_gff_and_fasta_stats_execute,
-        gff_and_fasta_stats_bin = sa_gff_and_fasta_stats_bin
-    }
+  call setup {
+    input:
+      n_splits = num_splits,
+      dir = imgap_input_dir,
+      fasta = imgap_input_fasta
   }
+
+  scatter(split in setup.splits) {
+
+    if(sa_execute) {
+      call sa.annotate {
+        input:
+          imgap_project_id = imgap_project_id,
+          additional_threads = additional_threads,
+          imgap_project_type = imgap_project_type,
+          imgap_input_fasta = split,
+          bin = sa_bin,
+          pre_qc_execute = sa_pre_qc_execute,
+          pre_qc_bin = sa_pre_qc_bin,
+          pre_qc_rename = sa_pre_qc_rename,
+          post_qc_bin = sa_post_qc_bin,
+          trnascan_se_execute = sa_trnascan_se_execute,
+          trnascan_se_bin = sa_trnascan_se_bin,
+          rfam_execute = sa_rfam_execute,
+          rfam_bin = sa_rfam_bin,
+          rfam_cm = sa_rfam_cm,
+          rfam_claninfo_tsv = sa_rfam_claninfo_tsv,
+          rfam_feature_lookup_tsv = sa_rfam_feature_lookup_tsv,
+          crt_execute = sa_crt_execute,
+          crt_bin = sa_crt_bin,
+          prodigal_execute = sa_prodigal_execute,
+          prodigal_bin = sa_prodigal_bin,
+          genemark_execute = sa_genemark_execute,
+          genemark_bin = sa_genemark_bin,
+          gff_merge_bin = sa_gff_merge_bin,
+          fasta_merge_bin = sa_fasta_merge_bin,
+          gff_and_fasta_stats_execute = sa_gff_and_fasta_stats_execute,
+          gff_and_fasta_stats_bin = sa_gff_and_fasta_stats_bin
+      }
+    }
 
 #  if(fa_execute) {
 #    call functional_annotation {
@@ -98,5 +105,18 @@ workflow metagenome_annotation {
 #        fa_bin = fa_bin
 #    }
 #  }
+  }
+}
 
+task setup {
+  String dir
+  Int    n_splits
+  String fasta
+
+  command {
+    python -c 'for i in range(${n_splits}): print("${dir}"+str(i+1)+"/${fasta}")'
+  }
+  output {
+    Array[File] splits = read_lines(stdout())
+  }
 }
