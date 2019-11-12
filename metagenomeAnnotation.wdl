@@ -62,6 +62,7 @@ workflow metagenomeAnnotation {
   }
 
   scatter(n in setup.n_splits) {
+
 #     call test {
 #       input:
 #         val=n,
@@ -85,6 +86,8 @@ workflow metagenomeAnnotation {
       call trnascan_se {
         input:
           bin = sa_trnascan_se_bin,
+          val = n,
+          dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
           project_id = imgap_project_id,
           project_type = imgap_project_type,
@@ -95,6 +98,8 @@ workflow metagenomeAnnotation {
       call rfam {
         input:
           bin = sa_rfam_bin,
+          val = n,
+          dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
           project_id = imgap_project_id,
           cm = sa_rfam_cm,
@@ -107,6 +112,8 @@ workflow metagenomeAnnotation {
       call crt {
         input:
           bin = sa_crt_bin,
+          val = n,
+          dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
           project_id = imgap_project_id
       }
@@ -115,6 +122,8 @@ workflow metagenomeAnnotation {
       call prodigal {
         input:
           bin = sa_prodigal_bin,
+          val = n,
+          dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
           project_id = imgap_project_id,
           project_type = imgap_project_type
@@ -124,6 +133,8 @@ workflow metagenomeAnnotation {
       call genemark {
         input:
           bin = sa_genemark_bin,
+          val = n,
+          dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
           project_id = imgap_project_id,
           project_type = imgap_project_type
@@ -133,6 +144,8 @@ workflow metagenomeAnnotation {
       call gff_merge {
         input:
           bin = sa_gff_merge_bin,
+          val = n,
+          dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
           project_id = imgap_project_id,
           misc_and_regulatory_gff = rfam.misc_bind_misc_feature_regulatory_gff,
@@ -148,6 +161,8 @@ workflow metagenomeAnnotation {
       call fasta_merge {
         input:
           bin = sa_fasta_merge_bin,
+          val = n,
+          dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
           project_id = imgap_project_id,
           final_gff = gff_merge.final_gff,
@@ -161,6 +176,8 @@ workflow metagenomeAnnotation {
       call gff_and_fasta_stats {
         input:
           bin = sa_gff_and_fasta_stats_bin,
+          val = n,
+          dir = imgap_input_dir,
           input_fasta = imgap_input_fasta,
           project_id = imgap_project_id,
           final_gff = gff_merge.final_gff
@@ -214,7 +231,7 @@ task pre_qc {
   String project_type
   Int    val
   String dir
-  File   input_fasta
+  String input_fasta
   String project_id
   String rename = "yes"
 
@@ -229,13 +246,15 @@ task pre_qc {
 task trnascan_se {
 
   File   bin
-  File   input_fasta
+  Int    val
+  String dir
+  String input_fasta
   String project_id
   String project_type
   Int    threads
 
   command {
-    ${bin} ${input_fasta} ${project_type} ${threads} &> ${project_id}_trna.log
+    ${bin} ${dir}${val}/${input_fasta} ${project_type} ${threads} &> ${project_id}_trna.log
   }
   output {
     File log = "${project_id}_trna.log"
@@ -247,7 +266,9 @@ task trnascan_se {
 task rfam {
 
   File   bin
-  File   input_fasta
+  Int    val
+  String dir
+  String input_fasta
   String project_id
   File   cm
   File   claninfo_tsv
@@ -255,7 +276,7 @@ task rfam {
   Int    threads
 
   command {
-    ${bin} ${input_fasta} ${cm} ${claninfo_tsv} ${feature_lookup_tsv} ${threads} &> ${project_id}_rfam.log
+    ${bin} ${dir}${val}/${input_fasta} ${cm} ${claninfo_tsv} ${feature_lookup_tsv} ${threads} &> ${project_id}_rfam.log
   }
   output {
     File log = "${project_id}_rfam.log"
@@ -269,11 +290,13 @@ task rfam {
 task crt {
 
   File   bin
-  File   input_fasta
+  Int    val
+  String dir
+  String input_fasta
   String project_id
 
   command {
-    ${bin} ${input_fasta}  &> ${project_id}_crt.log
+    ${bin} ${dir}${val}/${input_fasta}  &> ${project_id}_crt.log
   }
   output {
     File log = "${project_id}_crt.log"
@@ -286,12 +309,14 @@ task crt {
 task prodigal {
 
   File   bin
-  File   input_fasta
+  Int    val
+  String dir
+  String input_fasta
   String project_id
   String project_type
 
   command {
-    ${bin} ${input_fasta} ${project_type} &> ${project_id}_prodigal.log
+    ${bin} ${dir}${val}/${input_fasta} ${project_type} &> ${project_id}_prodigal.log
   }
   output {
     File log = "${project_id}_prodigal.log"
@@ -305,12 +330,14 @@ task prodigal {
 task genemark {
 
   File   bin
-  File   input_fasta
+  Int    val
+  String dir
+  String input_fasta
   String project_id
   String project_type
 
   command {
-    ${bin} ${input_fasta} ${project_type} &> ${project_id}_genemark.log
+    ${bin} ${dir}${val}/${input_fasta} ${project_type} &> ${project_id}_genemark.log
   }
   output {
     File log = "${project_id}_genemark.log"
@@ -323,7 +350,9 @@ task genemark {
 task gff_merge {
 
   File   bin
-  File   input_fasta
+  Int    val
+  String dir
+  String input_fasta
   String project_id
   File?  misc_and_regulatory_gff
   File?  rrna_gff
@@ -334,7 +363,7 @@ task gff_merge {
   File?  prodigal_gff
 
   command {
-    ${bin} -f ${input_fasta} ${"-a " + misc_and_regulatory_gff + " " + rrna_gff} \
+    ${bin} -f ${dir}${val}/${input_fasta} ${"-a " + misc_and_regulatory_gff + " " + rrna_gff} \
     ${trna_gff} ${ncrna_tmrna_gff} ${crt_gff} ${genemark_gff} ${prodigal_gff} 1> ${project_id}_structural_annotation.gff
   }
   output {
@@ -345,7 +374,9 @@ task gff_merge {
 task fasta_merge {
 
   File   bin
-  File   input_fasta
+  Int    val
+  String dir
+  String input_fasta
   String project_id
   File   final_gff
   File?  genemark_genes
@@ -366,23 +397,27 @@ task fasta_merge {
 task gff_and_fasta_stats {
 
   File   bin
-  File   input_fasta
+  Int    val
+  String dir
+  String input_fasta
   String project_id
   File   final_gff
 
   command {
-    ${bin} ${input_fasta} ${final_gff}
+    ${bin} ${dir}${val}/${input_fasta} ${final_gff}
   }
 }
 
 task post_qc {
 
   File   qc_bin
-  File   input_fasta
+  Int    val
+  String dir
+  String input_fasta
   String project_id
 
   command {
-    ${qc_bin} ${input_fasta} "${project_id}_structural_annotation.gff"
+    ${qc_bin} ${dir}${val}/${input_fasta} "${project_id}_structural_annotation.gff"
   }
   output {
     File out = "${project_id}_structural_annotation.gff"
