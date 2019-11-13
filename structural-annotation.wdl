@@ -1,6 +1,7 @@
 import "trnascan.wdl" as trnascan
 import "rfam.wdl" as rfam
 import "crt.wdl" as crt
+import "prodigal.wdl" as prodigal
 
 workflow annotate {
 
@@ -80,12 +81,12 @@ workflow annotate {
     }
   }
   if(prodigal_execute) {
-    call prodigal {
+    call prodigal.prodigal {
       input:
-        bin = prodigal_bin,
-        input_fasta = imgap_input_fasta,
-        project_id = imgap_project_id,
-        project_type = imgap_project_type
+        prodigal_bin = prodigal_bin,
+        imgap_input_fasta = imgap_input_fasta,
+        imgap_project_id = imgap_project_id,
+        imgap_project_type = imgap_project_type
     }
   }
   if(genemark_execute) {
@@ -156,25 +157,6 @@ task pre_qc {
   }
   output {
     File fasta = "${project_id}_contigs.fna"
-  }
-}
-
-task prodigal {
-
-  File   bin
-  File   input_fasta
-  String project_id
-  String project_type
-
-  command {
-    ${bin} ${input_fasta} ${project_type} &> ${project_id}_prodigal.log
-  }
-  output {
-    File log = "${project_id}_prodigal.log"
-    File gff = "${project_id}_prodigal.gff"
-    File out = "${project_id}_prodigal.out"
-    File genes = "${project_id}_prodigal_genes.fna" 
-    File proteins = "${project_id}_prodigal_proteins.faa" 
   }
 }
 
