@@ -2,35 +2,58 @@ workflow crt {
 
   String imgap_input_fasta
   String imgap_project_id
-  File   bin
+  File   crt_cli_jar
+  File   crt_transform_bin
 
-  call crt_task {
+  call run {
     input:
-      bin = bin,
+      jar = crt_cli_jar,
       input_fasta = imgap_input_fasta,
       project_id = imgap_project_id
   }
 
+  call transform {
+    input:
+      jar = crt_cli_jar,
+      transform_bin = crt_transform_bin,
+      project_id = imgap_project_id,
+      crt_out = run.out
+  }
+
   output {
-    File crisprs = crt_task.crisprs
-    File gff = crt_task.gff
+    File crisprs = transform.crisprs
+    File gff = transform.gff
   }
 }
 
-task crt_task {
+task run {
 
-  File   bin
+  File   jar
   File   input_fasta
   String project_id
 
   command {
-    ${bin} ${input_fasta}  &> ${project_id}_crt.log
+    java -Xmx1536m -jar ${jar} ${input_fasta} ${project_id}_crt.out
   }
   output {
-    File log = "${project_id}_crt.log"
+    File out = "${project_id}_crt.out"
+  }
+}
+
+task transform {
+
+  File   jar
+  File   transform_bin
+  File   crt_out
+  String project_id
+
+  command {
+    tool_and_version=$(java -jar ${jar} -version | cut -d' ' -f1,6)
+    ${transform_bin} ${crt_out} "$tool_and_version"
+  }
+  output{
     File crisprs = "${project_id}_crt.crisprs"
     File gff = "${project_id}_crt.gff"
-    File out = "${project_id}_crt.out"
   }
 }
 

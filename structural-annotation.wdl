@@ -24,7 +24,8 @@ workflow annotate {
   File    rfam_claninfo_tsv
   File    rfam_feature_lookup_tsv
   Boolean crt_execute
-  File    crt_bin
+  File    crt_cli_jar
+  File    crt_transform_bin
   Boolean prodigal_execute
   File    prodigal_bin
   Boolean genemark_execute
@@ -72,7 +73,8 @@ workflow annotate {
   if(crt_execute) {
     call crt.crt {
       input:
-        bin = crt_bin,
+        crt_cli_jar = crt_cli_jar,
+        crt_transform_bin = crt_transform_bin,
         imgap_input_fasta = imgap_input_fasta,
         imgap_project_id = imgap_project_id
     }
