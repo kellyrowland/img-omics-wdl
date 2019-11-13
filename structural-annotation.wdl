@@ -1,4 +1,5 @@
 import "trnascan.wdl" as trnascan
+import "rfam.wdl" as rfam
 
 workflow annotate {
 
@@ -17,7 +18,8 @@ workflow annotate {
   File    trnascan_se_bin
   File    trnascan_pick_and_transform_to_gff_bin
   Boolean rfam_execute
-  File    rfam_bin
+  File    rfam_cmsearch_bin
+  File    rfam_clan_filter_bin
   File    rfam_cm
   File    rfam_claninfo_tsv
   File    rfam_feature_lookup_tsv
@@ -54,15 +56,17 @@ workflow annotate {
     }
   }
   if(rfam_execute) {
-    call rfam {
+    call rfam.rfam {
       input:
-        bin = rfam_bin,
-        input_fasta = imgap_input_fasta,
-        project_id = imgap_project_id,
+        cmsearch_bin = rfam_cmsearch_bin,
+        clan_filter_bin = rfam_clan_filter_bin,
+        imgap_input_fasta = imgap_input_fasta,
+        imgap_project_id = imgap_project_id,
+        imgap_project_type = imgap_project_type,
         cm = rfam_cm,
         claninfo_tsv = rfam_claninfo_tsv,
         feature_lookup_tsv = rfam_feature_lookup_tsv,
-        threads = additional_threads
+        additional_threads = additional_threads
     }
   }
   if(crt_execute) {
@@ -152,28 +156,6 @@ task pre_qc {
   }
   output {
     File fasta = "${project_id}_contigs.fna"
-  }
-}
-
-task rfam {
-
-  File   bin
-  File   input_fasta
-  String project_id
-  File   cm
-  File   claninfo_tsv
-  File   feature_lookup_tsv
-  Int    threads
-
-  command {
-    ${bin} ${input_fasta} ${cm} ${claninfo_tsv} ${feature_lookup_tsv} ${threads} &> ${project_id}_rfam.log
-  }
-  output {
-    File log = "${project_id}_rfam.log"
-    File tbl = "${project_id}_rfam.tbl"
-    File misc_bind_misc_feature_regulatory_gff = "${project_id}_rfam_misc_bind_misc_feature_regulatory.gff"
-    File ncrna_tmrna_gff = "${project_id}_rfam_ncrna_tmrna.gff"
-    File rrna_gff = "${project_id}_rfam_rrna.gff"
   }
 }
 
