@@ -1,5 +1,6 @@
 import "trnascan.wdl" as trnascan
 import "rfam.wdl" as rfam
+import "crt.wdl" as crt
 
 workflow annotate {
 
@@ -24,7 +25,8 @@ workflow annotate {
   File    rfam_claninfo_tsv
   File    rfam_feature_lookup_tsv
   Boolean crt_execute
-  File    crt_bin
+  File    crt_cli_jar
+  File    crt_transform_bin
   Boolean prodigal_execute
   File    prodigal_bin
   Boolean genemark_execute
@@ -70,11 +72,12 @@ workflow annotate {
     }
   }
   if(crt_execute) {
-    call crt {
+    call crt.crt {
       input:
-        bin = crt_bin,
-        input_fasta = imgap_input_fasta,
-        project_id = imgap_project_id
+        crt_cli_jar = crt_cli_jar,
+        crt_transform_bin = crt_transform_bin,
+        imgap_input_fasta = imgap_input_fasta,
+        imgap_project_id = imgap_project_id
     }
   }
   if(prodigal_execute) {
@@ -156,23 +159,6 @@ task pre_qc {
   }
   output {
     File fasta = "${project_id}_contigs.fna"
-  }
-}
-
-task crt {
-
-  File   bin
-  File   input_fasta
-  String project_id
-
-  command {
-    ${bin} ${input_fasta}  &> ${project_id}_crt.log
-  }
-  output {
-    File log = "${project_id}_crt.log"
-    File crisprs = "${project_id}_crt.crisprs"
-    File gff = "${project_id}_crt.gff"
-    File out = "${project_id}_crt.out"
   }
 }
 

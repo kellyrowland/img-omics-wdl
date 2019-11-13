@@ -25,7 +25,8 @@ workflow metagenome_annotation {
   File    sa_rfam_claninfo_tsv
   File    sa_rfam_feature_lookup_tsv
   Boolean sa_crt_execute
-  File    sa_crt_bin
+  File    sa_crt_cli_jar
+  File    sa_crt_transform_bin
   Boolean sa_prodigal_execute
   File    sa_prodigal_bin
   Boolean sa_genemark_execute
@@ -91,7 +92,8 @@ workflow metagenome_annotation {
           rfam_claninfo_tsv = sa_rfam_claninfo_tsv,
           rfam_feature_lookup_tsv = sa_rfam_feature_lookup_tsv,
           crt_execute = sa_crt_execute,
-          crt_bin = sa_crt_bin,
+          crt_cli_jar = sa_crt_cli_jar,
+          crt_transform_bin = sa_crt_transform_bin,
           prodigal_execute = sa_prodigal_execute,
           prodigal_bin = sa_prodigal_bin,
           genemark_execute = sa_genemark_execute,

@@ -12,23 +12,23 @@ workflow rfam {
 
 
   call cmsearch {
-        input:
-          bin = cmsearch_bin,
-          input_fasta = imgap_input_fasta,
-          project_id = imgap_project_id,
-          cm = cm,
-          threads = additional_threads
-      }
+    input:
+      bin = cmsearch_bin,
+      input_fasta = imgap_input_fasta,
+      project_id = imgap_project_id,
+      cm = cm,
+      threads = additional_threads
+  }
 
   call clan_filter {
-        input:
-          clan_filter_bin = clan_filter_bin,
-          project_id = imgap_project_id,
-          tbl = cmsearch.tbl,
-          cmsearch_bin = cmsearch_bin,
-          claninfo_tsv = claninfo_tsv,
-          feature_lookup_tsv = feature_lookup_tsv,
-      }
+    input:
+      clan_filter_bin = clan_filter_bin,
+      project_id = imgap_project_id,
+      tbl = cmsearch.tbl,
+      cmsearch_bin = cmsearch_bin,
+      claninfo_tsv = claninfo_tsv,
+      feature_lookup_tsv = feature_lookup_tsv,
+  }
 
   call misc_and_regulatory {
     input:
