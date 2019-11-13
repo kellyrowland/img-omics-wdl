@@ -1,5 +1,6 @@
 import "trnascan.wdl" as trnascan
 import "rfam.wdl" as rfam
+import "crt.wdl" as crt
 
 workflow annotate {
 
@@ -69,11 +70,11 @@ workflow annotate {
     }
   }
   if(crt_execute) {
-    call crt {
+    call crt.crt {
       input:
         bin = crt_bin,
-        input_fasta = imgap_input_fasta,
-        project_id = imgap_project_id
+        imgap_input_fasta = imgap_input_fasta,
+        imgap_project_id = imgap_project_id
     }
   }
   if(prodigal_execute) {
@@ -153,23 +154,6 @@ task pre_qc {
   }
   output {
     File fasta = "${project_id}_contigs.fna"
-  }
-}
-
-task crt {
-
-  File   bin
-  File   input_fasta
-  String project_id
-
-  command {
-    ${bin} ${input_fasta}  &> ${project_id}_crt.log
-  }
-  output {
-    File log = "${project_id}_crt.log"
-    File crisprs = "${project_id}_crt.crisprs"
-    File gff = "${project_id}_crt.gff"
-    File out = "${project_id}_crt.out"
   }
 }
 
