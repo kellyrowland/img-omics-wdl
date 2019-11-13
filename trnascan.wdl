@@ -63,13 +63,10 @@ task trnascan_metagenome {
   String project_id
   Int    threads
 
-  command <<<
-    filesize=$(ls -l ${input_fasta} | awk '{print $5}')
-    blocksize=$(($filesize / ${threads-2}))
-    cat ${input_fasta} | parallel --pipe --recstart '>' --blocksize $blocksize \
-    'cat > 'tmp.$$.split.fna;' ${bin} -G --thread 0 tmp.$$.split.fna &> tmp.general.$$.out;'
-    cat tmp.general.* > ${project_id}_trnascan_general.out
-  >>>
+  # need to parallelize this
+  command {
+    ${bin} -G --thread ${threads} ${input_fasta} &> ${project_id}_trnascan_general.out
+  }
   output {
     File out = "${project_id}_trnascan_general.out"
   }
