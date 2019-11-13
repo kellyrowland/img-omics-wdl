@@ -2,6 +2,7 @@ import "trnascan.wdl" as trnascan
 
 workflow annotate {
 
+  Boolean test = true
   File   imgap_input_fasta
   String imgap_project_id
   String imgap_project_type
@@ -90,6 +91,7 @@ workflow annotate {
         project_type = imgap_project_type
     }
   }
+  if(!test) {
   call gff_merge {
     input:
       bin = gff_merge_bin,
@@ -102,6 +104,7 @@ workflow annotate {
       crt_gff = crt.gff, 
       genemark_gff = genemark.gff,
       prodigal_gff = prodigal.gff
+  }
   }
   if(prodigal_execute || genemark_execute) {
     call fasta_merge {
