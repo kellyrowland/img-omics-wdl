@@ -1,5 +1,5 @@
 {
-  "metagenome_annotation.num_splits": 9,
+  "metagenome_annotation.num_splits": 1,
   "metagenome_annotation.imgap_input_dir": "/global/projectb/scratch/rowlandk/jaws/metagenome_annotation/splits/",
   "metagenome_annotation.imgap_input_fasta": "Ga0399893_contigs.fna",
   "metagenome_annotation.imgap_project_id": "Ga0399893",
