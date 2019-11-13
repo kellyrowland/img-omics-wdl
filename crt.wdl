@@ -46,10 +46,12 @@ task transform {
   File   transform_bin
   File   crt_out
   String project_id
+  String crt_out_local = basename(crt_out)
 
   command {
+    mv ${crt_out} ./${crt_out_local}
     tool_and_version=$(java -jar ${jar} -version | cut -d' ' -f1,6)
-    ${transform_bin} ${crt_out} "$tool_and_version"
+    ${transform_bin} ${crt_out_local} "$tool_and_version"
   }
   output{
     File crisprs = "${project_id}_crt.crisprs"
