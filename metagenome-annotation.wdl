@@ -19,7 +19,8 @@ workflow metagenome_annotation {
   File    sa_trnascan_se_bin
   File    sa_trnascan_pick_and_transform_to_gff_bin
   Boolean sa_rfam_execute
-  File    sa_rfam_bin
+  File    sa_rfam_cmsearch_bin
+  File    sa_rfam_clan_filter_bin
   File    sa_rfam_cm
   File    sa_rfam_claninfo_tsv
   File    sa_rfam_feature_lookup_tsv
@@ -84,7 +85,8 @@ workflow metagenome_annotation {
           trnascan_se_bin = sa_trnascan_se_bin,
           trnascan_pick_and_transform_to_gff_bin = sa_trnascan_pick_and_transform_to_gff_bin,
           rfam_execute = sa_rfam_execute,
-          rfam_bin = sa_rfam_bin,
+          rfam_cmsearch_bin = sa_rfam_cmsearch_bin,
+          rfam_clan_filter_bin = sa_rfam_clan_filter_bin,
           rfam_cm = sa_rfam_cm,
           rfam_claninfo_tsv = sa_rfam_claninfo_tsv,
           rfam_feature_lookup_tsv = sa_rfam_feature_lookup_tsv,
