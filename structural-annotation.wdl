@@ -29,6 +29,7 @@ workflow annotate {
   File    crt_transform_bin
   Boolean prodigal_execute
   File    prodigal_bin
+  File    prodigal_unify_bin
   Boolean genemark_execute
   File    genemark_bin
   File    gff_merge_bin
@@ -84,6 +85,7 @@ workflow annotate {
     call prodigal.prodigal {
       input:
         prodigal_bin = prodigal_bin,
+        prodigal_unify_bin = prodigal_unify_bin,
         imgap_input_fasta = imgap_input_fasta,
         imgap_project_id = imgap_project_id,
         imgap_project_type = imgap_project_type
