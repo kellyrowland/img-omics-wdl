@@ -23,7 +23,7 @@
   "metagenome_annotation.sa_crt_cli_jar": "/global/dna/projectdirs/microbial/omics/bin/CRT-CLI.jar",
   "metagenome_annotation.sa_crt_transform_bin": "bin/structural_annotation/transform_crt_output.py",
   "metagenome_annotation.sa_prodigal_execute": true,
-  "metagenome_annotation.sa_prodigal_bin": "bin/structural_annotation/prodigal_genes.sh",
+  "metagenome_annotation.sa_prodigal_bin": "/global/dna/projectdirs/microbial/omics/bin/prodigal",
   "metagenome_annotation.sa_prodigal_unify_bin": "bin/structural_annotation/unify_gene_ids.py",
   "metagenome_annotation.sa_genemark_execute": true,
   "metagenome_annotation.sa_genemark_bin": "bin/structural_annotation/genemark_genes.sh",
