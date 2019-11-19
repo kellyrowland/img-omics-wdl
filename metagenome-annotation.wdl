@@ -29,9 +29,11 @@ workflow metagenome_annotation {
   File    sa_crt_transform_bin
   Boolean sa_prodigal_execute
   File    sa_prodigal_bin
-  File    sa_prodigal_unify_bin
+  File    sa_unify_bin
   Boolean sa_genemark_execute
-  File    sa_genemark_bin
+  File    sa_genemark_iso_bin
+  File    sa_genemark_meta_bin
+  File    sa_genemark_meta_model
   File    sa_gff_merge_bin
   File    sa_fasta_merge_bin
   Boolean sa_gff_and_fasta_stats_execute
@@ -97,9 +99,11 @@ workflow metagenome_annotation {
           crt_transform_bin = sa_crt_transform_bin,
           prodigal_execute = sa_prodigal_execute,
           prodigal_bin = sa_prodigal_bin,
-          prodigal_unify_bin = sa_prodigal_unify_bin,
+          unify_bin = sa_unify_bin,
           genemark_execute = sa_genemark_execute,
-          genemark_bin = sa_genemark_bin,
+          genemark_iso_bin = sa_genemark_iso_bin,
+          genemark_meta_bin = sa_genemark_meta_bin,
+          genemark_meta_model = sa_genemark_meta_model,
           gff_merge_bin = sa_gff_merge_bin,
           fasta_merge_bin = sa_fasta_merge_bin,
           gff_and_fasta_stats_execute = sa_gff_and_fasta_stats_execute,

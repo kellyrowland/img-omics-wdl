@@ -2,6 +2,7 @@ import "trnascan.wdl" as trnascan
 import "rfam.wdl" as rfam
 import "crt.wdl" as crt
 import "prodigal.wdl" as prodigal
+import "genemark.wdl" as genemark
 
 workflow annotate {
 
@@ -29,9 +30,11 @@ workflow annotate {
   File    crt_transform_bin
   Boolean prodigal_execute
   File    prodigal_bin
-  File    prodigal_unify_bin
+  File    unify_bin
   Boolean genemark_execute
-  File    genemark_bin
+  File    genemark_iso_bin
+  File    genemark_meta_bin
+  File    genemark_meta_model
   File    gff_merge_bin
   File    fasta_merge_bin
   Boolean gff_and_fasta_stats_execute
@@ -85,19 +88,22 @@ workflow annotate {
     call prodigal.prodigal {
       input:
         prodigal_bin = prodigal_bin,
-        prodigal_unify_bin = prodigal_unify_bin,
+        prodigal_unify_bin = unify_bin,
         imgap_input_fasta = imgap_input_fasta,
         imgap_project_id = imgap_project_id,
         imgap_project_type = imgap_project_type
     }
   }
   if(genemark_execute) {
-    call genemark {
+    call genemark.genemark {
       input:
-        bin = genemark_bin,
-        input_fasta = imgap_input_fasta,
-        project_id = imgap_project_id,
-        project_type = imgap_project_type
+        genemark_iso_bin = genemark_iso_bin,
+        genemark_meta_bin = genemark_meta_bin,
+        genemark_meta_model = genemark_meta_model,
+        genemark_unify_bin = unify_bin,
+        imgap_input_fasta = imgap_input_fasta,
+        imgap_project_id = imgap_project_id,
+        imgap_project_type = imgap_project_type
     }
   }
   call gff_merge {
@@ -159,24 +165,6 @@ task pre_qc {
   }
   output {
     File fasta = "${project_id}_contigs.fna"
-  }
-}
-
-task genemark {
-
-  File   bin
-  File   input_fasta
-  String project_id
-  String project_type
-
-  command {
-    ${bin} ${input_fasta} ${project_type} &> ${project_id}_genemark.log
-  }
-  output {
-    File log = "${project_id}_genemark.log"
-    File gff = "${project_id}_genemark.gff"
-    File genes = "${project_id}_genemark_genes.fna" 
-    File proteins = "${project_id}_genemark_proteins.faa" 
   }
 }
 
