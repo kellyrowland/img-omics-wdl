@@ -116,7 +116,7 @@ workflow annotate {
       prodigal_gff = prodigal.gff
   }
   }
-  if(prodigal_execute || genemark_execute) {
+  if(!test && (prodigal_execute || genemark_execute)) {
     call fasta_merge {
       input:
         bin = fasta_merge_bin,
