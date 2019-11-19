@@ -12,7 +12,7 @@ workflow prodigal {
         input_fasta = imgap_input_fasta
     }
   }
-  if(fasta_len.wc >= 20000) {
+  if(imgap_project_type == "isolate" && fasta_len.wc >= 20000) {
     call iso_big {
       input:
         bin = prodigal_bin,
@@ -20,7 +20,7 @@ workflow prodigal {
         project_id = imgap_project_id
     }
   }
-  if(fasta_len.wc < 20000) {
+  if(imgap_project_type == "isolate" && fasta_len.wc < 20000) {
     call iso_small {
       input:
         bin = prodigal_bin,
@@ -67,7 +67,7 @@ task fasta_len {
     grep -v '^>' ${input_fasta} | wc -m
   }
   output {
-    Int wc = read_int(stdout())
+    Int wc = select_first([read_int(stdout()),0])
   }
 }
 
@@ -148,6 +148,15 @@ task clean_and_unify {
     ${unify_bin} ${iso_big_gff} ${iso_small_gff} ${meta_gff} \
                  ${iso_big_genes_fasta} ${iso_small_genes_fasta} ${meta_genes_fasta} \
                  ${iso_big_proteins_fasta} ${iso_small_proteins_fasta} ${meta_proteins_fasta}
+    mv ${iso_big_proteins_fasta} . 2> /dev/null
+    mv ${iso_small_proteins_fasta} . 2> /dev/null
+    mv ${meta_proteins_fasta} . 2> /dev/null
+    mv ${iso_big_genes_fasta} . 2> /dev/null
+    mv ${iso_small_genes_fasta} . 2> /dev/null
+    mv ${meta_genes_fasta} . 2> /dev/null
+    mv ${iso_big_gff} . 2> /dev/null
+    mv ${iso_small_gff} . 2> /dev/null
+    mv ${meta_gff} . 2> /dev/null
   }
   output {
     File gff = "${project_id}_prodigal.gff"
