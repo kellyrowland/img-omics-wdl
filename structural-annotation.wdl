@@ -136,10 +136,12 @@ workflow annotate {
 
 
 if(imgap_project_type == "isolate") {
-#    call post_qc {
-#      input:
-#        qc_bin = post_qc_bin
-#    }
+    call post_qc {
+      input:
+        qc_bin = post_qc_bin,
+        input_fasta = imgap_input_fasta,
+        project_id = imgap_project_id
+    }
   }
 
 }
