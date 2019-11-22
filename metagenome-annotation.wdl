@@ -1,4 +1,5 @@
 import "structural-annotation.wdl" as sa
+import "functional-annotation.wdl" as fa
 
 workflow metagenome_annotation {
 
@@ -10,7 +11,6 @@ workflow metagenome_annotation {
   Int additional_threads
   # structural annotation
   Boolean sa_execute
-  File    sa_bin
   Boolean sa_pre_qc_execute
   File    sa_pre_qc_bin
   String  sa_pre_qc_rename
@@ -40,12 +40,13 @@ workflow metagenome_annotation {
   File    sa_gff_and_fasta_stats_bin
   # functional annotation
   Boolean fa_execute
-  File    fa_bin
   String  fa_product_names_mapping_dir
   Boolean fa_ko_ec_execute
   File    fa_ko_ec_img_nr_db
   File    fa_ko_ec_md5_mapping
   File    fa_ko_ec_taxon_to_phylo_mapping
+  File    fa_lastal_bin
+  File    fa_selector_bin
   Boolean fa_cath_funfam_execute
   File    fa_cath_funfam_db
   Boolean fa_pfam_execute
@@ -74,13 +75,12 @@ workflow metagenome_annotation {
   scatter(split in setup.splits) {
 
     if(sa_execute) {
-      call sa.annotate {
+      call sa.s_annotate {
         input:
           imgap_project_id = imgap_project_id,
           additional_threads = additional_threads,
           imgap_project_type = imgap_project_type,
           imgap_input_fasta = split,
-          bin = sa_bin,
           pre_qc_execute = sa_pre_qc_execute,
           pre_qc_bin = sa_pre_qc_bin,
           pre_qc_rename = sa_pre_qc_rename,
@@ -111,12 +111,21 @@ workflow metagenome_annotation {
       }
     }
 
-#  if(fa_execute) {
-#    call functional_annotation {
-#      input:
-#        fa_bin = fa_bin
-#    }
-#  }
+    if(fa_execute) {
+      call fa.f_annotate {
+        input:
+          imgap_project_id = imgap_project_id,
+          imgap_project_type = imgap_project_type,
+          additional_threads = additional_threads,
+          input_fasta = s_annotate.proteins,
+          ko_ec_execute = fa_ko_ec_execute,
+          ko_ec_img_nr_db = fa_ko_ec_img_nr_db,
+          ko_ec_md5_mapping = fa_ko_ec_md5_mapping,
+          ko_ec_taxon_to_phylo_mapping = fa_ko_ec_taxon_to_phylo_mapping,
+          lastal_bin = fa_lastal_bin,
+          selector_bin = fa_selector_bin
+      }
+    }
   }
 }
 

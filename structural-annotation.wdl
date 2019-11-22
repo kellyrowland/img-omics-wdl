@@ -4,14 +4,12 @@ import "crt.wdl" as crt
 import "prodigal.wdl" as prodigal
 import "genemark.wdl" as genemark
 
-workflow annotate {
+workflow s_annotate {
 
-  File   imgap_input_fasta
-  String imgap_project_id
-  String imgap_project_type
-  Int additional_threads
-  # structural annotation
-  File    bin
+  File    imgap_input_fasta
+  String  imgap_project_id
+  String  imgap_project_type
+  Int     additional_threads
   Boolean pre_qc_execute
   File    pre_qc_bin
   String  pre_qc_rename
@@ -141,9 +139,7 @@ workflow annotate {
         final_gff = gff_merge.final_gff
     }
   }
-
-
-if(imgap_project_type == "isolate") {
+  if(imgap_project_type == "isolate") {
     call post_qc {
       input:
         qc_bin = post_qc_bin,
@@ -151,7 +147,9 @@ if(imgap_project_type == "isolate") {
         project_id = imgap_project_id
     }
   }
-
+  output {
+    File? proteins = fasta_merge.final_proteins
+  }
 }
 
 task pre_qc {
