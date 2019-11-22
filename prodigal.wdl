@@ -4,6 +4,7 @@ workflow prodigal {
   String imgap_project_id
   String imgap_project_type
   File   prodigal_bin
+  File   prodigal_unify_bin
 
   if(imgap_project_type == "isolate") {
     call fasta_len {
@@ -11,7 +12,7 @@ workflow prodigal {
         input_fasta = imgap_input_fasta
     }
   }
-  if(fasta_len.wc > 20000) {
+  if(imgap_project_type == "isolate" && fasta_len.wc >= 20000) {
     call iso_big {
       input:
         bin = prodigal_bin,
@@ -19,7 +20,7 @@ workflow prodigal {
         project_id = imgap_project_id
     }
   }
-  if(fasta_len.wc <= 20000) {
+  if(imgap_project_type == "isolate" && fasta_len.wc < 20000) {
     call iso_small {
       input:
         bin = prodigal_bin,
@@ -41,6 +42,13 @@ workflow prodigal {
       iso_big_proteins_fasta = iso_big.proteins,
       iso_small_proteins_fasta = iso_small.proteins,
       meta_proteins_fasta = metag.proteins,
+      iso_big_genes_fasta = iso_big.genes,
+      iso_small_genes_fasta = iso_small.genes,
+      meta_genes_fasta = metag.genes,
+      iso_big_gff = iso_big.gff,
+      iso_small_gff = iso_small.gff,
+      meta_gff = metag.gff,
+      unify_bin = prodigal_unify_bin,
       project_id = imgap_project_id
   }
 
@@ -59,7 +67,7 @@ task fasta_len {
     grep -v '^>' ${input_fasta} | wc -m
   }
   output {
-    Int wc = read_int(stdout())
+    Int wc = select_first([read_int(stdout()),0])
   }
 }
 
@@ -125,10 +133,30 @@ task clean_and_unify {
   File?  iso_big_proteins_fasta
   File?  iso_small_proteins_fasta
   File?  meta_proteins_fasta
+  File?  iso_big_genes_fasta
+  File?  iso_small_genes_fasta
+  File?  meta_genes_fasta
+  File?  iso_big_gff
+  File?  iso_small_gff
+  File?  meta_gff
+  File   unify_bin
   String project_id
 
   command {
-
+    sed -i 's/\*$//g' ${iso_big_proteins_fasta} ${iso_small_proteins_fasta} ${meta_proteins_fasta}
+    sed -i 's/\*/X/g' ${iso_big_proteins_fasta} ${iso_small_proteins_fasta} ${meta_proteins_fasta}
+    ${unify_bin} ${iso_big_gff} ${iso_small_gff} ${meta_gff} \
+                 ${iso_big_genes_fasta} ${iso_small_genes_fasta} ${meta_genes_fasta} \
+                 ${iso_big_proteins_fasta} ${iso_small_proteins_fasta} ${meta_proteins_fasta}
+    mv ${iso_big_proteins_fasta} . 2> /dev/null
+    mv ${iso_small_proteins_fasta} . 2> /dev/null
+    mv ${meta_proteins_fasta} . 2> /dev/null
+    mv ${iso_big_genes_fasta} . 2> /dev/null
+    mv ${iso_small_genes_fasta} . 2> /dev/null
+    mv ${meta_genes_fasta} . 2> /dev/null
+    mv ${iso_big_gff} . 2> /dev/null
+    mv ${iso_small_gff} . 2> /dev/null
+    mv ${meta_gff} . 2> /dev/null
   }
   output {
     File gff = "${project_id}_prodigal.gff"
