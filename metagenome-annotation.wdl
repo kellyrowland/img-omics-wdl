@@ -60,6 +60,8 @@ workflow metagenome_annotation {
   File    fa_tigrfam_db
   Boolean fa_smart_execute
   File    fa_smart_db
+  File    fa_hmmsearch_bin
+  File    fa_frag_hits_filter_bin
   Boolean fa_signalp_execute
   String  fa_signalp_gram_stain
   Boolean fa_tmhmm_execute
@@ -123,7 +125,11 @@ workflow metagenome_annotation {
           ko_ec_md5_mapping = fa_ko_ec_md5_mapping,
           ko_ec_taxon_to_phylo_mapping = fa_ko_ec_taxon_to_phylo_mapping,
           lastal_bin = fa_lastal_bin,
-          selector_bin = fa_selector_bin
+          selector_bin = fa_selector_bin,
+          smart_execute = fa_smart_execute,
+          smart_db = fa_smart_db,
+          hmmsearch_bin = fa_hmmsearch_bin,
+          frag_hits_filter_bin = fa_frag_hits_filter_bin
       }
     }
   }

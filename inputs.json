@@ -54,6 +54,8 @@
   "metagenome_annotation.fa_tigrfam_db": "/global/dna/projectdirs/microbial/omics/databases/TIGRFAM/v15.0/TIGRFAM.hmm",
   "metagenome_annotation.fa_smart_execute": true,
   "metagenome_annotation.fa_smart_db": "/global/dna/projectdirs/microbial/omics/databases/SMART/01_06_2016/SMART.hmm",
+  "metagenome_annotation.fa_hmmsearch_bin": "/global/common/sw/cray/cnl7/haswell/hmmer/3.1b2/gcc/8.2.0/a2ng2in/bin/hmmsearch",
+  "metagenome_annotation.fa_frag_hits_filter_bin": "bin/functional_annotation/hmmsearch_fragmented_hits_filter.py",
   "metagenome_annotation.fa_signalp_execute": true,
   "metagenome_annotation.fa_signalp_gram_stain": "GRAM_STAIN",
   "metagenome_annotation.fa_tmhmm_execute": true,
