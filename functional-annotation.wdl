@@ -19,6 +19,8 @@ workflow f_annotate {
   Boolean tigrfam_execute
   File    tigrfam_db
   File    hit_selector_bin
+  Boolean superfam_execute
+  File    superfam_db
 
   if(ko_ec_execute) {
     call ko_ec {
@@ -65,6 +67,17 @@ workflow f_annotate {
         tigrfam_db = tigrfam_db,
         hmmsearch = hmmsearch_bin,
         hit_selector = hit_selector_bin
+    }
+  }
+  if(superfam_execute) {
+    call superfam {
+      input:
+        project_id = imgap_project_id,
+        input_fasta = input_fasta,
+        threads = additional_threads,
+        superfam_db = superfam_db,
+        hmmsearch = hmmsearch_bin,
+        frag_hits_filter = frag_hits_filter_bin
     }
   }
 }
@@ -170,7 +183,7 @@ task tigrfam {
     ${hmmsearch} --notextw --cut_nc --cpu ${threads} \
                  --domtblout ${project_id}_proteins.tigrfam.domtblout \
                  ${tigrfam_db} ${input_fasta}
-  grep -v '^#' ${project_id}_proteins.tigrfam.domtblout | \
+    grep -v '^#' ${project_id}_proteins.tigrfam.domtblout | \
     awk '{print $1,$3,$4,$6,$13,$14,$16,$17,$20,$21}' | \
     sort -k1,1 -k6,6nr -k5,5n | \
     ${hit_selector} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
@@ -179,4 +192,32 @@ task tigrfam {
   output {
     File gff = "{project_id}_tigrfam.gff"
   }
+}
+
+task superfam {
+
+  String project_id
+  File   input_fasta
+  File   superfam_db
+  Int    threads = 0
+  Float  min_domain_eval_cutoff = 0.01
+  Float  aln_length_ratio = 0.7
+  Float  max_overlap_ratio = 0.1
+  File   hmmsearch
+  File   frag_hits_filter
+
+  command <<<
+    ${hmmsearch} --notextw --domE ${min_domain_eval_cutoff} --cpu ${threads} \
+                 --domtblout ${project_id}_proteins._supfam.domtblout \
+                 ${superfam_db} ${input_fasta}
+    grep -v '^#' ${project_id}_proteins.cog.domtblout | \
+    awk '{print $1,$3,$4,$5,$6,$7,$8,$13,$14,$16,$17,$20,$21}' | \
+    sort -k1,1 -k7,7nr -k6,6n | \
+    ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
+                        > ${project_id}_supfam.gff
+  >>>
+  output {
+    File gff = "${project_id}_supfam.gff"
+  }
+  
 }
