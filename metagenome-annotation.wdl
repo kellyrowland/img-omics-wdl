@@ -129,7 +129,9 @@ workflow metagenome_annotation {
           smart_execute = fa_smart_execute,
           smart_db = fa_smart_db,
           hmmsearch_bin = fa_hmmsearch_bin,
-          frag_hits_filter_bin = fa_frag_hits_filter_bin
+          frag_hits_filter_bin = fa_frag_hits_filter_bin,
+          cog_execute = fa_cog_execute,
+          cog_db = fa_cog_db
       }
     }
   }
