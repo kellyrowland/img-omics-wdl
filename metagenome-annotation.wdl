@@ -58,6 +58,7 @@ workflow metagenome_annotation {
   File    fa_cog_db
   Boolean fa_tigrfam_execute
   File    fa_tigrfam_db
+  File    fa_hit_selector_bin
   Boolean fa_smart_execute
   File    fa_smart_db
   File    fa_hmmsearch_bin
@@ -131,7 +132,10 @@ workflow metagenome_annotation {
           hmmsearch_bin = fa_hmmsearch_bin,
           frag_hits_filter_bin = fa_frag_hits_filter_bin,
           cog_execute = fa_cog_execute,
-          cog_db = fa_cog_db
+          cog_db = fa_cog_db,
+          tigrfam_execute = fa_tigrfam_execute,
+          tigrfam_db = fa_tigrfam_db,
+          hit_selector_bin = fa_hit_selector_bin
       }
     }
   }

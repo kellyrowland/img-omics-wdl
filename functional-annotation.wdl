@@ -16,6 +16,9 @@ workflow f_annotate {
   File    frag_hits_filter_bin
   Boolean cog_execute
   File    cog_db
+  Boolean tigrfam_execute
+  File    tigrfam_db
+  File    hit_selector_bin
 
   if(ko_ec_execute) {
     call ko_ec {
@@ -51,6 +54,17 @@ workflow f_annotate {
         cog_db = cog_db,
         hmmsearch = hmmsearch_bin,
         frag_hits_filter = frag_hits_filter_bin
+    }
+  }
+  if(tigrfam_execute) {
+    call tigrfam {
+      input:
+        project_id = imgap_project_id,
+        input_fasta = input_fasta,
+        threads = additional_threads,
+        tigrfam_db = tigrfam_db,
+        hmmsearch = hmmsearch_bin,
+        hit_selector = hit_selector_bin
     }
   }
 }
@@ -138,5 +152,31 @@ task cog {
   >>>
   output {
     File gff = "${project_id}_cog.gff"
+  }
+}
+
+task tigrfam {
+  
+  String project_id
+  File   input_fasta
+  File   tigrfam_db
+  Int    threads = 0
+  Float  aln_length_ratio = 0.7
+  Float  max_overlap_ratio = 0.1
+  File   hmmsearch
+  File   hit_selector
+
+  command <<<
+    ${hmmsearch} --notextw --cut_nc --cpu ${threads} \
+                 --domtblout ${project_id}_proteins.tigrfam.domtblout \
+                 ${tigrfam_db} ${input_fasta}
+  grep -v '^#' ${project_id}_proteins.tigrfam.domtblout | \
+    awk '{print $1,$3,$4,$6,$13,$14,$16,$17,$20,$21}' | \
+    sort -k1,1 -k6,6nr -k5,5n | \
+    ${hit_selector} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
+                        > ${project_id}_tigrfam.gff
+  >>>
+  output {
+    File gff = "{project_id}_tigrfam.gff"
   }
 }
