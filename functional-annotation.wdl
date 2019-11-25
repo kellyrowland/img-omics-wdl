@@ -128,9 +128,9 @@ task cog {
 
   command <<<
     ${hmmsearch} --notextw --domE ${min_domain_eval_cutoff} --cpu ${threads} \
-                 --domtblout ${project_id}_proteins.smart.domtblout \
+                 --domtblout ${project_id}_proteins.cog.domtblout \
                  ${cog_db} ${input_fasta}
-    grep -v '^#' ${project_id}_proteins.smart.domtblout | \
+    grep -v '^#' ${project_id}_proteins.cog.domtblout | \
     awk '{print $1,$3,$4,$5,$6,$7,$8,$13,$14,$16,$17,$20,$21}' | \
     sort -k1,1 -k7,7nr -k6,6n | \
     ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
