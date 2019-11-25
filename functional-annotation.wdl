@@ -21,6 +21,10 @@ workflow f_annotate {
   File    hit_selector_bin
   Boolean superfam_execute
   File    superfam_db
+  Boolean pfam_execute
+  File    pfam_db
+  File    pfam_claninfo_tsv
+  File    pfam_clan_filter
 
   if(ko_ec_execute) {
     call ko_ec {
@@ -78,6 +82,18 @@ workflow f_annotate {
         superfam_db = superfam_db,
         hmmsearch = hmmsearch_bin,
         frag_hits_filter = frag_hits_filter_bin
+    }
+  }
+  if(pfam_execute) {
+    call pfam {
+      input:
+        project_id = imgap_project_id,
+        input_fasta = input_fasta,
+        threads = additional_threads,
+        pfam_db = pfam_db,
+        pfam_claninfo_tsv = pfam_claninfo_tsv,
+        pfam_clan_filter = pfam_clan_filter,
+        hmmsearch = hmmsearch_bin
     }
   }
 }
@@ -219,5 +235,28 @@ task superfam {
   output {
     File gff = "${project_id}_supfam.gff"
   }
+}
+
+task pfam {
   
+  String project_id
+  File   input_fasta
+  File   pfam_db
+  File   pfam_claninfo_tsv
+  Int    threads = 0
+  File   hmmsearch
+  File   pfam_clan_filter
+
+  command <<<
+    ${hmmsearch} --notextw --cut_tc --cpu ${threads} \
+                 --domtblout ${project_id}_proteins.pfam.domtblout \
+                 ${pfam_db} ${input_fasta}
+    grep -v '^#' ${project_id}_proteins.pfam.domtblout | \
+    awk '{print $1,$3,$4,$6,$13,$14,$16,$17,$20,$21}' | \
+    sort -k1,1 -k6,6nr -k5,5n | \
+    ${pfam_clan_filter} ${pfam_claninfo_tsv} > ${project_id}_pfam.gff
+  >>>
+  output {
+    File gff = "{project_id}_pfam.gff"
+  }
 }

@@ -46,6 +46,7 @@
   "metagenome_annotation.fa_pfam_execute": true,
   "metagenome_annotation.fa_pfam_db": "/global/dna/projectdirs/microbial/omics/databases/Pfam/Pfam-A-LATEST/Pfam-A.hmm",
   "metagenome_annotation.fa_pfam_claninfo_tsv": "/global/dna/projectdirs/microbial/omics/databases/Pfam/Pfam-A-LATEST/Pfam-A.clans.tsv",
+  "metagenome_annotation.fa_pfam_clan_filter": "bin/functional_annotation/pfam_clan_filter.py",
   "metagenome_annotation.fa_superfam_excute": true,
   "metagenome_annotation.fa_superfam_db": "/global/dna/projectdirs/microbial/omics/databases/SuperFamily/v1.75/supfam.hmm",
   "metagenome_annotation.fa_cog_execute": true,

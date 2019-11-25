@@ -52,6 +52,7 @@ workflow metagenome_annotation {
   Boolean fa_pfam_execute
   File    fa_pfam_db
   File    fa_pfam_claninfo_tsv
+  File    fa_pfam_clan_filter
   Boolean fa_superfam_excute
   File    fa_superfam_db
   Boolean fa_cog_execute
@@ -137,7 +138,11 @@ workflow metagenome_annotation {
           tigrfam_db = fa_tigrfam_db,
           hit_selector_bin = fa_hit_selector_bin,
           superfam_execute = fa_superfam_excute,
-          superfam_db = fa_superfam_db
+          superfam_db = fa_superfam_db,
+          pfam_execute = fa_pfam_execute,
+          pfam_db = fa_pfam_db,
+          pfam_claninfo_tsv = fa_pfam_claninfo_tsv,
+          pfam_clan_filter = fa_pfam_clan_filter
       }
     }
   }
