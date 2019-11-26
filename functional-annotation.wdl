@@ -237,6 +237,7 @@ task tigrfam {
   File   hit_selector
 
   command <<<
+    tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
     ${hmmsearch} --notextw --cut_nc --cpu ${threads} \
                  --domtblout ${project_id}_proteins.tigrfam.domtblout \
                  ${tigrfam_db} ${input_fasta}
@@ -244,10 +245,10 @@ task tigrfam {
     awk '{print $1,$3,$4,$6,$13,$14,$16,$17,$20,$21}' | \
     sort -k1,1 -k6,6nr -k5,5n | \
     ${hit_selector} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
-                        > ${project_id}_tigrfam.gff
+                    "$tool_and_version" > ${project_id}_tigrfam.gff
   >>>
   output {
-    File gff = "{project_id}_tigrfam.gff"
+    File gff = "${project_id}_tigrfam.gff"
   }
 }
 
@@ -290,16 +291,17 @@ task pfam {
   File   pfam_clan_filter
 
   command <<<
+    tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
     ${hmmsearch} --notextw --cut_tc --cpu ${threads} \
                  --domtblout ${project_id}_proteins.pfam.domtblout \
                  ${pfam_db} ${input_fasta}
     grep -v '^#' ${project_id}_proteins.pfam.domtblout | \
     awk '{print $1,$3,$4,$6,$13,$14,$16,$17,$20,$21}' | \
     sort -k1,1 -k6,6nr -k5,5n | \
-    ${pfam_clan_filter} ${pfam_claninfo_tsv} > ${project_id}_pfam.gff
+    ${pfam_clan_filter} "$tool_and_version" ${pfam_claninfo_tsv} > ${project_id}_pfam.gff
   >>>
   output {
-    File gff = "{project_id}_pfam.gff"
+    File gff = "${project_id}_pfam.gff"
   }
 }
 
