@@ -143,7 +143,7 @@ task ko_ec {
   String project_type
   Int    threads = 0
   File   input_fasta
-  File   nr_db
+  String nr_db
   File   md5
   File   phylo
   Int    top_hits = 5
