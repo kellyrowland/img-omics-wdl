@@ -27,6 +27,13 @@ workflow f_annotate {
   File    pfam_clan_filter
   Boolean cath_funfam_execute
   File    cath_funfam_db
+  Boolean signalp_execute
+  String  signalp_gram_stain
+  File    signalp_bin
+  Boolean tmhmm_execute
+  File    tmhmm_model
+  File    tmhmm_decode
+  File    tmhmm_decode_parser
 
   if(ko_ec_execute) {
     call ko_ec {
@@ -107,6 +114,25 @@ workflow f_annotate {
         cath_funfam_db = cath_funfam_db,
         hmmsearch = hmmsearch_bin,
         frag_hits_filter = frag_hits_filter_bin
+    }
+  }
+  if(imgap_project_type == "isolate" && signalp_execute) {
+    call signalp {
+      input:
+        project_id = imgap_project_id,
+        input_fasta = input_fasta,
+        gram_stain = signalp_gram_stain,
+        signalp = signalp_bin
+    }
+  }
+  if(imgap_project_type == "isolate" && tmhmm_execute) {
+    call tmhmm {
+      input:
+        project_id = imgap_project_id,
+        input_fasta = input_fasta,
+        model = tmhmm_model,
+        decode = tmhmm_decode,
+        decode_parser = tmhmm_decode_parser
     }
   }
 }
@@ -298,5 +324,46 @@ task cath_funfam {
   >>>
   output {
     File gff = "${project_id}_cath_funfam.gff"
+  }
+}
+
+task signalp {
+  
+  String project_id
+  File   input_fasta
+  String gram_stain
+  File   signalp
+
+  command <<<
+    signalp_version=$(${signalp} -V)
+    ${signalp} -t ${gram_stain} -f short ${input_fasta} | \
+    grep -v '^#' | \
+    awk -v sv="$signalp_version" -v ot="${gram_stain}" \
+        '$10 == "Y" {print $1"\t"sv"\tcleavage_site\t"$3-1"\t"$3"\t"$2\
+        "\t.\t.\tD-score="$9";network="$12";organism_type="ot}' > ${project_id}_cleavage_sites.gff
+  >>>
+  output {
+    File gff = "${project_id}_cleavage_sites.gff"
+  }
+}
+
+task tmhmm {
+  
+  String project_id
+  File   input_fasta
+  File   model
+  File   decode
+  File   decode_parser
+
+  command <<<
+  tool_and_version=$(${decode} -v 2>&1 | head -1)
+    background="0.081 0.015 0.054 0.061 0.040 0.068 0.022 0.057 0.056 0.093 0.025"
+    background="$background 0.045 0.049 0.039 0.057 0.068 0.058 0.067 0.013 0.032"
+    sed 's/\*/X/g' ${input_fasta} | \
+    ${decode} -N 1 -background $background -PrintNumbers \
+    ${model} 2> /dev/null | ${decode_parser} "$tool_and_version" > ${project_id}_tmh.gff
+  >>>
+  output {
+    File gff = "${project_id}_tmh.gff"
   }
 }

@@ -65,9 +65,12 @@ workflow metagenome_annotation {
   File    fa_hmmsearch_bin
   File    fa_frag_hits_filter_bin
   Boolean fa_signalp_execute
+  File    fa_signalp_bin
   String  fa_signalp_gram_stain
   Boolean fa_tmhmm_execute
   File    fa_tmhmm_model
+  File    fa_tmhmm_decode
+  File    fa_tmhmm_decode_parser
 
   call setup {
     input:
@@ -144,7 +147,14 @@ workflow metagenome_annotation {
           pfam_claninfo_tsv = fa_pfam_claninfo_tsv,
           pfam_clan_filter = fa_pfam_clan_filter,
           cath_funfam_execute = fa_cath_funfam_execute,
-          cath_funfam_db = fa_cath_funfam_db
+          cath_funfam_db = fa_cath_funfam_db,
+          signalp_execute = fa_signalp_execute,
+          signalp_bin = fa_signalp_bin,
+          signalp_gram_stain = fa_signalp_gram_stain,
+          tmhmm_execute = fa_tmhmm_execute,
+          tmhmm_model = fa_tmhmm_model,
+          tmhmm_decode = fa_tmhmm_decode,
+          tmhmm_decode_parser = fa_tmhmm_decode_parser
       }
     }
   }
