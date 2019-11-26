@@ -1,16 +1,16 @@
 import "structural-annotation.wdl" as sa
+import "functional-annotation.wdl" as fa
 
 workflow metagenome_annotation {
 
-  Int    num_splits
-  String imgap_input_dir
-  String imgap_input_fasta
-  String imgap_project_id
-  String imgap_project_type
+  Int     num_splits
+  String  imgap_input_dir
+  String  imgap_input_fasta
+  String  imgap_project_id
+  String  imgap_project_type
   Int additional_threads
   # structural annotation
   Boolean sa_execute
-  File    sa_bin
   Boolean sa_pre_qc_execute
   File    sa_pre_qc_bin
   String  sa_pre_qc_rename
@@ -40,29 +40,37 @@ workflow metagenome_annotation {
   File    sa_gff_and_fasta_stats_bin
   # functional annotation
   Boolean fa_execute
-  File    fa_bin
   String  fa_product_names_mapping_dir
   Boolean fa_ko_ec_execute
   File    fa_ko_ec_img_nr_db
   File    fa_ko_ec_md5_mapping
   File    fa_ko_ec_taxon_to_phylo_mapping
+  File    fa_lastal_bin
+  File    fa_selector_bin
   Boolean fa_cath_funfam_execute
   File    fa_cath_funfam_db
   Boolean fa_pfam_execute
   File    fa_pfam_db
   File    fa_pfam_claninfo_tsv
-  Boolean fa_superfamily_excute
-  File    fa_superfamily_db
+  File    fa_pfam_clan_filter
+  Boolean fa_superfam_excute
+  File    fa_superfam_db
   Boolean fa_cog_execute
   File    fa_cog_db
   Boolean fa_tigrfam_execute
   File    fa_tigrfam_db
+  File    fa_hit_selector_bin
   Boolean fa_smart_execute
   File    fa_smart_db
+  File    fa_hmmsearch_bin
+  File    fa_frag_hits_filter_bin
   Boolean fa_signalp_execute
+  File    fa_signalp_bin
   String  fa_signalp_gram_stain
   Boolean fa_tmhmm_execute
   File    fa_tmhmm_model
+  File    fa_tmhmm_decode
+  File    fa_tmhmm_decode_parser
 
   call setup {
     input:
@@ -74,13 +82,12 @@ workflow metagenome_annotation {
   scatter(split in setup.splits) {
 
     if(sa_execute) {
-      call sa.annotate {
+      call sa.s_annotate {
         input:
           imgap_project_id = imgap_project_id,
           additional_threads = additional_threads,
           imgap_project_type = imgap_project_type,
           imgap_input_fasta = split,
-          bin = sa_bin,
           pre_qc_execute = sa_pre_qc_execute,
           pre_qc_bin = sa_pre_qc_bin,
           pre_qc_rename = sa_pre_qc_rename,
@@ -111,12 +118,45 @@ workflow metagenome_annotation {
       }
     }
 
-#  if(fa_execute) {
-#    call functional_annotation {
-#      input:
-#        fa_bin = fa_bin
-#    }
-#  }
+    if(fa_execute) {
+      call fa.f_annotate {
+        input:
+          imgap_project_id = imgap_project_id,
+          imgap_project_type = imgap_project_type,
+          additional_threads = additional_threads,
+          input_fasta = s_annotate.proteins,
+          ko_ec_execute = fa_ko_ec_execute,
+          ko_ec_img_nr_db = fa_ko_ec_img_nr_db,
+          ko_ec_md5_mapping = fa_ko_ec_md5_mapping,
+          ko_ec_taxon_to_phylo_mapping = fa_ko_ec_taxon_to_phylo_mapping,
+          lastal_bin = fa_lastal_bin,
+          selector_bin = fa_selector_bin,
+          smart_execute = fa_smart_execute,
+          smart_db = fa_smart_db,
+          hmmsearch_bin = fa_hmmsearch_bin,
+          frag_hits_filter_bin = fa_frag_hits_filter_bin,
+          cog_execute = fa_cog_execute,
+          cog_db = fa_cog_db,
+          tigrfam_execute = fa_tigrfam_execute,
+          tigrfam_db = fa_tigrfam_db,
+          hit_selector_bin = fa_hit_selector_bin,
+          superfam_execute = fa_superfam_excute,
+          superfam_db = fa_superfam_db,
+          pfam_execute = fa_pfam_execute,
+          pfam_db = fa_pfam_db,
+          pfam_claninfo_tsv = fa_pfam_claninfo_tsv,
+          pfam_clan_filter = fa_pfam_clan_filter,
+          cath_funfam_execute = fa_cath_funfam_execute,
+          cath_funfam_db = fa_cath_funfam_db,
+          signalp_execute = fa_signalp_execute,
+          signalp_bin = fa_signalp_bin,
+          signalp_gram_stain = fa_signalp_gram_stain,
+          tmhmm_execute = fa_tmhmm_execute,
+          tmhmm_model = fa_tmhmm_model,
+          tmhmm_decode = fa_tmhmm_decode,
+          tmhmm_decode_parser = fa_tmhmm_decode_parser
+      }
+    }
   }
 }
 
