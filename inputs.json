@@ -64,6 +64,7 @@
   "metagenome_annotation.fa_tmhmm_execute": true,
   "metagenome_annotation.fa_tmhmm_model": "/global/dna/projectdirs/microbial/omics/programs/tmhmm-2.0c/lib/TMHMM2.0.model",
   "metagenome_annotation.fa_tmhmm_decode": "/global/dna/projectdirs/microbial/omics/bin/decodeanhmm",
-  "metagenome_annotation.fa_tmhmm_decode_parser": "bin/functional_annotation/decodeanhmm_parser.py"
+  "metagenome_annotation.fa_tmhmm_decode_parser": "bin/functional_annotation/decodeanhmm_parser.py",
+  "metagenome_annotation.fa_product_assign_bin": "bin/functional_annotation/assign_product_names_and_create_fa_gff.py"
 }
 

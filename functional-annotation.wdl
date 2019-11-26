@@ -34,6 +34,9 @@ workflow f_annotate {
   File    tmhmm_model
   File    tmhmm_decode
   File    tmhmm_decode_parser
+  File?   sa_gff
+  File    product_assign_bin
+  String  product_names_mapping_dir
 
   if(ko_ec_execute) {
     call ko_ec {
@@ -135,6 +138,22 @@ workflow f_annotate {
         decode_parser = tmhmm_decode_parser
     }
   }
+  call product_name {
+    input:
+      project_id = imgap_project_id,
+      sa_gff = sa_gff,
+      product_assign = product_assign_bin,
+      map_dir = product_names_mapping_dir,
+      ko_ec_gff = ko_ec.gff,
+      smart_gff = smart.gff,
+      cog_gff = cog.gff,
+      tigrfam_gff = tigrfam.gff,
+      supfam_gff = superfam.gff,
+      pfam_gff = pfam.gff,
+      cath_funfam_gff = cath_funfam.gff,
+      signalp_gff = signalp.gff,
+      tmhmm_gff = tmhmm.gff
+  }
 }
 
 task ko_ec {
@@ -165,7 +184,7 @@ task ko_ec {
     File ko_tsv = "${project_id}_ko.tsv"
     File ec_tsv = "${project_id}_ec.tsv"
     File phylo_tsv = "${project_id}_gene_phylogeny.tsv"
-    File ko_ec_gff = "${project_id}_ko_ec.gff"
+    File gff = "${project_id}_ko_ec.gff"
   }
 }
 
@@ -371,5 +390,32 @@ task tmhmm {
   >>>
   output {
     File gff = "${project_id}_tmh.gff"
+  }
+}
+
+task product_name {
+  
+  String project_id
+  File?  sa_gff
+  File   product_assign
+  String map_dir
+  File?  ko_ec_gff
+  File?  smart_gff
+  File?  cog_gff
+  File?  tigrfam_gff
+  File?  supfam_gff
+  File?  pfam_gff
+  File?  cath_funfam_gff
+  File?  signalp_gff
+  File?  tmhmm_gff
+
+  command {
+    ${product_assign} ${"-k " + ko_ec_gff} ${"-s " + smart_gff} ${"-c " + cog_gff} \
+                      ${"-t " + tigrfam_gff} ${"-u " + supfam_gff} ${"-p " + pfam_gff} \
+                      ${"f " + cath_funfam_gff} ${"-e " + signalp_gff} ${"-r " + tmhmm_gff} \
+                      ${map_dir} ${sa_gff}
+  }
+  output {
+    File gff = "${project_id}_functional_annotation.gff"
   }
 }
