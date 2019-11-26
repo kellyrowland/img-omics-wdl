@@ -142,7 +142,9 @@ workflow metagenome_annotation {
           pfam_execute = fa_pfam_execute,
           pfam_db = fa_pfam_db,
           pfam_claninfo_tsv = fa_pfam_claninfo_tsv,
-          pfam_clan_filter = fa_pfam_clan_filter
+          pfam_clan_filter = fa_pfam_clan_filter,
+          cath_funfam_execute = fa_cath_funfam_execute,
+          cath_funfam_db = fa_cath_funfam_db
       }
     }
   }

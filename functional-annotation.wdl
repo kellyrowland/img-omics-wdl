@@ -25,6 +25,8 @@ workflow f_annotate {
   File    pfam_db
   File    pfam_claninfo_tsv
   File    pfam_clan_filter
+  Boolean cath_funfam_execute
+  File    cath_funfam_db
 
   if(ko_ec_execute) {
     call ko_ec {
@@ -94,6 +96,17 @@ workflow f_annotate {
         pfam_claninfo_tsv = pfam_claninfo_tsv,
         pfam_clan_filter = pfam_clan_filter,
         hmmsearch = hmmsearch_bin
+    }
+  }
+  if(cath_funfam_execute) {
+    call cath_funfam {
+      input:
+        project_id = imgap_project_id,
+        input_fasta = input_fasta,
+        threads = additional_threads,
+        cath_funfam_db = cath_funfam_db,
+        hmmsearch = hmmsearch_bin,
+        frag_hits_filter = frag_hits_filter_bin
     }
   }
 }
@@ -258,5 +271,32 @@ task pfam {
   >>>
   output {
     File gff = "{project_id}_pfam.gff"
+  }
+}
+
+task cath_funfam {
+  
+  String project_id
+  File   input_fasta
+  File   cath_funfam_db
+  Int    threads = 0
+  Float  min_domain_eval_cutoff = 0.01
+  Float  aln_length_ratio = 0.7
+  Float  max_overlap_ratio = 0.1
+  File   hmmsearch
+  File   frag_hits_filter
+
+  command <<<
+    ${hmmsearch} --notextw --domE ${min_domain_eval_cutoff} --cpu ${threads} \
+                 --domtblout ${project_id}_proteins.cath_funfam.domtblout \
+                 ${cath_funfam_db} ${input_fasta}
+    grep -v '^#' ${project_id}_proteins.cath_funfam.domtblout | \
+    awk '{print $1,$3,$4,$5,$6,$7,$8,$13,$14,$16,$17,$20,$21}' | \
+    sort -k1,1 -k7,7nr -k6,6n | \
+    ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
+                        > ${project_id}_cath_funfam.gff
+  >>>
+  output {
+    File gff = "${project_id}_cath_funfam.gff"
   }
 }
