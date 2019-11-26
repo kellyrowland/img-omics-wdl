@@ -5,7 +5,7 @@ workflow f_annotate {
   Int     additional_threads
   File    input_fasta
   Boolean ko_ec_execute
-  File    ko_ec_img_nr_db
+  String  ko_ec_img_nr_db
   File    ko_ec_md5_mapping
   File    ko_ec_taxon_to_phylo_mapping
   File    lastal_bin
