@@ -182,6 +182,7 @@ task smart {
   File   frag_hits_filter
 
   command <<<
+    tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
     ${hmmsearch} --notextw --domE ${min_domain_eval_cutoff} --cpu ${threads} \
                  --domtblout ${project_id}_proteins.smart.domtblout \
                  ${smart_db} ${input_fasta}
@@ -189,7 +190,7 @@ task smart {
     awk '{print $1,$3,$4,$5,$6,$7,$8,$13,$14,$16,$17,$20,$21}' | \
     sort -k1,1 -k7,7nr -k6,6n | \
     ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
-                        > ${project_id}_smart.gff
+                        "$tool_and_version" > ${project_id}_smart.gff
   >>>
   output {
     File gff = "${project_id}_smart.gff"
@@ -209,6 +210,7 @@ task cog {
   File   frag_hits_filter
 
   command <<<
+    tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
     ${hmmsearch} --notextw --domE ${min_domain_eval_cutoff} --cpu ${threads} \
                  --domtblout ${project_id}_proteins.cog.domtblout \
                  ${cog_db} ${input_fasta}
@@ -216,7 +218,7 @@ task cog {
     awk '{print $1,$3,$4,$5,$6,$7,$8,$13,$14,$16,$17,$20,$21}' | \
     sort -k1,1 -k7,7nr -k6,6n | \
     ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
-                        > ${project_id}_cog.gff
+                        "$tool_and_version" > ${project_id}_cog.gff
   >>>
   output {
     File gff = "${project_id}_cog.gff"
@@ -262,6 +264,7 @@ task superfam {
   File   frag_hits_filter
 
   command <<<
+    tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
     ${hmmsearch} --notextw --domE ${min_domain_eval_cutoff} --cpu ${threads} \
                  --domtblout ${project_id}_proteins.supfam.domtblout \
                  ${superfam_db} ${input_fasta}
@@ -269,7 +272,7 @@ task superfam {
     awk '{print $1,$3,$4,$5,$6,$7,$8,$13,$14,$16,$17,$20,$21}' | \
     sort -k1,1 -k7,7nr -k6,6n | \
     ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
-                        > ${project_id}_supfam.gff
+                        "$tool_and_version" > ${project_id}_supfam.gff
   >>>
   output {
     File gff = "${project_id}_supfam.gff"
@@ -313,6 +316,7 @@ task cath_funfam {
   File   frag_hits_filter
 
   command <<<
+    tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
     ${hmmsearch} --notextw --domE ${min_domain_eval_cutoff} --cpu ${threads} \
                  --domtblout ${project_id}_proteins.cath_funfam.domtblout \
                  ${cath_funfam_db} ${input_fasta}
@@ -320,7 +324,7 @@ task cath_funfam {
     awk '{print $1,$3,$4,$5,$6,$7,$8,$13,$14,$16,$17,$20,$21}' | \
     sort -k1,1 -k7,7nr -k6,6n | \
     ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
-                        > ${project_id}_cath_funfam.gff
+                        "$tool_and_version" > ${project_id}_cath_funfam.gff
   >>>
   output {
     File gff = "${project_id}_cath_funfam.gff"
@@ -356,7 +360,7 @@ task tmhmm {
   File   decode_parser
 
   command <<<
-  tool_and_version=$(${decode} -v 2>&1 | head -1)
+    tool_and_version=$(${decode} -v 2>&1 | head -1)
     background="0.081 0.015 0.054 0.061 0.040 0.068 0.022 0.057 0.056 0.093 0.025"
     background="$background 0.045 0.049 0.039 0.057 0.068 0.058 0.067 0.013 0.032"
     sed 's/\*/X/g' ${input_fasta} | \
