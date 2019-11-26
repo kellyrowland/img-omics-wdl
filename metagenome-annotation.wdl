@@ -42,7 +42,7 @@ workflow metagenome_annotation {
   Boolean fa_execute
   String  fa_product_names_mapping_dir
   Boolean fa_ko_ec_execute
-  File    fa_ko_ec_img_nr_db
+  String  fa_ko_ec_img_nr_db
   File    fa_ko_ec_md5_mapping
   File    fa_ko_ec_taxon_to_phylo_mapping
   File    fa_lastal_bin
