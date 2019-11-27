@@ -7,39 +7,26 @@ workflow trnascan {
   File   trnascan_se_bin
   File   pick_and_transform_to_gff_bin
 
-
-  if(imgap_project_type == "isolate") {
-    call trnascan_isolate {
-      input:
-        bin = trnascan_se_bin,
-        input_fasta = imgap_input_fasta,
-        project_id = imgap_project_id,
-        threads = additional_threads
-    }
-  }
-  if(imgap_project_type == "metagenome") {
-    call trnascan_metagenome {
-      input:
-        bin = trnascan_se_bin,
-        input_fasta = imgap_input_fasta,
-        project_id = imgap_project_id,
-        threads = additional_threads
-    }
+  call trnascan_ba {
+    input:
+      bin = trnascan_se_bin,
+      input_fasta = imgap_input_fasta,
+      project_id = imgap_project_id,
+      threads = additional_threads
   }
   call pick_and_transform_to_gff {
     input:
       bin = pick_and_transform_to_gff_bin,
       project_id = imgap_project_id,
-      bacterial_out = trnascan_isolate.bacterial_out,
-      archaeal_out = trnascan_isolate.archaeal_out,
-      metagenome_out = trnascan_metagenome.out
+      bacterial_out = trnascan_ba.bacterial_out,
+      archaeal_out = trnascan_ba.archaeal_out
   }
   output {
     File gff = pick_and_transform_to_gff.gff
   }
 }
 
-task trnascan_isolate {
+task trnascan_ba {
 
   File   bin
   String input_fasta
@@ -56,32 +43,15 @@ task trnascan_isolate {
   }
 }
 
-task trnascan_metagenome {
-
-  File   bin
-  String input_fasta
-  String project_id
-  Int    threads
-
-  # need to parallelize this
-  command {
-    ${bin} -G --thread ${threads} ${input_fasta} &> ${project_id}_trnascan_general.out
-  }
-  output {
-    File out = "${project_id}_trnascan_general.out"
-  }
-}
-
 task pick_and_transform_to_gff {
 
   File   bin
   String project_id
-  File?  bacterial_out
-  File?  archaeal_out
-  File?  metagenome_out
+  File   bacterial_out
+  File   archaeal_out
   
   command {
-    ${bin} ${bacterial_out} ${archaeal_out} ${metagenome_out} > ${project_id}_trna.gff
+    ${bin} ${bacterial_out} ${archaeal_out} > ${project_id}_trna.gff
   }
   output {
     File gff = "${project_id}_trna.gff"
