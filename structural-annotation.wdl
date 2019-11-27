@@ -148,6 +148,7 @@ workflow s_annotate {
     }
   }
   output {
+    File  gff = gff_merge.final_gff
     File? proteins = fasta_merge.final_proteins
   }
 }

@@ -71,6 +71,7 @@ workflow metagenome_annotation {
   File    fa_tmhmm_model
   File    fa_tmhmm_decode
   File    fa_tmhmm_decode_parser
+  File    fa_product_assign_bin
 
   call setup {
     input:
@@ -154,7 +155,10 @@ workflow metagenome_annotation {
           tmhmm_execute = fa_tmhmm_execute,
           tmhmm_model = fa_tmhmm_model,
           tmhmm_decode = fa_tmhmm_decode,
-          tmhmm_decode_parser = fa_tmhmm_decode_parser
+          tmhmm_decode_parser = fa_tmhmm_decode_parser,
+          sa_gff = s_annotate.gff,
+          product_assign_bin = fa_product_assign_bin,
+          product_names_mapping_dir = fa_product_names_mapping_dir
       }
     }
   }
