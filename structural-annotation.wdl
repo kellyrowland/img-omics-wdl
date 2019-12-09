@@ -72,7 +72,8 @@ workflow s_annotate {
         cm = rfam_cm,
         claninfo_tsv = rfam_claninfo_tsv,
         feature_lookup_tsv = rfam_feature_lookup_tsv,
-        additional_threads = additional_threads
+        additional_threads = additional_threads,
+        output_dir = output_dir
     }
   }
   if(crt_execute) {
@@ -81,7 +82,8 @@ workflow s_annotate {
         crt_cli_jar = crt_cli_jar,
         crt_transform_bin = crt_transform_bin,
         imgap_input_fasta = imgap_input_fasta,
-        imgap_project_id = imgap_project_id
+        imgap_project_id = imgap_project_id,
+        output_dir = output_dir
     }
   }
   if(prodigal_execute) {
@@ -91,7 +93,8 @@ workflow s_annotate {
         prodigal_unify_bin = unify_bin,
         imgap_input_fasta = imgap_input_fasta,
         imgap_project_id = imgap_project_id,
-        imgap_project_type = imgap_project_type
+        imgap_project_type = imgap_project_type,
+        output_dir = output_dir
     }
   }
   if(genemark_execute) {
@@ -103,7 +106,8 @@ workflow s_annotate {
         genemark_unify_bin = unify_bin,
         imgap_input_fasta = imgap_input_fasta,
         imgap_project_id = imgap_project_id,
-        imgap_project_type = imgap_project_type
+        imgap_project_type = imgap_project_type,
+        output_dir = output_dir
     }
   }
   call gff_merge {
@@ -117,7 +121,8 @@ workflow s_annotate {
       ncrna_tmrna_gff = rfam.ncrna_tmrna_gff,
       crt_gff = crt.gff, 
       genemark_gff = genemark.gff,
-      prodigal_gff = prodigal.gff
+      prodigal_gff = prodigal.gff,
+      output_dir = output_dir
   }
   if(prodigal_execute || genemark_execute) {
     call fasta_merge {
@@ -129,7 +134,8 @@ workflow s_annotate {
         genemark_genes = genemark.genes,
         genemark_proteins = genemark.proteins,
         prodigal_genes = prodigal.genes,
-        prodigal_proteins = prodigal.proteins
+        prodigal_proteins = prodigal.proteins,
+        output_dir = output_dir
     }
   }
   if(gff_and_fasta_stats_execute) {
@@ -146,7 +152,8 @@ workflow s_annotate {
       input:
         qc_bin = post_qc_bin,
         input_fasta = imgap_input_fasta,
-        project_id = imgap_project_id
+        project_id = imgap_project_id,
+        output_dir = output_dir
     }
   }
   output {
@@ -183,11 +190,13 @@ task gff_merge {
   File?  crt_gff
   File?  genemark_gff
   File?  prodigal_gff
+  String output_dir
 
   command {
     ${bin} -f ${input_fasta} ${"-a " + misc_and_regulatory_gff + " " + rrna_gff} \
     ${trna_gff} ${ncrna_tmrna_gff} ${crt_gff} \
     ${genemark_gff} ${prodigal_gff} 1> ${project_id}_structural_annotation.gff
+    cp ./${project_id}_structural_annotation.gff ${output_dir}
   }
   output {
     File final_gff = "${project_id}_structural_annotation.gff"
@@ -204,10 +213,12 @@ task fasta_merge {
   File?  genemark_proteins
   File?  prodigal_genes
   File?  prodigal_proteins
+  String output_dir
 
   command {
     ${bin} ${final_gff} ${genemark_genes} ${prodigal_genes} 1> ${project_id}_genes.fna
     ${bin} ${final_gff} ${genemark_proteins} ${prodigal_proteins} 1> ${project_id}_proteins.faa
+    cp ./${project_id}_genes.fna ./${project_id}_proteins.faa ${output_dir}
   }
   output {
     File final_genes = "${project_id}_genes.fna"
@@ -232,9 +243,11 @@ task post_qc {
   File   qc_bin
   File   input_fasta
   String project_id
+  String output_dir
 
   command {
     ${qc_bin} ${input_fasta} "${project_id}_structural_annotation.gff"
+    cp ./${project_id}_structural_annotation.gff ${output_dir}
   }
   output {
     File out = "${project_id}_structural_annotation.gff"
