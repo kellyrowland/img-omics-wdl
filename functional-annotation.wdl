@@ -414,7 +414,7 @@ task product_name {
                       ${"-t " + tigrfam_gff} ${"-u " + supfam_gff} ${"-p " + pfam_gff} \
                       ${"-f " + cath_funfam_gff} ${"-e " + signalp_gff} ${"-r " + tmhmm_gff} \
                       ${map_dir} ${sa_gff} ; \
-    mv ${project_id}_functional_annotation.gff . 2> /dev/null
+    mv ../inputs/*/*.gff .
   }
   output {
     File gff = "${project_id}_functional_annotation.gff"
