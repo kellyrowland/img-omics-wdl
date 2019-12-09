@@ -3,11 +3,11 @@ import "functional-annotation.wdl" as fa
 
 workflow metagenome_annotation {
 
-  Int    num_splits
-  String imgap_input_dir
-  String imgap_input_fasta
-  String imgap_project_id
-  String imgap_project_type
+  Int     num_splits
+  String  imgap_input_dir
+  String  imgap_input_fasta
+  String  imgap_project_id
+  String  imgap_project_type
   Int additional_threads
   # structural annotation
   Boolean sa_execute
@@ -76,8 +76,7 @@ workflow metagenome_annotation {
   call setup {
     input:
       n_splits = num_splits,
-      dir = imgap_input_dir,
-      fasta = imgap_input_fasta
+      dir = imgap_input_dir
   }
 
   scatter(split in setup.splits) {
@@ -88,7 +87,8 @@ workflow metagenome_annotation {
           imgap_project_id = imgap_project_id,
           additional_threads = additional_threads,
           imgap_project_type = imgap_project_type,
-          imgap_input_fasta = split,
+          output_dir = split,
+          imgap_input_fasta = split+imgap_project_id,
           pre_qc_execute = sa_pre_qc_execute,
           pre_qc_bin = sa_pre_qc_bin,
           pre_qc_rename = sa_pre_qc_rename,
@@ -167,10 +167,9 @@ workflow metagenome_annotation {
 task setup {
   String dir
   Int    n_splits
-  String fasta
 
   command {
-    python -c 'for i in range(${n_splits}): print("${dir}"+str(i+1)+"/${fasta}")'
+    python -c 'for i in range(${n_splits}): print("${dir}"+str(i+1)+"/")'
   }
   output {
     Array[File] splits = read_lines(stdout())

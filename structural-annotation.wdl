@@ -9,6 +9,7 @@ workflow s_annotate {
   File    imgap_input_fasta
   String  imgap_project_id
   String  imgap_project_type
+  String  output_dir
   Int     additional_threads
   Boolean pre_qc_execute
   File    pre_qc_bin
@@ -56,7 +57,8 @@ workflow s_annotate {
         imgap_input_fasta = imgap_input_fasta,
         imgap_project_id = imgap_project_id,
         imgap_project_type = imgap_project_type,
-        additional_threads = additional_threads
+        additional_threads = additional_threads,
+        output_dir = output_dir
     }
   }
   if(rfam_execute) {
