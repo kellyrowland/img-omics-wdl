@@ -88,7 +88,7 @@ workflow metagenome_annotation {
           additional_threads = additional_threads,
           imgap_project_type = imgap_project_type,
           output_dir = split,
-          imgap_input_fasta = split+imgap_project_id,
+          imgap_input_fasta = "${split}"+"/"+"${imgap_input_fasta}",
           pre_qc_execute = sa_pre_qc_execute,
           pre_qc_bin = sa_pre_qc_bin,
           pre_qc_rename = sa_pre_qc_rename,
