@@ -224,7 +224,7 @@ task smart {
     sort -k1,1 -k7,7nr -k6,6n | \
     ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
                         "$tool_and_version" > ${project_id}_smart.gff
-    cp ./${project_id}_smart.gff ${out_dir}
+    cp ./${project_id}_smart.gff ./${project_id}_proteins.smart.domtblout ${out_dir}
   >>>
   output {
     File gff = "${project_id}_smart.gff"
@@ -254,7 +254,7 @@ task cog {
     sort -k1,1 -k7,7nr -k6,6n | \
     ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
                         "$tool_and_version" > ${project_id}_cog.gff
-    cp ./${project_id}_cog.gff ${out_dir}
+    cp ./${project_id}_cog.gff ./${project_id}_proteins.cog.domtblout ${out_dir}
   >>>
   output {
     File gff = "${project_id}_cog.gff"
@@ -283,7 +283,7 @@ task tigrfam {
     sort -k1,1 -k6,6nr -k5,5n | \
     ${hit_selector} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
                     "$tool_and_version" > ${project_id}_tigrfam.gff
-    cp ./${project_id}_tigrfam.gff ${out_dir}
+    cp ./${project_id}_tigrfam.gff ./${project_id}_proteins.tigrfam.domtblout ${out_dir}
   >>>
   output {
     File gff = "${project_id}_tigrfam.gff"
@@ -313,7 +313,7 @@ task superfam {
     sort -k1,1 -k7,7nr -k6,6n | \
     ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
                         "$tool_and_version" > ${project_id}_supfam.gff
-    cp ./${project_id}_supfam.gff ${out_dir}
+    cp ./${project_id}_supfam.gff ./${project_id}_proteins.supfam.domtblout ${out_dir}
   >>>
   output {
     File gff = "${project_id}_supfam.gff"
@@ -340,7 +340,7 @@ task pfam {
     awk '{print $1,$3,$4,$6,$13,$14,$16,$17,$20,$21}' | \
     sort -k1,1 -k6,6nr -k5,5n | \
     ${pfam_clan_filter} "$tool_and_version" ${pfam_claninfo_tsv} > ${project_id}_pfam.gff
-    cp ./${project_id}_pfam.gff ${out_dir}
+    cp ./${project_id}_pfam.gff ./${project_id}_proteins.pfam.domtblout ${out_dir}
   >>>
   output {
     File gff = "${project_id}_pfam.gff"
@@ -370,7 +370,7 @@ task cath_funfam {
     sort -k1,1 -k7,7nr -k6,6n | \
     ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
                         "$tool_and_version" > ${project_id}_cath_funfam.gff
-    cp ./${project_id}_cath_funfam.gff ${out_dir}
+    cp ./${project_id}_cath_funfam.gff ./${project_id}_proteins.cath_funfam.domtblout ${out_dir}
   >>>
   output {
     File gff = "${project_id}_cath_funfam.gff"
