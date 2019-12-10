@@ -125,6 +125,7 @@ workflow metagenome_annotation {
           imgap_project_id = imgap_project_id,
           imgap_project_type = imgap_project_type,
           additional_threads = additional_threads,
+          output_dir = split,
           input_fasta = s_annotate.proteins,
           ko_ec_execute = fa_ko_ec_execute,
           ko_ec_img_nr_db = fa_ko_ec_img_nr_db,
