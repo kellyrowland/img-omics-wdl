@@ -39,8 +39,8 @@ like:
 ```
 
 where "example" should be set as the value of the variable 
-`metagenome_annotation.imgap_project_id` and `/path/splits/` should be set as
-the value of the variable `metagenome_annotation.imgap_input_dir`.
+`annotation.imgap_project_id` and `/path/splits/` should be set as
+the value of the variable `annotation.imgap_input_dir`.
 
 ## Instructions
 
@@ -79,6 +79,6 @@ The annotation workflow is structured:
 
 Run the workflow with the command:
 
-`java -jar <Cromwell> metagenome-annotation.wdl -i inputs.json`
+`java -jar <Cromwell> annotation.wdl -i inputs.json`
 
 in this directory.

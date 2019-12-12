@@ -1,7 +1,7 @@
 import "structural-annotation.wdl" as sa
 import "functional-annotation.wdl" as fa
 
-workflow metagenome_annotation {
+workflow annotation {
 
   Int     num_splits
   String  imgap_input_dir
