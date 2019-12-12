@@ -1,4 +1,4 @@
-# Metagenome Annotation WDL
+# IMG Omics Annotation WDL
 
 ## Setup
 
