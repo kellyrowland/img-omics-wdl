@@ -7,7 +7,7 @@
   "annotation.additional_threads": 16,
   "annotation.sa_execute": true,
   "annotation.sa_pre_qc_execute": false,
-  "annotation.sa_pre_qc_bin": "bin/qc/pre-annotation/simple_fasta_qc.sh",
+  "annotation.sa_pre_qc_bin": "bin/qc/pre-annotation/fasta_sanity.py",
   "annotation.sa_pre_qc_rename": "yes",
   "annotation.sa_trnascan_se_execute": true,
   "annotation.sa_trnascan_se_bin": "/global/dna/projectdirs/microbial/omics/bin/tRNAscan-SE",

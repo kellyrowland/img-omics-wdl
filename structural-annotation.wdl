@@ -169,14 +169,56 @@ task pre_qc {
   File   input_fasta
   String project_id
   String rename = "yes"
+  Float  n_ratio_cutoff = 0.5
+  Int    seqs_per_million_bp_cutoff = 500
+  Int    min_seq_length = 150
 
-  command {
-    ${bin} ${project_type} ${input_fasta} ${project_id} ${rename}
-  }
+  command <<< 
+    tmp_fasta="${input_fasta}.tmp"
+    qced_fasta="${project_id}_contigs.fna"
+    grep -v '^\s*$' ${input_fasta} | tr -d '\r' | \
+    sed 's/^>[[:blank:]]*/>/g' > $tmp_fasta
+    acgt_count=`grep -v '^>' $tmp_fasta | grep -o [acgtACGT] | wc -l`
+    n_count=`grep -v '^>' $tmp_fasta | grep -o '[^acgtACGT]' | wc -l`
+    n_ratio=`echo $n_count $acgt_count | awk '{printf "%f", $1 / $2}'`
+    if (( $(echo "$n_ratio >= ${n_ratio_cutoff}" | bc) ))
+    then
+        rm $tmp_fasta
+        exit 1
+    fi
+
+    if [[ ${project_type} == "isolate" ]]
+    then
+        seq_count=`grep -c '^>' $tmp_fasta`
+        bp_count=`grep -v '^>' $tmp_fasta | tr -d '\n' | wc -m`
+        seqs_per_million_bp=$seq_count
+        if (( $bp_count > 1000000 ))
+        then
+            divisor=$(echo $bp_count | awk '{printf "%.f", $1 / 1000000}')
+            seqs_per_million_bp=$(echo $seq_count $divisor | \
+                                  awk '{printf "%.2f", $1 / $2}')
+        fi
+        if (( $(echo "$seqs_per_million_bp > ${seqs_per_million_bp_cutoff}" | bc) ))
+        then
+            rm $tmp_fasta
+            exit 1
+        fi
+    fi
+
+    fasta_sanity_cmd="${bin} $tmp_fasta $qced_fasta"
+    if [[ ${rename} == "yes" ]]
+    then
+        fasta_sanity_cmd="$fasta_sanity_cmd -p ${project_id}"
+    fi
+    fasta_sanity_cmd="$fasta_sanity_cmd -l ${min_seq_length}"
+    $fasta_sanity_cmd
+    rm $tmp_fasta
+  >>>
   output {
     File fasta = "${project_id}_contigs.fna"
   }
 }
+
 
 task gff_merge {
 
