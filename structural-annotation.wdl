@@ -46,7 +46,8 @@ workflow s_annotate {
         project_type = imgap_project_type,
         input_fasta = imgap_input_fasta,
         project_id = imgap_project_id,
-        rename = pre_qc_rename
+        rename = pre_qc_rename,
+        output_dir = output_dir
     }
   }
   if(trnascan_se_execute) {
@@ -172,6 +173,7 @@ task pre_qc {
   Float  n_ratio_cutoff = 0.5
   Int    seqs_per_million_bp_cutoff = 500
   Int    min_seq_length = 150
+  String output_dir
 
   command <<< 
     tmp_fasta="${input_fasta}.tmp"
@@ -213,6 +215,7 @@ task pre_qc {
     fasta_sanity_cmd="$fasta_sanity_cmd -l ${min_seq_length}"
     $fasta_sanity_cmd
     rm $tmp_fasta
+    cp ${project_id}_contigs.fna ${output_dir}
   >>>
   output {
     File fasta = "${project_id}_contigs.fna"
