@@ -158,7 +158,7 @@ workflow s_annotate {
     }
   }
   output {
-    File  gff = gff_merge.final_gff
+    File  gff = "${output_dir}"+"/"+"${imgap_project_id}_structural_annotation.gff"
     File? proteins = fasta_merge.final_proteins
   }
 }
