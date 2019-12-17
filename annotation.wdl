@@ -62,8 +62,8 @@ workflow annotation {
   File    fa_hit_selector_bin
   Boolean fa_smart_execute
   File    fa_smart_db
-  Int?    fa_smart_par_hmm_inst
-  Int?    fa_smart_approx_num_proteins
+  Int?    fa_par_hmm_inst
+  Int?    fa_approx_num_proteins
   File    fa_hmmsearch_bin
   File    fa_frag_hits_filter_bin
   Boolean fa_signalp_execute
@@ -137,8 +137,8 @@ workflow annotation {
           selector_bin = fa_selector_bin,
           smart_execute = fa_smart_execute,
           smart_db = fa_smart_db,
-          smart_par_hmm_inst = fa_smart_par_hmm_inst,
-          smart_approx_num_proteins = fa_smart_approx_num_proteins,
+          par_hmm_inst = fa_par_hmm_inst,
+          approx_num_proteins = fa_approx_num_proteins,
           hmmsearch_bin = fa_hmmsearch_bin,
           frag_hits_filter_bin = fa_frag_hits_filter_bin,
           cog_execute = fa_cog_execute,
