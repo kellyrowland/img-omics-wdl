@@ -231,12 +231,12 @@ task smart {
       filesize=$(ls -l ${input_fasta} | awk '{print $5}')
       blocksize=$((($filesize / ${par_hmm_inst}) + 20000))
 
-      hmmsearch_base_cmd="${hmmsearch} --notextw --domE $min_domain_evalue_cutoff"
+      hmmsearch_base_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
       if [[ ${approx_num_proteins} -gt 0 ]]
       then
-          hmmsearch_base_cmd="$hmmsearch_base_cmd -Z $approximate_number_of_total_proteins"
+          hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
       fi
-      hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $threads}"
+      hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu ${threads}"
       # Use parallel to split up the input and
       # run hmmsearch in parallel on those splits
       cat ${input_fasta} | parallel --pipe --recstart '>' \
@@ -264,7 +264,7 @@ task smart {
       rm $tmp_dir/tmp.*
   else
       echo "$(date +%F_%T) - Calling hmmsearch against the SMART db now..."
-      hmmsearch_cmd="${hmmsearch} --notextw --domE $min_domain_evalue_cutoff"
+      hmmsearch_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
       if [[ ${approx_num_proteins} -gt 0 ]]
       then
           hmmsearch_cmd="$hmmsearch_cmd -Z ${approx_num_proteins}"
