@@ -40,6 +40,18 @@ task run {
     ${jar} ${input_fasta} ${project_id}_crt.out
     cp ./${project_id}_crt.out ${out_dir}
   }
+
+  runtime {
+    cluster: "cori"
+	time: "00:06:00"
+	mem: "115G"
+	poolname: "img_annotation"
+	shared: 0
+	node: 1
+	nwpn: 1
+	constraint: "knl"
+  }
+
   output {
     File out = "${project_id}_crt.out"
   }
@@ -60,6 +72,18 @@ task transform {
     ${transform_bin} ${crt_out_local} "$tool_and_version"
     cp -r ./${project_id}_crt.* ${out_dir}
   }
+
+  runtime {
+    cluster: "cori"
+    time: "00:06:00"
+    mem: "115G"
+    poolname: "img_annotation"
+    shared: 0
+    node: 1
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output{
     File crisprs = "${project_id}_crt.crisprs"
     File gff = "${project_id}_crt.gff"

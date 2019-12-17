@@ -41,6 +41,18 @@ task trnascan_ba {
     ${bin} -A --thread ${threads} ${input_fasta} &> ${project_id}_trnascan_archaeal.out
     cp -r ./${project_id}_trnascan_*.out ${out_dir}
   }
+
+  runtime {
+    cluster: "cori"
+    time: "00:06:00"
+    mem: "115G"
+    poolname: "img_annotation"
+    shared: 0
+    node: 1
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File bacterial_out = "${project_id}_trnascan_bacterial.out"
     File archaeal_out = "${project_id}_trnascan_archaeal.out"
@@ -57,6 +69,18 @@ task pick_and_transform_to_gff {
   command {
     ${bin} ${bacterial_out} ${archaeal_out} > ${project_id}_trna.gff
   }
+
+  runtime {
+    cluster: "cori"
+    time: "00:06:00"
+    mem: "115G"
+    poolname: "img_annotation"
+    shared: 0
+    node: 1
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_trna.gff"
   }

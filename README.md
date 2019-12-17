@@ -7,6 +7,11 @@
 * Cromwell (and associated Java dependencies)
 * Input binaries, databases, etc. specified in the `inputs.json` file
 
+### Docker image
+There is only one docker container where everything runs from.
+You can see the dockerfile:
+`https://hub.docker.com/r/bfoster1/img-omics`
+
 ### Input
 
 Input options are listed in the `inputs.json` file and include locations of
@@ -81,12 +86,12 @@ The annotation workflow is structured:
 |-- product_name_assign
 ```
 
-Run the workflow with the command:
+# Run the workflow with the command:
 
-# using cromwell.jar (for testing)
+### using cromwell.jar (for testing)
 `java -jar <Cromwell> annotation.wdl -i inputs.json`
 
-# or through jaws
+### or through jaws
 `jaws submit annotation.wdl inputs.json`
 
 in this directory.

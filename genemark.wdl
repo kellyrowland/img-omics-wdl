@@ -59,6 +59,17 @@ task gm_isolate {
            --faa ${project_id}_genemark_proteins.faa
   }
 
+  runtime {
+    cluster: "cori"
+    time: "00:06:00"
+    mem: "115G"
+    poolname: "img_annotation"
+    shared: 0
+    node: 1
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_genemark.gff"
     File genes = "${project_id}_genemark_genes.fna"
@@ -78,6 +89,17 @@ task gm_meta {
            -o ${project_id}_genemark.gff \
            --format gff --NT ${project_id}_genemark_genes.fna \
            --AA ${project_id}_genemark_proteins.faa --seq ${input_fasta}
+  }
+
+  runtime {
+    cluster: "cori"
+    time: "00:06:00"
+    mem: "115G"
+    poolname: "img_annotation"
+    shared: 0
+    node: 1
+    nwpn: 1
+    constraint: "knl"
   }
 
   output {
@@ -112,6 +134,18 @@ task clean_and_unify {
     mv ${meta_gff} . 2> /dev/null
     cp -r ./${project_id}_genemark* ${out_dir}
   }
+
+  runtime {
+    cluster: "cori"
+    time: "00:06:00"
+    mem: "115G"
+    poolname: "img_annotation"
+    shared: 0
+    node: 1
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_genemark.gff"
     File genes = "${project_id}_genemark_genes.fna"
