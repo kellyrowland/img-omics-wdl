@@ -9,35 +9,39 @@ workflow f_annotate {
   String  ko_ec_img_nr_db
   File    ko_ec_md5_mapping
   File    ko_ec_taxon_to_phylo_mapping
-  File    lastal_bin
-  File    selector_bin
+  String  lastal_bin
+  String  selector_bin
   Boolean smart_execute
   File    smart_db
-  File    hmmsearch_bin
-  File    frag_hits_filter_bin
+  String  hmmsearch_bin
+  String  frag_hits_filter_bin
   Boolean cog_execute
   File    cog_db
   Boolean tigrfam_execute
   File    tigrfam_db
-  File    hit_selector_bin
+  String  hit_selector_bin
   Boolean superfam_execute
   File    superfam_db
   Boolean pfam_execute
   File    pfam_db
   File    pfam_claninfo_tsv
-  File    pfam_clan_filter
+  String  pfam_clan_filter
   Boolean cath_funfam_execute
   File    cath_funfam_db
   Boolean signalp_execute
   String  signalp_gram_stain
-  File    signalp_bin
+  String  signalp_bin
   Boolean tmhmm_execute
-  File    tmhmm_model
-  File    tmhmm_decode
-  File    tmhmm_decode_parser
-  File?   sa_gff
-  File    product_assign_bin
+  String  tmhmm_model
+  String  tmhmm_decode
+  String  tmhmm_decode_parser
+  File    sa_gff
+  String  product_assign_bin
   String  product_names_mapping_dir
+
+#  call test_sa_gff {
+#	input: sa_gff = sa_gff
+#  }
 
   if(ko_ec_execute) {
     call ko_ec {
@@ -179,8 +183,8 @@ task ko_ec {
   Int    top_hits = 5
   Int    min_ko_hits = 7
   Float  aln_length_ratio = 0.7
-  File   lastal
-  File   selector
+  String lastal
+  String selector
   String out_dir
 
   command {
@@ -210,8 +214,8 @@ task smart {
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
   Float  max_overlap_ratio = 0.1
-  File   hmmsearch
-  File   frag_hits_filter
+  String hmmsearch
+  String frag_hits_filter
   String out_dir
 
   command <<<
@@ -240,8 +244,8 @@ task cog {
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
   Float  max_overlap_ratio = 0.1
-  File   hmmsearch
-  File   frag_hits_filter
+  String hmmsearch
+  String frag_hits_filter
   String out_dir
 
   command <<<
@@ -269,8 +273,8 @@ task tigrfam {
   Int    threads = 0
   Float  aln_length_ratio = 0.7
   Float  max_overlap_ratio = 0.1
-  File   hmmsearch
-  File   hit_selector
+  String hmmsearch
+  String hit_selector
   String out_dir
 
   command <<<
@@ -299,8 +303,8 @@ task superfam {
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
   Float  max_overlap_ratio = 0.1
-  File   hmmsearch
-  File   frag_hits_filter
+  String hmmsearch
+  String frag_hits_filter
   String out_dir
 
   command <<<
@@ -327,8 +331,8 @@ task pfam {
   File   pfam_db
   File   pfam_claninfo_tsv
   Int    threads = 0
-  File   hmmsearch
-  File   pfam_clan_filter
+  String hmmsearch
+  String pfam_clan_filter
   String out_dir
 
   command <<<
@@ -356,8 +360,8 @@ task cath_funfam {
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
   Float  max_overlap_ratio = 0.1
-  File   hmmsearch
-  File   frag_hits_filter
+  String hmmsearch
+  String frag_hits_filter
   String out_dir
 
   command <<<
@@ -382,7 +386,7 @@ task signalp {
   String project_id
   File   input_fasta
   String gram_stain
-  File   signalp
+  String signalp
   String out_dir
 
   command <<<
@@ -403,9 +407,9 @@ task tmhmm {
   
   String project_id
   File   input_fasta
-  File   model
-  File   decode
-  File   decode_parser
+  String model
+  String decode
+  String decode_parser
   String out_dir
 
   command <<<
@@ -425,8 +429,8 @@ task tmhmm {
 task product_name {
   
   String project_id
-  File?  sa_gff
-  File   product_assign
+  File   sa_gff
+  String product_assign
   String map_dir
   File?  ko_ec_gff
   File?  smart_gff
@@ -443,7 +447,7 @@ task product_name {
     ${product_assign} ${"-k " + ko_ec_gff} ${"-s " + smart_gff} ${"-c " + cog_gff} \
                       ${"-t " + tigrfam_gff} ${"-u " + supfam_gff} ${"-p " + pfam_gff} \
                       ${"-f " + cath_funfam_gff} ${"-e " + signalp_gff} ${"-r " + tmhmm_gff} \
-                      ${map_dir} ${sa_gff} ; \
+                      ${map_dir} ${sa_gff}
     mv ../inputs/*/*.gff .
     cp ./${project_id}_functional_annotation.gff ${out_dir}
   }

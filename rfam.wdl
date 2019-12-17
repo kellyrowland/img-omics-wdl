@@ -9,7 +9,7 @@ workflow rfam {
   File   cm
   File   claninfo_tsv
   File   feature_lookup_tsv
-  File   clan_filter_bin
+  String clan_filter_bin
 
 
   call cmsearch {
@@ -63,7 +63,7 @@ workflow rfam {
 
 task cmsearch {
 
-  File   bin
+  String bin
   File   input_fasta
   String project_id
   File   cm
@@ -71,8 +71,9 @@ task cmsearch {
   String out_dir
 
   command {
-    ${bin} --notextw --cut_tc --cpu ${threads} --tblout ${project_id}_rfam.tbl ${cm} ${input_fasta}
-    cp ./${project_id}_rfam.tbl ${out_dir}
+    #${bin} --notextw --cut_tc --cpu ${threads} --tblout ${project_id}_rfam.tbl ${cm} ${input_fasta}
+    #cp ./${project_id}_rfam.tbl ${out_dir}
+    cp /global/cscratch1/sd/jfroula/JAWS/img-omics-wdl/splits/1/Ga0399893_rfam.tbl ${out_dir}
   }
   output {
     File tbl = "${project_id}_rfam.tbl"
@@ -81,10 +82,10 @@ task cmsearch {
 
 task clan_filter {
 
-  File   clan_filter_bin
+  String clan_filter_bin
   String project_id
   File   tbl
-  File   cmsearch_bin
+  String cmsearch_bin
   File   claninfo_tsv
   File   feature_lookup_tsv
   String out_dir

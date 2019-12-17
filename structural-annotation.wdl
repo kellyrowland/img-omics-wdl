@@ -12,32 +12,32 @@ workflow s_annotate {
   String  output_dir
   Int     additional_threads
   Boolean pre_qc_execute
-  File    pre_qc_bin
+  String  pre_qc_bin
   String  pre_qc_rename
-  File    post_qc_bin
+  String  post_qc_bin
   Boolean trnascan_se_execute
-  File    trnascan_se_bin
-  File    trnascan_pick_and_transform_to_gff_bin
+  String  trnascan_se_bin
+  String  trnascan_pick_and_transform_to_gff_bin
   Boolean rfam_execute
-  File    rfam_cmsearch_bin
-  File    rfam_clan_filter_bin
+  String  rfam_cmsearch_bin
+  String  rfam_clan_filter_bin
   File    rfam_cm
   File    rfam_claninfo_tsv
   File    rfam_feature_lookup_tsv
   Boolean crt_execute
-  File    crt_cli_jar
-  File    crt_transform_bin
+  String  crt_cli_jar
+  String  crt_transform_bin
   Boolean prodigal_execute
-  File    prodigal_bin
-  File    unify_bin
+  String  prodigal_bin
+  String  unify_bin
   Boolean genemark_execute
-  File    genemark_iso_bin
-  File    genemark_meta_bin
+  String  genemark_iso_bin
+  String  genemark_meta_bin
   File    genemark_meta_model
-  File    gff_merge_bin
-  File    fasta_merge_bin
+  String  gff_merge_bin
+  String  fasta_merge_bin
   Boolean gff_and_fasta_stats_execute
-  File    gff_and_fasta_stats_bin
+  String  gff_and_fasta_stats_bin
 
   if(pre_qc_execute) {
     call pre_qc {
@@ -47,7 +47,7 @@ workflow s_annotate {
         input_fasta = imgap_input_fasta,
         project_id = imgap_project_id,
         rename = pre_qc_rename,
-        output_dir = output_dir
+		output_dir = output_dir
     }
   }
   if(trnascan_se_execute) {
@@ -158,14 +158,14 @@ workflow s_annotate {
     }
   }
   output {
-    File  gff = "${output_dir}"+"/"+"${imgap_project_id}_structural_annotation.gff"
-    File? proteins = fasta_merge.final_proteins
+	File  gff = "${output_dir}"+"/"+"${imgap_project_id}_structural_annotation.gff"
+    File? proteins = fasta_merge.final_proteins 
   }
 }
 
 task pre_qc {
 
-  File   bin
+  String bin
   String project_type
   File   input_fasta
   String project_id
@@ -175,7 +175,7 @@ task pre_qc {
   Int    min_seq_length = 150
   String output_dir
 
-  command <<< 
+  command <<<
     tmp_fasta="${input_fasta}.tmp"
     qced_fasta="${project_id}_contigs.fna"
     grep -v '^\s*$' ${input_fasta} | tr -d '\r' | \
@@ -211,7 +211,7 @@ task pre_qc {
     if [[ ${rename} == "yes" ]]
     then
         fasta_sanity_cmd="$fasta_sanity_cmd -p ${project_id}"
-    fi
+	fi
     fasta_sanity_cmd="$fasta_sanity_cmd -l ${min_seq_length}"
     $fasta_sanity_cmd
     rm $tmp_fasta
@@ -222,10 +222,9 @@ task pre_qc {
   }
 }
 
-
 task gff_merge {
 
-  File   bin
+  String bin
   File   input_fasta
   String project_id
   File?  misc_and_regulatory_gff
@@ -250,7 +249,7 @@ task gff_merge {
 
 task fasta_merge {
 
-  File   bin
+  String bin
   File   input_fasta
   String project_id
   File   final_gff
@@ -273,7 +272,7 @@ task fasta_merge {
 
 task gff_and_fasta_stats {
 
-  File   bin
+  String bin
   File   input_fasta
   String project_id
   File   final_gff
@@ -285,7 +284,7 @@ task gff_and_fasta_stats {
 
 task post_qc {
 
-  File   qc_bin
+  String qc_bin
   File   input_fasta
   String project_id
   String output_dir

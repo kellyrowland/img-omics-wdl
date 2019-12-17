@@ -12,32 +12,32 @@ workflow annotation {
   # structural annotation
   Boolean sa_execute
   Boolean sa_pre_qc_execute
-  File    sa_pre_qc_bin
+  String  sa_pre_qc_bin
   String  sa_pre_qc_rename
-  File    sa_post_qc_bin
+  String  sa_post_qc_bin
   Boolean sa_trnascan_se_execute
-  File    sa_trnascan_se_bin
-  File    sa_trnascan_pick_and_transform_to_gff_bin
+  String  sa_trnascan_se_bin
+  String  sa_trnascan_pick_and_transform_to_gff_bin
   Boolean sa_rfam_execute
-  File    sa_rfam_cmsearch_bin
-  File    sa_rfam_clan_filter_bin
+  String  sa_rfam_cmsearch_bin
+  String  sa_rfam_clan_filter_bin
   File    sa_rfam_cm
   File    sa_rfam_claninfo_tsv
   File    sa_rfam_feature_lookup_tsv
   Boolean sa_crt_execute
-  File    sa_crt_cli_jar
-  File    sa_crt_transform_bin
+  String  sa_crt_cli_jar
+  String  sa_crt_transform_bin
   Boolean sa_prodigal_execute
-  File    sa_prodigal_bin
-  File    sa_unify_bin
+  String  sa_prodigal_bin
+  String  sa_unify_bin
   Boolean sa_genemark_execute
-  File    sa_genemark_iso_bin
-  File    sa_genemark_meta_bin
-  File    sa_genemark_meta_model
-  File    sa_gff_merge_bin
-  File    sa_fasta_merge_bin
+  String  sa_genemark_iso_bin
+  String  sa_genemark_meta_bin
+  String  sa_genemark_meta_model
+  String  sa_gff_merge_bin
+  String  sa_fasta_merge_bin
   Boolean sa_gff_and_fasta_stats_execute
-  File    sa_gff_and_fasta_stats_bin
+  String  sa_gff_and_fasta_stats_bin
   # functional annotation
   Boolean fa_execute
   String  fa_product_names_mapping_dir
@@ -45,33 +45,33 @@ workflow annotation {
   String  fa_ko_ec_img_nr_db
   File    fa_ko_ec_md5_mapping
   File    fa_ko_ec_taxon_to_phylo_mapping
-  File    fa_lastal_bin
-  File    fa_selector_bin
+  String  fa_lastal_bin
+  String  fa_selector_bin
   Boolean fa_cath_funfam_execute
   File    fa_cath_funfam_db
   Boolean fa_pfam_execute
   File    fa_pfam_db
   File    fa_pfam_claninfo_tsv
-  File    fa_pfam_clan_filter
+  String  fa_pfam_clan_filter
   Boolean fa_superfam_excute
   File    fa_superfam_db
   Boolean fa_cog_execute
   File    fa_cog_db
   Boolean fa_tigrfam_execute
   File    fa_tigrfam_db
-  File    fa_hit_selector_bin
+  String  fa_hit_selector_bin
   Boolean fa_smart_execute
   File    fa_smart_db
-  File    fa_hmmsearch_bin
-  File    fa_frag_hits_filter_bin
+  String  fa_hmmsearch_bin
+  String  fa_frag_hits_filter_bin
   Boolean fa_signalp_execute
-  File    fa_signalp_bin
+  String  fa_signalp_bin
   String  fa_signalp_gram_stain
   Boolean fa_tmhmm_execute
-  File    fa_tmhmm_model
-  File    fa_tmhmm_decode
-  File    fa_tmhmm_decode_parser
-  File    fa_product_assign_bin
+  String  fa_tmhmm_model
+  String  fa_tmhmm_decode
+  String  fa_tmhmm_decode_parser
+  String  fa_product_assign_bin
 
   call setup {
     input:
@@ -170,7 +170,7 @@ task setup {
   Int    n_splits
 
   command {
-    python -c 'for i in range(${n_splits}): print("${dir}"+str(i+1)+"/")'
+    python -c 'for i in range(${n_splits}): print("${dir}/"+str(i+1)+"/")'
   }
   output {
     Array[String] splits = read_lines(stdout())

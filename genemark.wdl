@@ -4,10 +4,10 @@ workflow genemark {
   String imgap_project_id
   String imgap_project_type
   String output_dir
-  File   genemark_iso_bin
-  File   genemark_meta_bin
-  File   genemark_meta_model
-  File   genemark_unify_bin
+  String genemark_iso_bin
+  String genemark_meta_bin
+  String genemark_meta_model
+  String genemark_unify_bin
 
   if(imgap_project_type == "isolate") {
     call gm_isolate {
@@ -48,7 +48,7 @@ workflow genemark {
 
 task gm_isolate {
   
-  File   bin
+  String bin
   File   input_fasta
   String project_id
 
@@ -68,8 +68,8 @@ task gm_isolate {
 
 task gm_meta {
   
-  File   bin
-  File   model
+  String bin
+  String model
   File   input_fasta
   String project_id
 
@@ -95,7 +95,7 @@ task clean_and_unify {
   File?  meta_proteins_fasta
   File?  iso_gff
   File?  meta_gff
-  File   unify_bin
+  String unify_bin
   String project_id
   String out_dir
   
