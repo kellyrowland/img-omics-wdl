@@ -90,6 +90,8 @@ workflow f_annotate {
         project_id = imgap_project_id,
         input_fasta = input_fasta,
         threads = additional_threads,
+        par_hmm_inst = par_hmm_inst,
+        approx_num_proteins = approx_num_proteins,
         tigrfam_db = tigrfam_db,
         hmmsearch = hmmsearch_bin,
         hit_selector = hit_selector_bin,
@@ -102,6 +104,8 @@ workflow f_annotate {
         project_id = imgap_project_id,
         input_fasta = input_fasta,
         threads = additional_threads,
+        par_hmm_inst = par_hmm_inst,
+        approx_num_proteins = approx_num_proteins,
         superfam_db = superfam_db,
         hmmsearch = hmmsearch_bin,
         frag_hits_filter = frag_hits_filter_bin,
@@ -114,6 +118,8 @@ workflow f_annotate {
         project_id = imgap_project_id,
         input_fasta = input_fasta,
         threads = additional_threads,
+        par_hmm_inst = par_hmm_inst,
+        approx_num_proteins = approx_num_proteins,
         pfam_db = pfam_db,
         pfam_claninfo_tsv = pfam_claninfo_tsv,
         pfam_clan_filter = pfam_clan_filter,
@@ -127,6 +133,8 @@ workflow f_annotate {
         project_id = imgap_project_id,
         input_fasta = input_fasta,
         threads = additional_threads,
+        par_hmm_inst = par_hmm_inst,
+        approx_num_proteins = approx_num_proteins,
         cath_funfam_db = cath_funfam_db,
         hmmsearch = hmmsearch_bin,
         frag_hits_filter = frag_hits_filter_bin,
@@ -390,6 +398,8 @@ task tigrfam {
   File   input_fasta
   File   tigrfam_db
   Int    threads = 0
+  Int    par_hmm_inst = 0
+  Int    approx_num_proteins = 0
   Float  aln_length_ratio = 0.7
   Float  max_overlap_ratio = 0.1
   File   hmmsearch
@@ -397,6 +407,66 @@ task tigrfam {
   String out_dir
 
   command <<<
+    if [[ ${threads} -gt ${par_hmm_inst} ]]
+      then
+          hmmsearch_threads=$(echo ${threads} / ${par_hmm_inst} | bc)
+          printf "$(date +%F_%T) - Splitting up proteins fasta into ${par_hmm_inst} "
+          printf "pieces now and then run hmmsearch on them separately with ${threads} "
+          printf "threads each against the TIGRFAM db...\n"
+          tmp_dir=.
+          filesize=$(ls -l ${input_fasta} | awk '{print $5}')
+          blocksize=$((($filesize / ${par_hmm_inst}) + 20000))
+
+          hmmsearch_base_cmd="${hmmsearch} --notextw --cut_nc"
+          if [[ ${par_hmm_inst} -gt 0 ]]
+          then
+              hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
+          fi
+          hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
+          # Use parallel to split up the input and
+          # run hmmsearch in parallel on those splits
+          cat ${input_fasta} | parallel --pipe --recstart '>' \
+                               --blocksize $blocksize \
+                               'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
+                               $hmmsearch_base_cmd \
+                               '--domtblout '$tmp_dir'/tmp.tigrfam.$$.domtblout' \
+                                ${tigrfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+          exit_code=$?
+          if [[ $exit_code -ne 0 ]]
+          then
+              echo "GNU parallel run failed! Aborting!" >&2
+              exit $exit_code
+          fi
+
+          echo "$(date +%F_%T) - Concatenating split result files now..."
+          cat $tmp_dir/tmp.tigrfam.* > ${project_id}_proteins.tigrfam.domtblout
+          exit_code=$?
+          if [[ $exit_code -ne 0 ]]
+          then
+              echo "Concatenating split outputs failed! Aborting!" >&2
+              exit $exit_code
+          fi
+
+          echo "$(date +%F_%T) - Deleting tmp files now..."
+          rm $tmp_dir/tmp.*
+      else
+          echo "$(date +%F_%T) - Calling hmmsearch to predict TIGRFAMs now..."
+          hmmsearch_cmd="${hmmsearch} --notextw --cut_nc"
+          if [[ ${approx_num_proteins} -gt 0 ]]
+          then
+              hmmsearch_cmd="$hmmsearch_cmd -Z ${approx_num_proteins}"
+          fi
+          hmmsearch_cmd="$hmmsearch_cmd --domtblout ${project_id}_proteins.tigrfam.domtblout "
+          hmmsearch_cmd="$hmmsearch_cmd ${tigrfam_db} ${input_fasta} 1> /dev/null"
+          $hmmsearch_cmd
+          exit_code=$?
+          if [[ $exit_code -ne 0 ]]
+          then
+              echo "$(date +%F_%T) - hmmsearch failed! Aborting!" >&2
+              exit $exit_code
+          fi
+      fi
+
     tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
     ${hmmsearch} --notextw --cut_nc --cpu ${threads} \
                  --domtblout ${project_id}_proteins.tigrfam.domtblout \
@@ -419,6 +489,8 @@ task superfam {
   File   input_fasta
   File   superfam_db
   Int    threads = 0
+  Int    par_hmm_inst = 0
+  Int    approx_num_proteins = 0
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
   Float  max_overlap_ratio = 0.1
@@ -450,6 +522,8 @@ task pfam {
   File   pfam_db
   File   pfam_claninfo_tsv
   Int    threads = 0
+  Int    par_hmm_inst = 0
+  Int    approx_num_proteins = 0
   File   hmmsearch
   File   pfam_clan_filter
   String out_dir
@@ -476,6 +550,8 @@ task cath_funfam {
   File   input_fasta
   File   cath_funfam_db
   Int    threads = 0
+  Int    par_hmm_inst = 0
+  Int    approx_num_proteins = 0
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
   Float  max_overlap_ratio = 0.1
