@@ -37,7 +37,6 @@ task run {
   String out_dir
 
   command {
-    #java -Xmx1536m -jar ${jar} ${input_fasta} ${project_id}_crt.out
     ${jar} ${input_fasta} ${project_id}_crt.out
     cp ./${project_id}_crt.out ${out_dir}
   }

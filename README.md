@@ -13,16 +13,14 @@ Input options are listed in the `inputs.json` file and include locations of
 input databases, locations of necessary executables, and Boolean variables
 to toggle run options on and off.
 
-Currently, the inputs have some executables' paths written in using the
-absolute system paths on Cori. Additionally, it is assumed that there is a
-`bin` directory at the same level as the `wdl` files which contains numerous
-scripts for different parts of the annotations. On Cori at NERSC, this
-directory is
-`/global/dna/projectdirs/microbial/omics/gbp/img-annotation-pipeline/bin` and
-can be copied here into this directory to be used in a relative way.
+The inputs have some executables' absolute paths within the docker container. 
+The scripts (bin), libraries (lib) and supporting script (programs) are all 
+under "omics".  And this whole directory is copied to the container.
+The original source for these scripts was 
+`/global/dna/projectdirs/microbial/omics/gbp/img-annotation-pipeline/bin`
 
-The workflow is written to take in a metagenome or isolate FASTA which is split
-into some number of smaller files. The directory structure looks like:
+The workflow is written to take in a pre-split fasta file of a metagenome or isolate genome. 
+The directory structure looks like:
 
 `/path/to/splits/<split number>/file.fna`
 
@@ -47,6 +45,12 @@ the value of the variable `annotation.imgap_input_dir`.
 Edit `inputs.json` to pick whichever parts of the annotation pipeline(s) should
 be run. Make sure that the locations of the input databases and executables are
 correctly set as well.
+
+For example, on cori the ref databases are
+`/global/dna/shared/databases/jaws/img/`
+
+And at lbl (i.e. LAB IT) they are here:
+`/global/scratch/jaws/ref_data/img`
 
 The annotation workflow is structured:
 
@@ -79,6 +83,10 @@ The annotation workflow is structured:
 
 Run the workflow with the command:
 
+# using cromwell.jar (for testing)
 `java -jar <Cromwell> annotation.wdl -i inputs.json`
+
+# or through jaws
+`jaws submit annotation.wdl inputs.json`
 
 in this directory.
