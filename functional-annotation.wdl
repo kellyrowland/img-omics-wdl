@@ -468,9 +468,6 @@ task tigrfam {
       fi
 
     tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
-    ${hmmsearch} --notextw --cut_nc --cpu ${threads} \
-                 --domtblout ${project_id}_proteins.tigrfam.domtblout \
-                 ${tigrfam_db} ${input_fasta}
     grep -v '^#' ${project_id}_proteins.tigrfam.domtblout | \
     awk '{print $1,$3,$4,$6,$13,$14,$16,$17,$20,$21}' | \
     sort -k1,1 -k6,6nr -k5,5n | \
@@ -499,10 +496,64 @@ task superfam {
   String out_dir
 
   command <<<
+    if [[ ${threads} -gt ${par_hmm_inst} ]]
+      then
+          hmmsearch_threads=$(echo ${threads} / ${par_hmm_inst} | bc)
+          printf "$(date +%F_%T) - Splitting up proteins fasta into ${par_hmm_inst} "
+          printf "pieces now and then run hmmsearch on them separately with $hmmsearch_threads "
+          printf "threads each against the SuperFamily db...\n"
+          tmp_dir=.
+          filesize=$(ls -l ${input_fasta} | awk '{print $5}')
+          blocksize=$((($filesize / ${par_hmm_inst}) + 20000))
+
+          hmmsearch_base_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
+          if [[ ${approx_num_proteins} -gt 0 ]]
+          then
+              hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
+          fi  
+          hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
+          # Use parallel to split up the input and
+          # run hmmsearch in parallel on those splits
+          cat ${input_fasta} | parallel --pipe --recstart '>' \
+                               --blocksize $blocksize \
+                               'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
+                               $hmmsearch_base_cmd \
+                               '--domtblout '$tmp_dir'/tmp.supfam.$$.domtblout' \
+                               ${superfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+          exit_code=$?
+          if [[ $exit_code -ne 0 ]]
+          then
+              echo "GNU parallel run failed! Aborting!" >&2
+              exit $exit_code
+          fi  
+
+          echo "$(date +%F_%T) - Concatenating split result files now..."
+          cat $tmp_dir/tmp.supfam.* > ${project_id}_proteins.supfam.domtblout
+          exit_code=$?
+          if [[ $exit_code -ne 0 ]]
+          then
+              echo "Concatenating split outputs failed! Aborting!" >&2
+              exit $exit_code
+          fi
+      else
+          echo "$(date +%F_%T) - Calling hmmsearch against the SuperFamily db now..."
+          hmmsearch_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
+          if [[ ${approx_num_proteins} -gt 0 ]]
+          then
+              hmmsearch_cmd="$hmmsearch_cmd -Z ${approx_num_proteins}"
+          fi  
+          hmmsearch_cmd="$hmmsearch_cmd --domtblout ${project_id}_proteins.supfam.domtblout "
+          hmmsearch_cmd="$hmmsearch_cmd ${superfam_db} ${input_fasta} 1> /dev/null"
+          $hmmsearch_cmd
+          exit_code=$?
+          if [[ $exit_code -ne 0 ]]
+          then
+              echo "$(date +%F_%T) - hmmsearch failed! Aborting!" >&2
+              exit $exit_code
+          fi  
+      fi
+
     tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
-    ${hmmsearch} --notextw --domE ${min_domain_eval_cutoff} --cpu ${threads} \
-                 --domtblout ${project_id}_proteins.supfam.domtblout \
-                 ${superfam_db} ${input_fasta}
     grep -v '^#' ${project_id}_proteins.supfam.domtblout | \
     awk '{print $1,$3,$4,$5,$6,$7,$8,$13,$14,$16,$17,$20,$21}' | \
     sort -k1,1 -k7,7nr -k6,6n | \
