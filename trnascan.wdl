@@ -5,8 +5,8 @@ workflow trnascan {
   String imgap_project_type
   String output_dir 
   Int    additional_threads
-  File   trnascan_se_bin
-  File   pick_and_transform_to_gff_bin
+  String trnascan_se_bin
+  String pick_and_transform_to_gff_bin
 
   call trnascan_ba {
     input:
@@ -30,7 +30,7 @@ workflow trnascan {
 
 task trnascan_ba {
 
-  File   bin
+  String bin
   String input_fasta
   String project_id
   String out_dir
@@ -49,7 +49,7 @@ task trnascan_ba {
 
 task pick_and_transform_to_gff {
 
-  File   bin
+  String bin
   String project_id
   File   bacterial_out
   File   archaeal_out

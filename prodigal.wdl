@@ -4,8 +4,8 @@ workflow prodigal {
   String imgap_project_id
   String imgap_project_type
   String output_dir
-  File   prodigal_bin
-  File   prodigal_unify_bin
+  String prodigal_bin
+  String prodigal_unify_bin
 
   if(imgap_project_type == "isolate") {
     call fasta_len {
@@ -75,7 +75,7 @@ task fasta_len {
 
 task iso_big {
 
-  File   bin
+  String bin
   File   input_fasta
   Int?   translation_table = 11
   String project_id
@@ -96,7 +96,7 @@ task iso_big {
 
 task iso_small {
 
-  File   bin
+  String bin
   File   input_fasta
   String project_id
 
@@ -114,7 +114,7 @@ task iso_small {
 
 task metag {
 
-  File   bin
+  String bin
   File   input_fasta
   String project_id
 
@@ -141,7 +141,7 @@ task clean_and_unify {
   File?  iso_big_gff
   File?  iso_small_gff
   File?  meta_gff
-  File   unify_bin
+  String unify_bin
   String project_id
   String out_dir
 
