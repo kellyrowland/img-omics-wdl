@@ -110,7 +110,7 @@ task clean_and_unify {
     mv ${meta_genes_fasta} . 2> /dev/null
     mv ${iso_gff} . 2> /dev/null
     mv ${meta_gff} . 2> /dev/null
-    cp -r ./${project_id}_genemark* ${out_dir}
+    #cp -r ./${project_id}_genemark* ${out_dir}
   }
   output {
     File gff = "${project_id}_genemark.gff"

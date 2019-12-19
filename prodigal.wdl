@@ -160,7 +160,7 @@ task clean_and_unify {
     mv ${iso_big_gff} . 2> /dev/null
     mv ${iso_small_gff} . 2> /dev/null
     mv ${meta_gff} . 2> /dev/null
-    cp -r ./${project_id}_prodigal* ${out_dir}
+    #cp -r ./${project_id}_prodigal* ${out_dir}
   }
   output {
     File gff = "${project_id}_prodigal.gff"

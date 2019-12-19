@@ -39,7 +39,7 @@ task run {
   command {
     #java -Xmx1536m -jar ${jar} ${input_fasta} ${project_id}_crt.out
     ${jar} ${input_fasta} ${project_id}_crt.out
-    cp ./${project_id}_crt.out ${out_dir}
+    #cp ./${project_id}_crt.out ${out_dir}
   }
   output {
     File out = "${project_id}_crt.out"
@@ -59,7 +59,7 @@ task transform {
     mv ${crt_out} ./${crt_out_local}
     tool_and_version=$(${jar} -version | cut -d' ' -f1,6)
     ${transform_bin} ${crt_out_local} "$tool_and_version"
-    cp -r ./${project_id}_crt.* ${out_dir}
+    #cp -r ./${project_id}_crt.* ${out_dir}
   }
   output{
     File crisprs = "${project_id}_crt.crisprs"

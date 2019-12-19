@@ -158,7 +158,9 @@ workflow s_annotate {
     }
   }
   output {
-	File  gff = "${output_dir}"+"/"+"${imgap_project_id}_structural_annotation.gff"
+	#File  gff = "${output_dir}"+"/"+"${imgap_project_id}_structural_annotation.gff"
+	File  gff = gff_merge.final_gff
+	#File  gff = post_qc.out
     File? proteins = fasta_merge.final_proteins 
   }
 }
@@ -215,7 +217,7 @@ task pre_qc {
     fasta_sanity_cmd="$fasta_sanity_cmd -l ${min_seq_length}"
     $fasta_sanity_cmd
     rm $tmp_fasta
-    cp ${project_id}_contigs.fna ${output_dir}
+    #cp ${project_id}_contigs.fna ${output_dir}
   >>>
   output {
     File fasta = "${project_id}_contigs.fna"
@@ -240,7 +242,7 @@ task gff_merge {
     ${bin} -f ${input_fasta} ${"-a " + misc_and_regulatory_gff + " " + rrna_gff} \
     ${trna_gff} ${ncrna_tmrna_gff} ${crt_gff} \
     ${genemark_gff} ${prodigal_gff} 1> ${project_id}_structural_annotation.gff
-    cp ./${project_id}_structural_annotation.gff ${output_dir}
+    #cp ./${project_id}_structural_annotation.gff ${output_dir}
   }
   output {
     File final_gff = "${project_id}_structural_annotation.gff"
@@ -262,7 +264,7 @@ task fasta_merge {
   command {
     ${bin} ${final_gff} ${genemark_genes} ${prodigal_genes} 1> ${project_id}_genes.fna
     ${bin} ${final_gff} ${genemark_proteins} ${prodigal_proteins} 1> ${project_id}_proteins.faa
-    cp ./${project_id}_genes.fna ./${project_id}_proteins.faa ${output_dir}
+    #cp ./${project_id}_genes.fna ./${project_id}_proteins.faa ${output_dir}
   }
   output {
     File final_genes = "${project_id}_genes.fna"
@@ -291,7 +293,7 @@ task post_qc {
 
   command {
     ${qc_bin} ${input_fasta} "${project_id}_structural_annotation.gff"
-    cp ./${project_id}_structural_annotation.gff ${output_dir}
+    #cp ./${project_id}_structural_annotation.gff ${output_dir}
   }
   output {
     File out = "${project_id}_structural_annotation.gff"

@@ -39,7 +39,7 @@ task trnascan_ba {
   command {
     ${bin} -B --thread ${threads} ${input_fasta} &> ${project_id}_trnascan_bacterial.out
     ${bin} -A --thread ${threads} ${input_fasta} &> ${project_id}_trnascan_archaeal.out
-    cp -r ./${project_id}_trnascan_*.out ${out_dir}
+    #cp -r ./${project_id}_trnascan_*.out ${out_dir}
   }
   output {
     File bacterial_out = "${project_id}_trnascan_bacterial.out"

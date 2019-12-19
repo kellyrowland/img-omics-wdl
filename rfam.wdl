@@ -72,7 +72,7 @@ task cmsearch {
 
   command {
     ${bin} --notextw --cut_tc --cpu ${threads} --tblout ${project_id}_rfam.tbl ${cm} ${input_fasta}
-    cp ./${project_id}_rfam.tbl ${out_dir}
+    #cp ./${project_id}_rfam.tbl ${out_dir}
   }
   output {
     File tbl = "${project_id}_rfam.tbl"
@@ -96,7 +96,7 @@ task clan_filter {
     sort -k1,1 -k10,10nr -k11,11n | \
     ${clan_filter_bin} "$tool_and_version" \
     ${claninfo_tsv} ${feature_lookup_tsv} > ${project_id}_rfam.gff
-    cp ./${project_id}_rfam.gff ${out_dir}
+    #cp ./${project_id}_rfam.gff ${out_dir}
   >>>
   output {
     File rfam_gff = "${project_id}_rfam.gff"
@@ -112,7 +112,7 @@ task misc_and_regulatory {
   command <<<
     awk -F'\t' '$3 == "misc_bind" || $3 == "misc_feature" || $3 == "regulatory" {print $0}' \
     ${rfam_gff} > ${project_id}_rfam_misc_bind_misc_feature_regulatory.gff
-    cp ./${project_id}_rfam_misc_bind_misc_feature_regulatory.gff ${out_dir}
+    #cp ./${project_id}_rfam_misc_bind_misc_feature_regulatory.gff ${out_dir}
   >>>
   output {
     File misc_bind_misc_feature_regulatory_gff = "${project_id}_rfam_misc_bind_misc_feature_regulatory.gff"
@@ -127,7 +127,7 @@ task rrna {
 
   command <<<
     awk -F'\t' '$3 == "rRNA" {print $0}' ${rfam_gff} > ${project_id}_rfam_rrna.gff
-    cp ./${project_id}_rfam_rrna.gff ${out_dir}
+    #cp ./${project_id}_rfam_rrna.gff ${out_dir}
   >>>
   output {
     File rrna_gff = "${project_id}_rfam_rrna.gff"
@@ -143,7 +143,7 @@ task ncrna_tmrna {
   command <<<
     awk -F'\t' '$3 == "ncRNA" || $3 == "tmRNA" {print $0}' \
         ${rfam_gff} > ${project_id}_rfam_ncrna_tmrna.gff
-    cp ./${project_id}_rfam_ncrna_tmrna.gff ${out_dir}
+    #cp ./${project_id}_rfam_ncrna_tmrna.gff ${out_dir}
   >>>
   output {
     File ncrna_tmrna_gff = "${project_id}_rfam_ncrna_tmrna.gff"

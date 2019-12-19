@@ -1,0 +1,8 @@
+ # marcel's data
+/global/cscratch1/sd/gbp/jaws/test_datasets/215367
+
+# Marcel's original code with new hmmsearch code
+$BSCRATCH/../rowlandk/jaws/metagenome_annotation/bin-new/functional_annotation
+
+# creating subs.zip
+zip subs.zip crt.wdl functional-annotation.wdl genemark.wdl prodigal.wdl rfam.wdl structural-annotation.wdl trnascan.wdl
