@@ -206,6 +206,18 @@ task ko_ec {
                 < ${project_id}_proteins.img_nr.last.blasttab
     #cp ${project_id}_*.tsv ${project_id}_ko_ec.gff ${project_id}_proteins.img_nr.last.blasttab ${out_dir}
   }
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File last_blasttab = "${project_id}_proteins.img_nr.last.blasttab"
     File ko_tsv = "${project_id}_ko.tsv"
@@ -303,6 +315,18 @@ task smart {
                         "$tool_and_version" > ${project_id}_smart.gff
     #cp ./${project_id}_smart.gff ./${project_id}_proteins.smart.domtblout ${out_dir}
   >>>
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_smart.gff"
 	File domtblout = "${project_id}_proteins.smart.domtblout"
@@ -398,6 +422,18 @@ task cog {
                         "$tool_and_version" > ${project_id}_cog.gff
     #cp ./${project_id}_cog.gff ./${project_id}_proteins.cog.domtblout ${out_dir}
   >>>
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_cog.gff"
 	File domtblout = "${project_id}_proteins.cog.domtblout"
@@ -492,6 +528,18 @@ task tigrfam {
                     "$tool_and_version" > ${project_id}_tigrfam.gff
     #cp ./${project_id}_tigrfam.gff ./${project_id}_proteins.tigrfam.domtblout ${out_dir}
   >>>
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_tigrfam.gff"
 	File domtblout = "${project_id}_proteins.tigrfam.domtblout"
@@ -586,6 +634,18 @@ task superfam {
                         "$tool_and_version" > ${project_id}_supfam.gff
     #cp ./${project_id}_supfam.gff ./${project_id}_proteins.supfam.domtblout ${out_dir}
   >>>
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_supfam.gff"
 	File domtblout = "${project_id}_proteins.supfam.domtblout"
@@ -678,6 +738,18 @@ task pfam {
     ${pfam_clan_filter} "$tool_and_version" ${pfam_claninfo_tsv} > ${project_id}_pfam.gff
     #cp ./${project_id}_pfam.gff ./${project_id}_proteins.pfam.domtblout ${out_dir}
   >>>
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_pfam.gff"
 	File domtblout = "${project_id}_proteins.pfam.domtblout"
@@ -773,6 +845,18 @@ task cath_funfam {
                         "$tool_and_version" > ${project_id}_cath_funfam.gff
     #cp ./${project_id}_cath_funfam.gff ./${project_id}_proteins.cath_funfam.domtblout ${out_dir}
   >>>
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_cath_funfam.gff"
 	File domtblout = "${project_id}_proteins.cath_funfam.domtblout"
@@ -796,6 +880,18 @@ task signalp {
         "\t.\t.\tD-score="$9";network="$12";organism_type="ot}' > ${project_id}_cleavage_sites.gff
     #cp ./${project_id}_cleavage_sites.gff ${out_dir}
   >>>
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_cleavage_sites.gff"
   }
@@ -819,6 +915,18 @@ task tmhmm {
     ${model} 2> /dev/null | ${decode_parser} "$tool_and_version" > ${project_id}_tmh.gff
     #cp ./${project_id}_tmh.gff ${out_dir}
   >>>
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_tmh.gff"
   }
@@ -849,6 +957,18 @@ task product_name {
     mv ../inputs/*/*.gff .
     #cp ./${project_id}_functional_annotation.gff ${out_dir}
   }
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_functional_annotation.gff"
   }

@@ -74,6 +74,18 @@ task cmsearch {
     ${bin} --notextw --cut_tc --cpu ${threads} --tblout ${project_id}_rfam.tbl ${cm} ${input_fasta}
     #cp ./${project_id}_rfam.tbl ${out_dir}
   }
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File tbl = "${project_id}_rfam.tbl"
   }
@@ -98,6 +110,18 @@ task clan_filter {
     ${claninfo_tsv} ${feature_lookup_tsv} > ${project_id}_rfam.gff
     #cp ./${project_id}_rfam.gff ${out_dir}
   >>>
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File rfam_gff = "${project_id}_rfam.gff"
   }
@@ -114,6 +138,18 @@ task misc_and_regulatory {
     ${rfam_gff} > ${project_id}_rfam_misc_bind_misc_feature_regulatory.gff
     #cp ./${project_id}_rfam_misc_bind_misc_feature_regulatory.gff ${out_dir}
   >>>
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File misc_bind_misc_feature_regulatory_gff = "${project_id}_rfam_misc_bind_misc_feature_regulatory.gff"
   }
@@ -129,6 +165,18 @@ task rrna {
     awk -F'\t' '$3 == "rRNA" {print $0}' ${rfam_gff} > ${project_id}_rfam_rrna.gff
     #cp ./${project_id}_rfam_rrna.gff ${out_dir}
   >>>
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File rrna_gff = "${project_id}_rfam_rrna.gff"
   }
@@ -145,6 +193,18 @@ task ncrna_tmrna {
         ${rfam_gff} > ${project_id}_rfam_ncrna_tmrna.gff
     #cp ./${project_id}_rfam_ncrna_tmrna.gff ${out_dir}
   >>>
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File ncrna_tmrna_gff = "${project_id}_rfam_ncrna_tmrna.gff"
   }

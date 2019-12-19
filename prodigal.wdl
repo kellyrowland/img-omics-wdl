@@ -68,6 +68,18 @@ task fasta_len {
   command {
     grep -v '^>' ${input_fasta} | wc -m
   }
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     Int wc = select_first([read_int(stdout()),0])
   }
@@ -87,6 +99,18 @@ task iso_big {
     -t ${train} -o ${project_id}_prodigal.gff \
     -d ${project_id}_prodigal_genes.fna -a ${project_id}_prodigal_proteins.faa
   }
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_prodigal.gff"
     File genes = "${project_id}_prodigal_genes.fna"
@@ -105,6 +129,18 @@ task iso_small {
     -o ${project_id}_prodigal.gff -d ${project_id}_prodigal_genes.fna \
     -a ${project_id}_prodigal_proteins.faa
   }
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_prodigal.gff"
     File genes = "${project_id}_prodigal_genes.fna"
@@ -123,6 +159,18 @@ task metag {
     -o ${project_id}_prodigal.gff -d ${project_id}_prodigal_genes.fna \
     -a ${project_id}_prodigal_proteins.faa
   }
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_prodigal.gff"
     File genes = "${project_id}_prodigal_genes.fna"
@@ -162,6 +210,18 @@ task clean_and_unify {
     mv ${meta_gff} . 2> /dev/null
     #cp -r ./${project_id}_prodigal* ${out_dir}
   }
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+
   output {
     File gff = "${project_id}_prodigal.gff"
     File genes = "${project_id}_prodigal_genes.fna"

@@ -219,6 +219,18 @@ task pre_qc {
     rm $tmp_fasta
     #cp ${project_id}_contigs.fna ${output_dir}
   >>>
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+	
   output {
     File fasta = "${project_id}_contigs.fna"
   }
@@ -244,6 +256,19 @@ task gff_merge {
     ${genemark_gff} ${prodigal_gff} 1> ${project_id}_structural_annotation.gff
     #cp ./${project_id}_structural_annotation.gff ${output_dir}
   }
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+	
+  }
+
   output {
     File final_gff = "${project_id}_structural_annotation.gff"
   }
@@ -266,6 +291,18 @@ task fasta_merge {
     ${bin} ${final_gff} ${genemark_proteins} ${prodigal_proteins} 1> ${project_id}_proteins.faa
     #cp ./${project_id}_genes.fna ./${project_id}_proteins.faa ${output_dir}
   }
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+	
   output {
     File final_genes = "${project_id}_genes.fna"
     File final_proteins = "${project_id}_proteins.faa"
@@ -282,6 +319,18 @@ task gff_and_fasta_stats {
   command {
     ${bin} ${input_fasta} ${final_gff}
   }
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+	
 }
 
 task post_qc {
@@ -295,6 +344,18 @@ task post_qc {
     ${qc_bin} ${input_fasta} "${project_id}_structural_annotation.gff"
     #cp ./${project_id}_structural_annotation.gff ${output_dir}
   }
+
+  runtime {
+    cluster: "cori"
+    time: "02:00:00"
+    mem: "86G"
+    poolname: "img_annotation"
+    shared: 1
+    node: 4
+    nwpn: 1
+    constraint: "knl"
+  }
+	
   output {
     File out = "${project_id}_structural_annotation.gff"
   }
