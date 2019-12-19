@@ -185,7 +185,7 @@ task ko_ec {
 
   String project_id
   String project_type
-  Int    threads = 0
+  Int    threads = 2
   File   input_fasta
   String nr_db
   File   md5
@@ -220,8 +220,8 @@ task smart {
   String project_id
   File   input_fasta
   File   smart_db
-  Int    threads = 0
-  Int    par_hmm_inst = 0
+  Int    threads = 2
+  Int    par_hmm_inst = 1
   Int    approx_num_proteins = 0
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
@@ -242,6 +242,7 @@ task smart {
         blocksize=$((($filesize / ${par_hmm_inst}) + 20000))
 
         hmmsearch_base_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
+		# TODO: jeff use default -Z setting for hmmscan until approx_num_proteins gets assigned by marcel
         if [[ ${approx_num_proteins} -gt 0 ]]
         then
             hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
@@ -249,11 +250,15 @@ task smart {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu ${threads}"
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        cat ${input_fasta} | parallel --pipe --recstart '>' \
-                             --blocksize $blocksize \
-                             'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
-                             $hmmsearch_base_cmd '--domtblout '$tmp_dir'/tmp.smart.$$.domtblout' \
-                             ${smart_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+        #cat ${input_fasta} | parallel --pipe --recstart '>' \
+        #                     --blocksize $blocksize \
+        #                     'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
+        #                     $hmmsearch_base_cmd '--domtblout '$tmp_dir'/tmp.smart.$$.domtblout' \
+        #                     ${smart_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+
+		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
+		$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.smart.$$.domtblout ${smart_db} ${input_fasta} 1> /dev/null
+
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
         then
@@ -308,8 +313,8 @@ task cog {
   String project_id
   File   input_fasta
   File   cog_db
-  Int    threads = 0
-  Int    par_hmm_inst = 0
+  Int    threads = 2
+  Int    par_hmm_inst = 1
   Int    approx_num_proteins = 0
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
@@ -331,6 +336,7 @@ task cog {
         blocksize=$((($filesize / $number_of_parallel_instances) + 30000))
 
         hmmsearch_base_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
+		# TODO: jeff use default -Z setting for hmmscan until approx_num_proteins gets assigned by marcel
         if [[ ${approx_num_proteins} -gt 0 ]]
         then
             hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
@@ -338,12 +344,16 @@ task cog {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        cat ${input_fasta} | parallel --pipe --recstart '>' \
-                             --blocksize $blocksize \
-                             'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
-                             $hmmsearch_base_cmd \
-                             '--domtblout '$tmp_dir'/tmp.cog.$$.domtblout' \
-                             ${cog_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+        #cat ${input_fasta} | parallel --pipe --recstart '>' \
+        #                     --blocksize $blocksize \
+        #                     'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
+        #                     $hmmsearch_base_cmd \
+        #                     '--domtblout '$tmp_dir'/tmp.cog.$$.domtblout' \
+        #                     ${cog_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+
+		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
+        $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cog.$$.domtblout ${cog_db} ${input_fasta} 1> /dev/null
+
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
         then
@@ -397,8 +407,8 @@ task tigrfam {
   String project_id
   File   input_fasta
   File   tigrfam_db
-  Int    threads = 0
-  Int    par_hmm_inst = 0
+  Int    threads = 2
+  Int    par_hmm_inst = 1
   Int    approx_num_proteins = 0
   Float  aln_length_ratio = 0.7
   Float  max_overlap_ratio = 0.1
@@ -418,19 +428,24 @@ task tigrfam {
           blocksize=$((($filesize / ${par_hmm_inst}) + 20000))
 
           hmmsearch_base_cmd="${hmmsearch} --notextw --cut_nc"
-          if [[ ${par_hmm_inst} -gt 0 ]]
-          then
-              hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
-          fi
+		  #TODO: jeff use default -Z setting for hmmscan until approx_num_proteins gets assigned by marcel
+          #if [[ ${par_hmm_inst} -gt 0 ]]
+          #then
+          #    hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
+          #fi
           hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
           # Use parallel to split up the input and
           # run hmmsearch in parallel on those splits
-          cat ${input_fasta} | parallel --pipe --recstart '>' \
-                               --blocksize $blocksize \
-                               'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
-                               $hmmsearch_base_cmd \
-                               '--domtblout '$tmp_dir'/tmp.tigrfam.$$.domtblout' \
-                                ${tigrfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+          #cat ${input_fasta} | parallel --pipe --recstart '>' \
+          #                     --blocksize $blocksize \
+          #                     'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
+          #                     $hmmsearch_base_cmd \
+          #                     '--domtblout '$tmp_dir'/tmp.tigrfam.$$.domtblout' \
+          #                      ${tigrfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+
+		  # TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
+          $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.tigrfam.$$.domtblout ${tigrfam_db} ${input_fasta} 1> /dev/null
+
           exit_code=$?
           if [[ $exit_code -ne 0 ]]
           then
@@ -485,8 +500,8 @@ task superfam {
   String project_id
   File   input_fasta
   File   superfam_db
-  Int    threads = 0
-  Int    par_hmm_inst = 0
+  Int    threads = 2
+  Int    par_hmm_inst = 1
   Int    approx_num_proteins = 0
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
@@ -498,6 +513,8 @@ task superfam {
   command <<<
     if [[ ${threads} -gt ${par_hmm_inst} ]]
       then
+		  # from marcel's original code
+	      #hmmsearch_threads=$(echo $number_of_additional_threads / $number_of_parallel_hmmsearch_instances | bc)
           hmmsearch_threads=$(echo ${threads} / ${par_hmm_inst} | bc)
           printf "$(date +%F_%T) - Splitting up proteins fasta into ${par_hmm_inst} "
           printf "pieces now and then run hmmsearch on them separately with $hmmsearch_threads "
@@ -507,6 +524,7 @@ task superfam {
           blocksize=$((($filesize / ${par_hmm_inst}) + 20000))
 
           hmmsearch_base_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
+		  # TODO: jeff use default -Z setting for hmmscan until approx_num_proteins gets assigned by marcel
           if [[ ${approx_num_proteins} -gt 0 ]]
           then
               hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
@@ -514,12 +532,16 @@ task superfam {
           hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
           # Use parallel to split up the input and
           # run hmmsearch in parallel on those splits
-          cat ${input_fasta} | parallel --pipe --recstart '>' \
-                               --blocksize $blocksize \
-                               'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
-                               $hmmsearch_base_cmd \
-                               '--domtblout '$tmp_dir'/tmp.supfam.$$.domtblout' \
-                               ${superfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+          #cat ${input_fasta} | parallel --pipe --recstart '>' \
+          #                     --blocksize $blocksize \
+          #                     'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
+          #                     $hmmsearch_base_cmd \
+          #                     '--domtblout '$tmp_dir'/tmp.supfam.$$.domtblout' \
+          #                     ${superfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+
+		  # TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
+          $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.supfam.$$.domtblout ${superfam_db} ${input_fasta} 1> /dev/null
+
           exit_code=$?
           if [[ $exit_code -ne 0 ]]
           then
@@ -572,8 +594,8 @@ task pfam {
   File   input_fasta
   File   pfam_db
   File   pfam_claninfo_tsv
-  Int    threads = 0
-  Int    par_hmm_inst = 0
+  Int    threads = 2
+  Int    par_hmm_inst = 1
   Int    approx_num_proteins = 0
   String hmmsearch
   String pfam_clan_filter
@@ -591,6 +613,7 @@ task pfam {
         blocksize=$((($filesize / ${par_hmm_inst}) + 20000))
 
         hmmsearch_base_cmd="${hmmsearch} --notextw --cut_tc"
+		# TODO: jeff use default -Z setting for hmmscan until approx_num_proteins gets assigned by marcel
         if [[ ${approx_num_proteins} -gt 0 ]]
         then
             hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
@@ -598,12 +621,16 @@ task pfam {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        cat ${input_fasta} | parallel --pipe --recstart '>' \
-                             --blocksize $blocksize \
-                             'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
-                             $hmmsearch_base_cmd \
-                             '--domtblout '$tmp_dir'/tmp.pfam.$$.domtblout' \
-                             ${pfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+        #cat ${input_fasta} | parallel --pipe --recstart '>' \
+        #                     --blocksize $blocksize \
+        #                     'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
+        #                     $hmmsearch_base_cmd \
+        #                     '--domtblout '$tmp_dir'/tmp.pfam.$$.domtblout' \
+        #                     ${pfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+
+		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
+        $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.pfam.$$.domtblout ${pfam_db} ${input_fasta} 1> /dev/null
+
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
         then
@@ -657,8 +684,8 @@ task cath_funfam {
   String project_id
   File   input_fasta
   File   cath_funfam_db
-  Int    threads = 0
-  Int    par_hmm_inst = 0
+  Int    threads = 2
+  Int    par_hmm_inst = 1
   Int    approx_num_proteins = 0
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
@@ -679,6 +706,7 @@ task cath_funfam {
         blocksize=$((($filesize / ${par_hmm_inst}) + 20000))
 
         hmmsearch_base_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
+		# TODO: jeff use default -Z setting for hmmscan until approx_num_proteins gets assigned by marcel
         if [[ ${approx_num_proteins} -gt 0 ]]
         then
             hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
@@ -686,12 +714,16 @@ task cath_funfam {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        cat ${input_fasta} | parallel --pipe --recstart '>' \
-                             --blocksize $blocksize \
-                             'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
-                             $hmmsearch_base_cmd \
-                             '--domtblout '$tmp_dir'/tmp.cath_funfam.$$.domtblout' \
-                             ${cath_funfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+        #cat ${input_fasta} | parallel --pipe --recstart '>' \
+        #                     --blocksize $blocksize \
+        #                     'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
+        #                     $hmmsearch_base_cmd \
+        #                     '--domtblout '$tmp_dir'/tmp.cath_funfam.$$.domtblout' \
+        #                     ${cath_funfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+
+		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
+        $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cath_funfam.$$.domtblout ${cath_funfam_db} ${input_fasta} 1> /dev/null
+
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
         then

@@ -71,9 +71,8 @@ task cmsearch {
   String out_dir
 
   command {
-    #${bin} --notextw --cut_tc --cpu ${threads} --tblout ${project_id}_rfam.tbl ${cm} ${input_fasta}
-    #cp ./${project_id}_rfam.tbl ${out_dir}
-    cp /global/cscratch1/sd/jfroula/JAWS/img-omics-wdl/splits/1/Ga0399893_rfam.tbl ${out_dir}
+    ${bin} --notextw --cut_tc --cpu ${threads} --tblout ${project_id}_rfam.tbl ${cm} ${input_fasta}
+    cp ./${project_id}_rfam.tbl ${out_dir}
   }
   output {
     File tbl = "${project_id}_rfam.tbl"
