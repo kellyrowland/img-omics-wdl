@@ -69,16 +69,7 @@ task fasta_len {
     grep -v '^>' ${input_fasta} | wc -m
   }
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 
   output {
     Int wc = select_first([read_int(stdout()),0])
@@ -100,16 +91,7 @@ task iso_big {
     -d ${project_id}_prodigal_genes.fna -a ${project_id}_prodigal_proteins.faa
   }
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 
   output {
     File gff = "${project_id}_prodigal.gff"
@@ -130,16 +112,7 @@ task iso_small {
     -a ${project_id}_prodigal_proteins.faa
   }
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 
   output {
     File gff = "${project_id}_prodigal.gff"
@@ -160,16 +133,7 @@ task metag {
     -a ${project_id}_prodigal_proteins.faa
   }
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 
   output {
     File gff = "${project_id}_prodigal.gff"
@@ -211,16 +175,7 @@ task clean_and_unify {
     #cp -r ./${project_id}_prodigal* ${out_dir}
   }
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 
   output {
     File gff = "${project_id}_prodigal.gff"

@@ -220,16 +220,7 @@ task pre_qc {
     #cp ${project_id}_contigs.fna ${output_dir}
   >>>
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 	
   output {
     File fasta = "${project_id}_contigs.fna"
@@ -257,17 +248,7 @@ task gff_merge {
     #cp ./${project_id}_structural_annotation.gff ${output_dir}
   }
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-	
-  }
+  runtime {backend: "Local"}
 
   output {
     File final_gff = "${project_id}_structural_annotation.gff"
@@ -292,16 +273,7 @@ task fasta_merge {
     #cp ./${project_id}_genes.fna ./${project_id}_proteins.faa ${output_dir}
   }
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 	
   output {
     File final_genes = "${project_id}_genes.fna"
@@ -320,16 +292,7 @@ task gff_and_fasta_stats {
     ${bin} ${input_fasta} ${final_gff}
   }
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 	
 }
 
@@ -345,16 +308,7 @@ task post_qc {
     #cp ./${project_id}_structural_annotation.gff ${output_dir}
   }
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 	
   output {
     File out = "${project_id}_structural_annotation.gff"

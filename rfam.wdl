@@ -75,16 +75,7 @@ task cmsearch {
     #cp ./${project_id}_rfam.tbl ${out_dir}
   }
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 
   output {
     File tbl = "${project_id}_rfam.tbl"
@@ -111,16 +102,7 @@ task clan_filter {
     #cp ./${project_id}_rfam.gff ${out_dir}
   >>>
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 
   output {
     File rfam_gff = "${project_id}_rfam.gff"
@@ -139,16 +121,7 @@ task misc_and_regulatory {
     #cp ./${project_id}_rfam_misc_bind_misc_feature_regulatory.gff ${out_dir}
   >>>
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 
   output {
     File misc_bind_misc_feature_regulatory_gff = "${project_id}_rfam_misc_bind_misc_feature_regulatory.gff"
@@ -166,16 +139,7 @@ task rrna {
     #cp ./${project_id}_rfam_rrna.gff ${out_dir}
   >>>
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 
   output {
     File rrna_gff = "${project_id}_rfam_rrna.gff"
@@ -194,16 +158,7 @@ task ncrna_tmrna {
     #cp ./${project_id}_rfam_ncrna_tmrna.gff ${out_dir}
   >>>
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 
   output {
     File ncrna_tmrna_gff = "${project_id}_rfam_ncrna_tmrna.gff"

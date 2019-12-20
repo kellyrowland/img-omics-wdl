@@ -42,16 +42,7 @@ task trnascan_ba {
     #cp -r ./${project_id}_trnascan_*.out ${out_dir}
   }
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 
   output {
     File bacterial_out = "${project_id}_trnascan_bacterial.out"
@@ -70,16 +61,7 @@ task pick_and_transform_to_gff {
     ${bin} ${bacterial_out} ${archaeal_out} > ${project_id}_trna.gff
   }
 
-  runtime {
-    cluster: "cori"
-    time: "02:00:00"
-    mem: "86G"
-    poolname: "img_annotation"
-    shared: 1
-    node: 4
-    nwpn: 1
-    constraint: "knl"
-  }
+  runtime {backend: "Local"}
 
   output {
     File gff = "${project_id}_trna.gff"

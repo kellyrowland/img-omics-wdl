@@ -2,9 +2,6 @@ import "structural-annotation.wdl" as sa
 import "functional-annotation.wdl" as fa
 
 workflow annotation {
-
-  Int     num_splits
-  String  imgap_input_dir
   File    imgap_input_fasta
   String  imgap_project_id
   String  imgap_project_type
@@ -75,22 +72,14 @@ workflow annotation {
   String  fa_tmhmm_decode_parser
   String  fa_product_assign_bin
 
-  call setup {
-    input:
-      n_splits = num_splits,
-      dir = imgap_input_dir
-  }
-
-  scatter(split in setup.splits) {
-
     if(sa_execute) {
       call sa.s_annotate {
         input:
           imgap_project_id = imgap_project_id,
           additional_threads = additional_threads,
           imgap_project_type = imgap_project_type,
-          output_dir = split,
-          imgap_input_fasta = "${split}"+"/"+"${imgap_input_fasta}",
+          output_dir = "NA",
+          #imgap_input_fasta = "${split}"+"/"+"${imgap_input_fasta}",
           pre_qc_execute = sa_pre_qc_execute,
           pre_qc_bin = sa_pre_qc_bin,
           pre_qc_rename = sa_pre_qc_rename,
@@ -127,7 +116,7 @@ workflow annotation {
           imgap_project_id = imgap_project_id,
           imgap_project_type = imgap_project_type,
           additional_threads = additional_threads,
-          output_dir = split,
+          output_dir = "NA",
           input_fasta = s_annotate.proteins,
           ko_ec_execute = fa_ko_ec_execute,
           ko_ec_img_nr_db = fa_ko_ec_img_nr_db,
@@ -166,7 +155,6 @@ workflow annotation {
           product_names_mapping_dir = fa_product_names_mapping_dir
       }
     }
-  }
 }
 
 task setup {
