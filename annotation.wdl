@@ -75,11 +75,11 @@ workflow annotation {
     if(sa_execute) {
       call sa.s_annotate {
         input:
+	  imgap_input_fasta = imgap_input_fasta,
           imgap_project_id = imgap_project_id,
           additional_threads = additional_threads,
           imgap_project_type = imgap_project_type,
           output_dir = "NA",
-          #imgap_input_fasta = "${split}"+"/"+"${imgap_input_fasta}",
           pre_qc_execute = sa_pre_qc_execute,
           pre_qc_bin = sa_pre_qc_bin,
           pre_qc_rename = sa_pre_qc_rename,
