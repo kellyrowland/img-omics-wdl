@@ -1,5 +1,5 @@
 {
-  "annotation.imgap_input_fasta": "Ga0399893_contigs.fna",
+  "annotation.imgap_input_fasta": "/data/Ga0399893_contigs.fna",
   "annotation.imgap_project_id": "Ga0399893",
   "annotation.imgap_project_type": "metagenome",
   "annotation.additional_threads": 16,
