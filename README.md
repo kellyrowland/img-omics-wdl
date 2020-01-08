@@ -7,6 +7,10 @@
 * Cromwell (and associated Java dependencies)
 * Input binaries, databases, etc. specified in the `inputs.json` file
 
+### Docker image
+This pipeline uses a docker image.  You can see the dockerfile and latest tag(version) here:  
+`https://hub.docker.com/repository/docker/bfoster1/img-omics`
+
 ### Input
 
 Input options are listed in the `inputs.json` file and include locations of
