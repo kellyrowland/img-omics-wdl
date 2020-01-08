@@ -209,13 +209,13 @@ task ko_ec {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 
   output {
@@ -262,14 +262,14 @@ task smart {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu ${threads}"
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        #cat ${input_fasta} | parallel --pipe --recstart '>' \
-        #                     --blocksize $blocksize \
-        #                     'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
-        #                     $hmmsearch_base_cmd '--domtblout '$tmp_dir'/tmp.smart.$$.domtblout' \
-        #                     ${smart_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+        cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+                             --blocksize $blocksize \
+                             cat > $tmp_dir/tmp.$$.split.faa; \
+                             $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.smart.$$.domtblout \
+                             ${smart_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
 
 		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-		$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.smart.$$.domtblout ${smart_db} ${input_fasta} 1> /dev/null
+		#$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.smart.$$.domtblout ${smart_db} ${input_fasta} 1> /dev/null
 
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
@@ -318,13 +318,13 @@ task smart {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 
   output {
@@ -369,15 +369,16 @@ task cog {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        #cat ${input_fasta} | parallel --pipe --recstart '>' \
-        #                     --blocksize $blocksize \
-        #                     'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
-        #                     $hmmsearch_base_cmd \
-        #                     '--domtblout '$tmp_dir'/tmp.cog.$$.domtblout' \
-        #                     ${cog_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+		
+        cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+                             --blocksize $blocksize \
+                             cat > $tmp_dir/tmp.$$.split.faa;  \
+                             $hmmsearch_base_cmd \
+                             --domtblout $tmp_dir/tmp.cog.$$.domtblout \
+                             ${cog_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
 
 		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-        $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cog.$$.domtblout ${cog_db} ${input_fasta} 1> /dev/null
+        #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cog.$$.domtblout ${cog_db} ${input_fasta} 1> /dev/null
 
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
@@ -425,13 +426,13 @@ task cog {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 
   output {
@@ -474,15 +475,15 @@ task tigrfam {
           hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
           # Use parallel to split up the input and
           # run hmmsearch in parallel on those splits
-          #cat ${input_fasta} | parallel --pipe --recstart '>' \
-          #                     --blocksize $blocksize \
-          #                     'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
-          #                     $hmmsearch_base_cmd \
-          #                     '--domtblout '$tmp_dir'/tmp.tigrfam.$$.domtblout' \
-          #                      ${tigrfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+          cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+                               --blocksize $blocksize \
+                               cat > $tmp_dir/tmp.$$.split.faa;  \
+                               $hmmsearch_base_cmd \
+                               --domtblout $tmp_dir/tmp.tigrfam.$$.domtblout \
+                                ${tigrfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
 
 		  # TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-          $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.tigrfam.$$.domtblout ${tigrfam_db} ${input_fasta} 1> /dev/null
+          #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.tigrfam.$$.domtblout ${tigrfam_db} ${input_fasta} 1> /dev/null
 
           exit_code=$?
           if [[ $exit_code -ne 0 ]]
@@ -531,13 +532,13 @@ task tigrfam {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 
   output {
@@ -583,15 +584,15 @@ task superfam {
           hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
           # Use parallel to split up the input and
           # run hmmsearch in parallel on those splits
-          #cat ${input_fasta} | parallel --pipe --recstart '>' \
-          #                     --blocksize $blocksize \
-          #                     'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
-          #                     $hmmsearch_base_cmd \
-          #                     '--domtblout '$tmp_dir'/tmp.supfam.$$.domtblout' \
-          #                     ${superfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+          cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+                               --blocksize $blocksize \
+                               cat > $tmp_dir/tmp.$$.split.faa;  \
+                               $hmmsearch_base_cmd \
+                               --domtblout $tmp_dir/tmp.supfam.$$.domtblout \
+                               ${superfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
 
 		  # TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-          $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.supfam.$$.domtblout ${superfam_db} ${input_fasta} 1> /dev/null
+          #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.supfam.$$.domtblout ${superfam_db} ${input_fasta} 1> /dev/null
 
           exit_code=$?
           if [[ $exit_code -ne 0 ]]
@@ -637,13 +638,13 @@ task superfam {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 
   output {
@@ -685,15 +686,15 @@ task pfam {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        #cat ${input_fasta} | parallel --pipe --recstart '>' \
-        #                     --blocksize $blocksize \
-        #                     'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
-        #                     $hmmsearch_base_cmd \
-        #                     '--domtblout '$tmp_dir'/tmp.pfam.$$.domtblout' \
-        #                     ${pfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+        cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+                             --blocksize $blocksize \
+                             cat > $tmp_dir/tmp.$$.split.faa;  \
+                             $hmmsearch_base_cmd \
+                             --domtblout $tmp_dir/tmp.pfam.$$.domtblout \
+                             ${pfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
 
 		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-        $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.pfam.$$.domtblout ${pfam_db} ${input_fasta} 1> /dev/null
+        #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.pfam.$$.domtblout ${pfam_db} ${input_fasta} 1> /dev/null
 
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
@@ -741,13 +742,13 @@ task pfam {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 
   output {
@@ -791,15 +792,15 @@ task cath_funfam {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        #cat ${input_fasta} | parallel --pipe --recstart '>' \
-        #                     --blocksize $blocksize \
-        #                     'cat > '$tmp_dir'/tmp.$$.split.faa; ' \
-        #                     $hmmsearch_base_cmd \
-        #                     '--domtblout '$tmp_dir'/tmp.cath_funfam.$$.domtblout' \
-        #                     ${cath_funfam_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null;'
+        cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+                             --blocksize $blocksize \
+                             cat > $tmp_dir/tmp.$$.split.faa;  \
+                             $hmmsearch_base_cmd \
+                             --domtblout $tmp_dir/tmp.cath_funfam.$$.domtblout \
+                             ${cath_funfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
 
 		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-        $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cath_funfam.$$.domtblout ${cath_funfam_db} ${input_fasta} 1> /dev/null
+        #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cath_funfam.$$.domtblout ${cath_funfam_db} ${input_fasta} 1> /dev/null
 
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
@@ -848,13 +849,13 @@ task cath_funfam {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 
   output {
@@ -883,13 +884,13 @@ task signalp {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 
   output {
@@ -918,13 +919,13 @@ task tmhmm {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 
   output {
@@ -960,13 +961,13 @@ task product_name {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 
   output {

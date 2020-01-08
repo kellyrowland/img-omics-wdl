@@ -61,13 +61,13 @@ task gm_isolate {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 
   output {
@@ -93,13 +93,13 @@ task gm_meta {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 
   output {
@@ -137,13 +137,13 @@ task clean_and_unify {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 
   output {

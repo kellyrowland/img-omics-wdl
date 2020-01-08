@@ -176,6 +176,7 @@ task setup {
   command {
     python -c 'for i in range(${n_splits}): print("${dir}/"+str(i+1)+"/")'
   }
+
   output {
     Array[String] splits = read_lines(stdout())
   }

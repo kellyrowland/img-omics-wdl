@@ -222,13 +222,13 @@ task pre_qc {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 	
   output {
@@ -259,13 +259,13 @@ task gff_merge {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
 	
   }
 
@@ -294,13 +294,13 @@ task fasta_merge {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 	
   output {
@@ -322,13 +322,13 @@ task gff_and_fasta_stats {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 	
 }
@@ -347,13 +347,13 @@ task post_qc {
 
   runtime {
     cluster: "cori"
-    time: "02:00:00"
+    time: "1:00:00"
     mem: "86G"
-    poolname: "img_annotation"
+    poolname: "justtest"
     shared: 1
-    node: 4
+    node: 1
     nwpn: 1
-    constraint: "knl"
+    constraint: "haswell"
   }
 	
   output {
