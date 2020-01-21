@@ -262,7 +262,7 @@ task smart {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu ${threads}"
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+        cat ${input_fasta} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
                              cat > $tmp_dir/tmp.$$.split.faa; \
                              $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.smart.$$.domtblout \
@@ -370,7 +370,7 @@ task cog {
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
 		
-        cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+        cat ${input_fasta} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
                              cat > $tmp_dir/tmp.$$.split.faa;  \
                              $hmmsearch_base_cmd \
@@ -475,7 +475,7 @@ task tigrfam {
           hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
           # Use parallel to split up the input and
           # run hmmsearch in parallel on those splits
-          cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+          cat ${input_fasta} | parallel --pipe --recstart '>' \
                                --blocksize $blocksize \
                                cat > $tmp_dir/tmp.$$.split.faa;  \
                                $hmmsearch_base_cmd \
@@ -584,7 +584,7 @@ task superfam {
           hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
           # Use parallel to split up the input and
           # run hmmsearch in parallel on those splits
-          cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+          cat ${input_fasta} |  parallel --pipe --recstart '>' \
                                --blocksize $blocksize \
                                cat > $tmp_dir/tmp.$$.split.faa;  \
                                $hmmsearch_base_cmd \
@@ -686,7 +686,7 @@ task pfam {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+        cat ${input_fasta} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
                              cat > $tmp_dir/tmp.$$.split.faa;  \
                              $hmmsearch_base_cmd \
@@ -792,7 +792,7 @@ task cath_funfam {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+        cat ${input_fasta} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
                              cat > $tmp_dir/tmp.$$.split.faa;  \
                              $hmmsearch_base_cmd \
