@@ -1,8 +1,8 @@
 {
   "annotation.num_splits": 1,
   "annotation.imgap_input_dir": "splits",
-  "annotation.imgap_input_fasta": "Ga0399893_contigs.fna",
-  "annotation.imgap_project_id": "Ga0399893",
+  "annotation.imgap_input_fasta": "GaXXXXXXX_contigs.fna",
+  "annotation.imgap_project_id": "GaXXXXXXX",
   "annotation.imgap_project_type": "metagenome",
   "annotation.additional_threads": 16,
   "annotation.sa_execute": true,
