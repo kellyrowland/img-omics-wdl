@@ -264,7 +264,7 @@ task smart {
         # run hmmsearch in parallel on those splits
         cat ${input_fasta} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
-                             cat > $tmp_dir/tmp.$$.split.faa; \
+                             'cat > '$tmp_dir'/tmp.$$.split.faa'; \
                              $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.smart.$$.domtblout \
                              ${smart_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
 
@@ -372,7 +372,7 @@ task cog {
 		
         cat ${input_fasta} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
-                             cat > $tmp_dir/tmp.$$.split.faa;  \
+                             'cat > '$tmp_dir'/tmp.$$.split.faa';  \
                              $hmmsearch_base_cmd \
                              --domtblout $tmp_dir/tmp.cog.$$.domtblout \
                              ${cog_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
@@ -477,7 +477,7 @@ task tigrfam {
           # run hmmsearch in parallel on those splits
           cat ${input_fasta} | parallel --pipe --recstart '>' \
                                --blocksize $blocksize \
-                               cat > $tmp_dir/tmp.$$.split.faa;  \
+                               'cat > '$tmp_dir'/tmp.$$.split.faa';  \
                                $hmmsearch_base_cmd \
                                --domtblout $tmp_dir/tmp.tigrfam.$$.domtblout \
                                 ${tigrfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
@@ -586,7 +586,7 @@ task superfam {
           # run hmmsearch in parallel on those splits
           cat ${input_fasta} |  parallel --pipe --recstart '>' \
                                --blocksize $blocksize \
-                               cat > $tmp_dir/tmp.$$.split.faa;  \
+                               'cat > '$tmp_dir'/tmp.$$.split.faa';  \
                                $hmmsearch_base_cmd \
                                --domtblout $tmp_dir/tmp.supfam.$$.domtblout \
                                ${superfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
@@ -688,7 +688,7 @@ task pfam {
         # run hmmsearch in parallel on those splits
         cat ${input_fasta} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
-                             cat > $tmp_dir/tmp.$$.split.faa;  \
+                             'cat > '$tmp_dir'/tmp.$$.split.faa';  \
                              $hmmsearch_base_cmd \
                              --domtblout $tmp_dir/tmp.pfam.$$.domtblout \
                              ${pfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
@@ -794,7 +794,7 @@ task cath_funfam {
         # run hmmsearch in parallel on those splits
         cat ${input_fasta} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
-                             cat > $tmp_dir/tmp.$$.split.faa;  \
+                             'cat > '$tmp_dir'/tmp.$$.split.faa';  \
                              $hmmsearch_base_cmd \
                              --domtblout $tmp_dir/tmp.cath_funfam.$$.domtblout \
                              ${cath_funfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
