@@ -1,7 +1,7 @@
 workflow img_cloud {
     File input_file
     File databases="s3://bf-20191119-staging/databases.tar"
-    String img_container="bfoster1/img-omics:0.0.8"
+    String img_container="bfoster1/img-omics:0.0.0"
     call split {input: infile=input_file, container=img_container}
     scatter(pathname in split.files) {
         call img_annot{input: infile=pathname,db=databases, container=img_container}
