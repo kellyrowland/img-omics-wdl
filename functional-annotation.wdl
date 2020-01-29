@@ -372,10 +372,10 @@ task cog {
 		
         cat ${input_fasta} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
-                             cat > $tmp_dir/tmp.$$.split.faa;  \
+                             'cat > '$tmp_dir'/tmp.$$.split.faa';  \
                              $hmmsearch_base_cmd \
-                             --domtblout $tmp_dir/tmp.cog.$$.domtblout \
-                             ${cog_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
+                             '--domtblout '$tmp_dir'/tmp.cog.$$.domtblout' \
+                             ${cog_db} $tmp_dir'/tmp.$$.split.faa 1> /dev/null';
 
 		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
         #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cog.$$.domtblout ${cog_db} ${input_fasta} 1> /dev/null
