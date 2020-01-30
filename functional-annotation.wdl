@@ -262,14 +262,14 @@ task smart {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu ${threads}"
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        cat ${input_fasta} | parallel --pipe --recstart '>' \
-                             --blocksize $blocksize \
-                             'cat > '$tmp_dir'/tmp.$$.split.faa'; \
-                             $hmmsearch_base_cmd' --domtblout '$tmp_dir'/tmp.smart.$$.domtblout' \
-                             ${smart_db} ' '$tmp_dir'/tmp.$$.split.faa 1> /dev/null';
+#        cat ${input_fasta} | parallel --pipe --recstart '>' \
+#                             --blocksize $blocksize \
+#                             cat > $tmp_dir/tmp.$$.split.faa; \
+#                             $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.smart.$$.domtblout \
+#                             ${smart_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
 
 		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-		#$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.smart.$$.domtblout ${smart_db} ${input_fasta} 1> /dev/null
+		$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.smart.$$.domtblout ${smart_db} ${input_fasta} 1> /dev/null
 
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
@@ -370,15 +370,15 @@ task cog {
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
 		
-        cat ${input_fasta} | parallel --pipe --recstart '>' \
-                             --blocksize $blocksize \
-                             'cat > '$tmp_dir'/tmp.$$.split.faa';  \
-                             $hmmsearch_base_cmd \
-                             '--domtblout '$tmp_dir'/tmp.cog.$$.domtblout' \
-                             ${cog_db} ' '$tmp_dir'/tmp.$$.split.faa 1> /dev/null';
+#        cat ${input_fasta} | parallel --pipe --recstart '>' \
+#                             --blocksize $blocksize \
+#                             cat > $tmp_dir/tmp.$$.split.faa;  \
+#                             $hmmsearch_base_cmd \
+#                             --domtblout $tmp_dir/tmp.cog.$$.domtblout \
+#                             ${cog_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
 
 		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-        #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cog.$$.domtblout ${cog_db} ${input_fasta} 1> /dev/null
+        $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cog.$$.domtblout ${cog_db} ${input_fasta} 1> /dev/null
 
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
@@ -475,15 +475,15 @@ task tigrfam {
           hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
           # Use parallel to split up the input and
           # run hmmsearch in parallel on those splits
-          cat ${input_fasta} | parallel --pipe --recstart '>' \
-                               --blocksize $blocksize \
-                               'cat > '$tmp_dir'/tmp.$$.split.faa';  \
-                               $hmmsearch_base_cmd \
-                               '--domtblout '$tmp_dir'/tmp.tigrfam.$$.domtblout' \
-                               ${tigrfam_db} ' '$tmp_dir'/tmp.$$.split.faa 1> /dev/null';
+#          cat ${input_fasta} | parallel --pipe --recstart '>' \
+#                               --blocksize $blocksize \
+#                               cat > $tmp_dir/tmp.$$.split.faa;  \
+#                               $hmmsearch_base_cmd \
+#                               --domtblout $tmp_dir/tmp.tigrfam.$$.domtblout \
+#                                ${tigrfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
 
 		  # TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-          #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.tigrfam.$$.domtblout ${tigrfam_db} ${input_fasta} 1> /dev/null
+          $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.tigrfam.$$.domtblout ${tigrfam_db} ${input_fasta} 1> /dev/null
 
           exit_code=$?
           if [[ $exit_code -ne 0 ]]
@@ -584,15 +584,15 @@ task superfam {
           hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
           # Use parallel to split up the input and
           # run hmmsearch in parallel on those splits
-          cat ${input_fasta} |  parallel --pipe --recstart '>' \
-                               --blocksize $blocksize \
-                               'cat > '$tmp_dir'/tmp.$$.split.faa';  \
-                               $hmmsearch_base_cmd \
-                               '--domtblout '$tmp_dir'/tmp.supfam.$$.domtblout' \
-                               ${superfam_db} ' '$tmp_dir'/tmp.$$.split.faa 1> /dev/null';
+#          cat ${input_fasta} |  parallel --pipe --recstart '>' \
+#                               --blocksize $blocksize \
+#                               cat > $tmp_dir/tmp.$$.split.faa;  \
+#                               $hmmsearch_base_cmd \
+#                               --domtblout $tmp_dir/tmp.supfam.$$.domtblout \
+#                               ${superfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
 
 		  # TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-          #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.supfam.$$.domtblout ${superfam_db} ${input_fasta} 1> /dev/null
+          $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.supfam.$$.domtblout ${superfam_db} ${input_fasta} 1> /dev/null
 
           exit_code=$?
           if [[ $exit_code -ne 0 ]]
@@ -686,15 +686,15 @@ task pfam {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        cat ${input_fasta} | parallel --pipe --recstart '>' \
-                             --blocksize $blocksize \
-                             'cat > '$tmp_dir'/tmp.$$.split.faa';  \
-                             $hmmsearch_base_cmd \
-                             '--domtblout '$tmp_dir'/tmp.pfam.$$.domtblout' \
-                             ${pfam_db} ' '$tmp_dir'/tmp.$$.split.faa 1> /dev/null';
+#        cat ${input_fasta} | parallel --pipe --recstart '>' \
+#                             --blocksize $blocksize \
+#                             cat > $tmp_dir/tmp.$$.split.faa;  \
+#                             $hmmsearch_base_cmd \
+#                             --domtblout $tmp_dir/tmp.pfam.$$.domtblout \
+#                             ${pfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
 
 		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-        #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.pfam.$$.domtblout ${pfam_db} ${input_fasta} 1> /dev/null
+        $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.pfam.$$.domtblout ${pfam_db} ${input_fasta} 1> /dev/null
 
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
@@ -792,15 +792,15 @@ task cath_funfam {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        cat ${input_fasta} | parallel --pipe --recstart '>' \
-                             --blocksize $blocksize \
-                             'cat > '$tmp_dir'/tmp.$$.split.faa';  \
-                             $hmmsearch_base_cmd \
-                             '--domtblout '$tmp_dir'/tmp.cath_funfam.$$.domtblout' \
-                             ${cath_funfam_db} ' '$tmp_dir'/tmp.$$.split.faa 1> /dev/null';
+#        cat ${input_fasta} | parallel --pipe --recstart '>' \
+#                             --blocksize $blocksize \
+#                             cat > $tmp_dir/tmp.$$.split.faa;  \
+#                             $hmmsearch_base_cmd \
+#                             --domtblout $tmp_dir/tmp.cath_funfam.$$.domtblout \
+#                             ${cath_funfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
 
 		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-        #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cath_funfam.$$.domtblout ${cath_funfam_db} ${input_fasta} 1> /dev/null
+        $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cath_funfam.$$.domtblout ${cath_funfam_db} ${input_fasta} 1> /dev/null
 
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
