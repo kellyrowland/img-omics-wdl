@@ -27,7 +27,7 @@ task split{
 	   tmp_dir=${tmp_dir}
            cat ${infile} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
-                             cat > $tmp_dir'/tmp.$$.split.faa';
+                             'cat > '$tmp_dir'/tmp.$$.split.faa';
      }
      output {
         Array[File] files = glob("*split.faa")
