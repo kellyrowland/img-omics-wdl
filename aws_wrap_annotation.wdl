@@ -16,7 +16,7 @@ task split{
      String tmp_dir="."
      runtime {
             docker: container
-            backend: "r5-120g-16c-spot-ceq"
+            backend: "i3-120-16c-spot-ceq"
             memory: "120 GiB"
             cpu:  16
             maxRetries: 1
@@ -27,7 +27,7 @@ task split{
 	   tmp_dir=${tmp_dir}
            cat ${infile} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
-                             'cat > '$tmp_dir'/tmp.$$.split.faa';
+                             cat > $tmp_dir'/tmp.$$.split.faa';
      }
      output {
         Array[File] files = glob("*split.faa")
