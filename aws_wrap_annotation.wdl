@@ -12,7 +12,7 @@ workflow img_cloud {
 task split{
      File infile
      String container
-     String blocksize=30000000
+     String blocksize=90000000
      String tmp_dir="."
      runtime {
             docker: container
@@ -61,7 +61,7 @@ task img_annot{
 	mkdir -p splits/1
 	cp ${infile} splits/1/GaXXXXXXX_contigs.fna
 	java -jar /opt/omics/bin/cromwell.jar run -i inputs.cloud.json annotation.wdl -m ${outmetadata}
-	find /cromwell_root/img-omics-wdl/cromwell-executions -size +1G |  grep '/inputs/' |  xargs -i rm {}
+	find /cromwell_root/img-omics-wdl/cromwell-executions -size +1G |  grep "/inputs/" |  xargs  rm 
 	tar -cpvzf ${outfile} /cromwell_root/img-omics-wdl/cromwell-executions
 
      }
