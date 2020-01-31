@@ -61,6 +61,7 @@ task img_annot{
 	mkdir -p splits/1
 	cp ${infile} splits/1/GaXXXXXXX_contigs.fna
 	java -jar /opt/omics/bin/cromwell.jar run -i inputs.cloud.json annotation.wdl -m ${outmetadata}
+	find /cromwell_root/img-omics-wdl/cromwell-executions -size +1G |  grep '/inputs/' |  xargs -i rm {}
 	tar -cpvzf ${outfile} /cromwell_root/img-omics-wdl/cromwell-executions
 
      }
