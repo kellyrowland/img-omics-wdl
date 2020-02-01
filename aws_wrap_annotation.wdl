@@ -12,7 +12,7 @@ workflow img_cloud {
 task split{
      File infile
      String container
-     String blocksize=90000000
+     String blocksize=120000000
      String tmp_dir="."
      runtime {
             docker: container
