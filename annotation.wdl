@@ -177,6 +177,18 @@ task setup {
     python -c 'for i in range(${n_splits}): print("${dir}/"+str(i+1)+"/")'
   }
 
+  runtime {
+    cluster: "jaws_lbl_gov"
+    time: "2:00:00"
+    mem: "86G"
+    poolname: "marcel_split1"
+    shared: 1
+    node: 1
+    nwpn: 1
+    constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
+  }
+
   output {
     Array[String] splits = read_lines(stdout())
   }

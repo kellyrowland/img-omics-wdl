@@ -209,13 +209,14 @@ task ko_ec {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 
   output {
@@ -262,14 +263,11 @@ task smart {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu ${threads}"
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+        cat ${input_fasta} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
                              cat > $tmp_dir/tmp.$$.split.faa; \
                              $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.smart.$$.domtblout \
                              ${smart_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
-
-		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-		#$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.smart.$$.domtblout ${smart_db} ${input_fasta} 1> /dev/null
 
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
@@ -318,13 +316,14 @@ task smart {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 
   output {
@@ -370,15 +369,12 @@ task cog {
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
 		
-        cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+        cat ${input_fasta} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
                              cat > $tmp_dir/tmp.$$.split.faa;  \
                              $hmmsearch_base_cmd \
                              --domtblout $tmp_dir/tmp.cog.$$.domtblout \
                              ${cog_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
-
-		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-        #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cog.$$.domtblout ${cog_db} ${input_fasta} 1> /dev/null
 
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
@@ -426,13 +422,14 @@ task cog {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 
   output {
@@ -475,15 +472,12 @@ task tigrfam {
           hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
           # Use parallel to split up the input and
           # run hmmsearch in parallel on those splits
-          cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+          cat ${input_fasta} | parallel --pipe --recstart '>' \
                                --blocksize $blocksize \
                                cat > $tmp_dir/tmp.$$.split.faa;  \
                                $hmmsearch_base_cmd \
                                --domtblout $tmp_dir/tmp.tigrfam.$$.domtblout \
                                 ${tigrfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
-
-		  # TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-          #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.tigrfam.$$.domtblout ${tigrfam_db} ${input_fasta} 1> /dev/null
 
           exit_code=$?
           if [[ $exit_code -ne 0 ]]
@@ -532,13 +526,14 @@ task tigrfam {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 
   output {
@@ -584,15 +579,12 @@ task superfam {
           hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
           # Use parallel to split up the input and
           # run hmmsearch in parallel on those splits
-          cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+          cat ${input_fasta} | parallel --pipe --recstart '>' \
                                --blocksize $blocksize \
                                cat > $tmp_dir/tmp.$$.split.faa;  \
                                $hmmsearch_base_cmd \
                                --domtblout $tmp_dir/tmp.supfam.$$.domtblout \
                                ${superfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
-
-		  # TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-          #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.supfam.$$.domtblout ${superfam_db} ${input_fasta} 1> /dev/null
 
           exit_code=$?
           if [[ $exit_code -ne 0 ]]
@@ -638,13 +630,14 @@ task superfam {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 
   output {
@@ -686,15 +679,12 @@ task pfam {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+        cat ${input_fasta} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
                              cat > $tmp_dir/tmp.$$.split.faa;  \
                              $hmmsearch_base_cmd \
                              --domtblout $tmp_dir/tmp.pfam.$$.domtblout \
                              ${pfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
-
-		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-        #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.pfam.$$.domtblout ${pfam_db} ${input_fasta} 1> /dev/null
 
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
@@ -742,13 +732,14 @@ task pfam {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 
   output {
@@ -792,15 +783,12 @@ task cath_funfam {
         hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
-        cat ${input_fasta} | shifter --image=bfoster1/img-omics:0.0.7 parallel --pipe --recstart '>' \
+        cat ${input_fasta} | parallel --pipe --recstart '>' \
                              --blocksize $blocksize \
                              cat > $tmp_dir/tmp.$$.split.faa;  \
                              $hmmsearch_base_cmd \
                              --domtblout $tmp_dir/tmp.cath_funfam.$$.domtblout \
                              ${cath_funfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
-
-		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-        #$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cath_funfam.$$.domtblout ${cath_funfam_db} ${input_fasta} 1> /dev/null
 
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
@@ -849,13 +837,14 @@ task cath_funfam {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 
   output {
@@ -884,13 +873,14 @@ task signalp {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 
   output {
@@ -909,8 +899,8 @@ task tmhmm {
 
   command <<<
     tool_and_version=$(${decode} -v 2>&1 | head -1)
-    background="0.081 0.015 0.054 0.061 0.040 0.068 0.022 0.057 0.056 0.093 0.025"
-    background="$background 0.045 0.049 0.039 0.057 0.068 0.058 0.067 0.013 0.032"
+    background="0.081 0.015 0.054 0.061 0.040 0.0.9 0.022 0.057 0.056 0.093 0.025"
+    background="$background 0.045 0.049 0.039 0.057 0.0.9 0.058 0.067 0.013 0.032"
     sed 's/\*/X/g' ${input_fasta} | \
     ${decode} -N 1 -background $background -PrintNumbers \
     ${model} 2> /dev/null | ${decode_parser} "$tool_and_version" > ${project_id}_tmh.gff
@@ -919,13 +909,14 @@ task tmhmm {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 
   output {
@@ -951,7 +942,6 @@ task product_name {
   String out_dir
 
   command {
-	date
     ${product_assign} ${"-k " + ko_ec_gff} ${"-s " + smart_gff} ${"-c " + cog_gff} \
                       ${"-t " + tigrfam_gff} ${"-u " + supfam_gff} ${"-p " + pfam_gff} \
                       ${"-f " + cath_funfam_gff} ${"-e " + signalp_gff} ${"-r " + tmhmm_gff} \
@@ -962,13 +952,14 @@ task product_name {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 
   output {

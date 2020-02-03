@@ -178,7 +178,6 @@ task pre_qc {
   String output_dir
 
   command <<<
-	date
     tmp_fasta="${input_fasta}.tmp"
     qced_fasta="${project_id}_contigs.fna"
     grep -v '^\s*$' ${input_fasta} | tr -d '\r' | \
@@ -223,13 +222,14 @@ task pre_qc {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 	
   output {
@@ -260,13 +260,14 @@ task gff_merge {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
 	
   }
 
@@ -295,13 +296,14 @@ task fasta_merge {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 	
   output {
@@ -323,13 +325,14 @@ task gff_and_fasta_stats {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 	
 }
@@ -348,13 +351,14 @@ task post_qc {
 
   runtime {
     cluster: "cori"
-    time: "12:00:00"
+    time: "2:00:00"
     mem: "86G"
-    poolname: "marcel_haswell"
+    poolname: "marcel_split1"
     shared: 1
-    node: 144
+    node: 1
     nwpn: 1
     constraint: "haswell"
+    docker: "jfroula/img-omics:0.1.0"
   }
 	
   output {
