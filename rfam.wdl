@@ -77,11 +77,11 @@ task cmsearch {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -113,11 +113,11 @@ task clan_filter {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -141,11 +141,11 @@ task misc_and_regulatory {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -168,11 +168,11 @@ task rrna {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -196,11 +196,11 @@ task ncrna_tmrna {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }

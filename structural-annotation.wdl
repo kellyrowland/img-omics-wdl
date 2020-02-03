@@ -178,6 +178,7 @@ task pre_qc {
   String output_dir
 
   command <<<
+	date
     tmp_fasta="${input_fasta}.tmp"
     qced_fasta="${project_id}_contigs.fna"
     grep -v '^\s*$' ${input_fasta} | tr -d '\r' | \
@@ -222,11 +223,11 @@ task pre_qc {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -259,11 +260,11 @@ task gff_merge {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
 	
@@ -294,11 +295,11 @@ task fasta_merge {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -322,11 +323,11 @@ task gff_and_fasta_stats {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -347,11 +348,11 @@ task post_qc {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }

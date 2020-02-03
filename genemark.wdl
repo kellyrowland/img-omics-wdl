@@ -61,11 +61,11 @@ task gm_isolate {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -93,11 +93,11 @@ task gm_meta {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -137,11 +137,11 @@ task clean_and_unify {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }

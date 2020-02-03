@@ -13,3 +13,7 @@ marcels_data
 marcels_code
 replace.sh
 run.sh
+subs_*.zip
+results_*
+notes
+runtime

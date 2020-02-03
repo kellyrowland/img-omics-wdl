@@ -209,11 +209,11 @@ task ko_ec {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -318,11 +318,11 @@ task smart {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -426,11 +426,11 @@ task cog {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -532,11 +532,11 @@ task tigrfam {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -638,11 +638,11 @@ task superfam {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -742,11 +742,11 @@ task pfam {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -849,11 +849,11 @@ task cath_funfam {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -884,11 +884,11 @@ task signalp {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -919,11 +919,11 @@ task tmhmm {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -951,6 +951,7 @@ task product_name {
   String out_dir
 
   command {
+	date
     ${product_assign} ${"-k " + ko_ec_gff} ${"-s " + smart_gff} ${"-c " + cog_gff} \
                       ${"-t " + tigrfam_gff} ${"-u " + supfam_gff} ${"-p " + pfam_gff} \
                       ${"-f " + cath_funfam_gff} ${"-e " + signalp_gff} ${"-r " + tmhmm_gff} \
@@ -961,11 +962,11 @@ task product_name {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }

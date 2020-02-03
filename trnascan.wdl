@@ -44,11 +44,11 @@ task trnascan_ba {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
@@ -72,11 +72,11 @@ task pick_and_transform_to_gff {
 
   runtime {
     cluster: "cori"
-    time: "1:00:00"
+    time: "12:00:00"
     mem: "86G"
-    poolname: "justtest"
+    poolname: "marcel_haswell"
     shared: 1
-    node: 1
+    node: 144
     nwpn: 1
     constraint: "haswell"
   }
