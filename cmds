@@ -1,4 +1,10 @@
- # marcel's data
+# marcel 2 samples 
+java -Dconfig.file= -jar /global/home/groups-sw/lr_jgicloud/dev/jtm/opt/cromwell.jar run annotation.wdl -i marcel.2.lrcs.json 
+
+/global/home/groups-sw/lr_jgicloud/site/prod/opt/site/jaws_site_cli.py submit marcel.2.lrcs.json annotation.wdl --zip_file subs_n1_t2_marcel_split1_haswell.zip
+
+
+# marcel's data
 /global/cscratch1/sd/gbp/jaws/test_datasets/215367
 
 # Marcel's original code with new hmmsearch code
@@ -7,9 +13,6 @@ $BSCRATCH/../rowlandk/jaws/metagenome_annotation/bin-new/functional_annotation
 # creating subs.zip
 zip subs.zip crt.wdl functional-annotation.wdl genemark.wdl prodigal.wdl rfam.wdl structural-annotation.wdl trnascan.wdl
 
-marcel.4.json  da8f69ea-6563-475c-bff0-517bfad9ddcd
-marcel.json
-754a91a4-fae6-4bc2-bbb5-f37b426e9de0
 
 # get list of my nodes
 squeue -u jaws | tail -n +2 | awk '{print $1}' | sort -n  > nids

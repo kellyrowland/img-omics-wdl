@@ -76,9 +76,9 @@ task fasta_len {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -108,9 +108,9 @@ task iso_big {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -139,9 +139,9 @@ task iso_small {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -170,9 +170,9 @@ task metag {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -222,9 +222,9 @@ task clean_and_unify {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {

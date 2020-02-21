@@ -49,9 +49,9 @@ task trnascan_ba {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -78,9 +78,9 @@ task pick_and_transform_to_gff {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {

@@ -227,9 +227,9 @@ task pre_qc {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 	
   output {
@@ -265,9 +265,9 @@ task gff_merge {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
 	
   }
 
@@ -301,9 +301,9 @@ task fasta_merge {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 	
   output {
@@ -330,9 +330,9 @@ task gff_and_fasta_stats {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 	
 }
@@ -356,9 +356,9 @@ task post_qc {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 	
   output {

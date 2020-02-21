@@ -214,9 +214,9 @@ task ko_ec {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -321,9 +321,9 @@ task smart {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -427,9 +427,9 @@ task cog {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -531,9 +531,9 @@ task tigrfam {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -635,9 +635,9 @@ task superfam {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -737,9 +737,9 @@ task pfam {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -842,9 +842,9 @@ task cath_funfam {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -878,9 +878,9 @@ task signalp {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -914,9 +914,9 @@ task tmhmm {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -957,9 +957,9 @@ task product_name {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {

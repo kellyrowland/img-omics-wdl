@@ -82,9 +82,9 @@ task cmsearch {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -119,9 +119,9 @@ task clan_filter {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -148,9 +148,9 @@ task misc_and_regulatory {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -176,9 +176,9 @@ task rrna {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
@@ -205,9 +205,9 @@ task ncrna_tmrna {
     poolname: "marcel_split1"
     shared: 1
     node: 1
-    nwpn: 1
+    nwpn: 2
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
   }
 
   output {
