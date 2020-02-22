@@ -21,9 +21,9 @@ workflow s_annotate {
   Boolean rfam_execute
   String  rfam_cmsearch_bin
   String  rfam_clan_filter_bin
-  File    rfam_cm
-  File    rfam_claninfo_tsv
-  File    rfam_feature_lookup_tsv
+  String  rfam_cm
+  String  rfam_claninfo_tsv
+  String  rfam_feature_lookup_tsv
   Boolean crt_execute
   String  crt_cli_jar
   String  crt_transform_bin
@@ -221,15 +221,15 @@ task pre_qc {
   >>>
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
     nwpn: 1
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 	
   output {
@@ -259,15 +259,15 @@ task gff_merge {
   }
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
     nwpn: 1
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
 	
   }
 
@@ -295,15 +295,15 @@ task fasta_merge {
   }
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
     nwpn: 1
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 	
   output {
@@ -324,15 +324,15 @@ task gff_and_fasta_stats {
   }
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
     nwpn: 1
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 	
 }
@@ -350,15 +350,15 @@ task post_qc {
   }
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
     nwpn: 1
     constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 	
   output {

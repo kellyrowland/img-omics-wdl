@@ -21,9 +21,9 @@ workflow annotation {
   Boolean sa_rfam_execute
   String  sa_rfam_cmsearch_bin
   String  sa_rfam_clan_filter_bin
-  File    sa_rfam_cm
-  File    sa_rfam_claninfo_tsv
-  File    sa_rfam_feature_lookup_tsv
+  String  sa_rfam_cm
+  String  sa_rfam_claninfo_tsv
+  String  sa_rfam_feature_lookup_tsv
   Boolean sa_crt_execute
   String  sa_crt_cli_jar
   String  sa_crt_transform_bin
@@ -43,25 +43,25 @@ workflow annotation {
   String  fa_product_names_mapping_dir
   Boolean fa_ko_ec_execute
   String  fa_ko_ec_img_nr_db
-  File    fa_ko_ec_md5_mapping
-  File    fa_ko_ec_taxon_to_phylo_mapping
+  String  fa_ko_ec_md5_mapping
+  String  fa_ko_ec_taxon_to_phylo_mapping
   String  fa_lastal_bin
   String  fa_selector_bin
   Boolean fa_cath_funfam_execute
-  File    fa_cath_funfam_db
+  String  fa_cath_funfam_db
   Boolean fa_pfam_execute
-  File    fa_pfam_db
-  File    fa_pfam_claninfo_tsv
+  String  fa_pfam_db
+  String  fa_pfam_claninfo_tsv
   String  fa_pfam_clan_filter
   Boolean fa_superfam_excute
-  File    fa_superfam_db
+  String  fa_superfam_db
   Boolean fa_cog_execute
-  File    fa_cog_db
+  String  fa_cog_db
   Boolean fa_tigrfam_execute
-  File    fa_tigrfam_db
+  String  fa_tigrfam_db
   String  fa_hit_selector_bin
   Boolean fa_smart_execute
-  File    fa_smart_db
+  String  fa_smart_db
   Int?    fa_par_hmm_inst
   Int?    fa_approx_num_proteins
   String  fa_hmmsearch_bin
@@ -179,14 +179,13 @@ task setup {
 
   runtime {
     cluster: "jaws_lbl_gov"
-    time: "2:00:00"
-    mem: "86G"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
     nwpn: 1
-    constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
