@@ -44,14 +44,13 @@ task run {
 
   runtime {
     cluster: "jaws_lbl_gov"
-    time: "2:00:00"
-    mem: "86G"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
-    constraint: "haswell"
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
@@ -77,14 +76,14 @@ task transform {
 
   runtime {
     cluster: "jaws_lbl_gov"
-    time: "2:00:00"
-    mem: "86G"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
-    constraint: "haswell"
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
+    constraint: "haswell"
   }
 
   output{

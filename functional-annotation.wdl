@@ -7,29 +7,29 @@ workflow f_annotate {
   File    input_fasta
   Boolean ko_ec_execute
   String  ko_ec_img_nr_db
-  File    ko_ec_md5_mapping
-  File    ko_ec_taxon_to_phylo_mapping
+  String  ko_ec_md5_mapping
+  String  ko_ec_taxon_to_phylo_mapping
   String  lastal_bin
   String  selector_bin
   Boolean smart_execute
   Int?    par_hmm_inst
   Int?    approx_num_proteins
-  File    smart_db
+  String  smart_db
   String  hmmsearch_bin
   String  frag_hits_filter_bin
   Boolean cog_execute
-  File    cog_db
+  String  cog_db
   Boolean tigrfam_execute
-  File    tigrfam_db
+  String  tigrfam_db
   String  hit_selector_bin
   Boolean superfam_execute
-  File    superfam_db
+  String  superfam_db
   Boolean pfam_execute
-  File    pfam_db
-  File    pfam_claninfo_tsv
+  String  pfam_db
+  String  pfam_claninfo_tsv
   String  pfam_clan_filter
   Boolean cath_funfam_execute
-  File    cath_funfam_db
+  String  cath_funfam_db
   Boolean signalp_execute
   String  signalp_gram_stain
   String  signalp_bin
@@ -208,15 +208,15 @@ task ko_ec {
   }
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
+    nwpn: 1
     constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
@@ -232,7 +232,7 @@ task smart {
   
   String project_id
   File   input_fasta
-  File   smart_db
+  String smart_db
   Int    threads = 2
   Int    par_hmm_inst = 1
   Int    approx_num_proteins = 0
@@ -315,15 +315,15 @@ task smart {
   >>>
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
+    nwpn: 1
     constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
@@ -336,7 +336,7 @@ task cog {
   
   String project_id
   File   input_fasta
-  File   cog_db
+  String cog_db
   Int    threads = 2
   Int    par_hmm_inst = 1
   Int    approx_num_proteins = 0
@@ -421,15 +421,15 @@ task cog {
   >>>
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
+    nwpn: 1
     constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
@@ -442,7 +442,7 @@ task tigrfam {
   
   String project_id
   File   input_fasta
-  File   tigrfam_db
+  String tigrfam_db
   Int    threads = 2
   Int    par_hmm_inst = 1
   Int    approx_num_proteins = 0
@@ -525,15 +525,15 @@ task tigrfam {
   >>>
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
+    nwpn: 1
     constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
@@ -546,7 +546,7 @@ task superfam {
 
   String project_id
   File   input_fasta
-  File   superfam_db
+  String superfam_db
   Int    threads = 2
   Int    par_hmm_inst = 1
   Int    approx_num_proteins = 0
@@ -629,15 +629,15 @@ task superfam {
   >>>
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
+    nwpn: 1
     constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
@@ -650,8 +650,8 @@ task pfam {
   
   String project_id
   File   input_fasta
-  File   pfam_db
-  File   pfam_claninfo_tsv
+  String pfam_db
+  String pfam_claninfo_tsv
   Int    threads = 2
   Int    par_hmm_inst = 1
   Int    approx_num_proteins = 0
@@ -731,15 +731,15 @@ task pfam {
   >>>
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
+    nwpn: 1
     constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
@@ -752,7 +752,7 @@ task cath_funfam {
   
   String project_id
   File   input_fasta
-  File   cath_funfam_db
+  String cath_funfam_db
   Int    threads = 2
   Int    par_hmm_inst = 1
   Int    approx_num_proteins = 0
@@ -836,15 +836,15 @@ task cath_funfam {
   >>>
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
+    nwpn: 1
     constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
@@ -872,15 +872,15 @@ task signalp {
   >>>
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
+    nwpn: 1
     constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
@@ -908,15 +908,15 @@ task tmhmm {
   >>>
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
+    nwpn: 1
     constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
@@ -951,15 +951,15 @@ task product_name {
   }
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
+    nwpn: 1
     constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {

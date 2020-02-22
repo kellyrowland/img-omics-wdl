@@ -1,7 +1,7 @@
-# marcel 2 samples 
-java -Dconfig.file= -jar /global/home/groups-sw/lr_jgicloud/dev/jtm/opt/cromwell.jar run annotation.wdl -i marcel.2.lrcs.json 
+# marcel 1 samples 
+java -Dconfig.file=singularity.conf -jar /global/home/groups-sw/lr_jgicloud/dev/jtm/opt/cromwell.jar run annotation.wdl -i split.1.lrcs.refdata.json
 
-/global/home/groups-sw/lr_jgicloud/site/prod/opt/site/jaws_site_cli.py submit marcel.2.lrcs.json annotation.wdl --zip_file subs_n1_t2_marcel_split1_haswell.zip
+ jaws_site_cli.py submit split.1.lrcs.refdata.json annotation.wdl --zip_file subs_n1_t00_marcel_split1_haswell_w1.zip
 
 
 # marcel's data

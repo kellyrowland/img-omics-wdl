@@ -43,15 +43,15 @@ task trnascan_ba {
   }
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
+    nwpn: 1
     constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
@@ -72,15 +72,15 @@ task pick_and_transform_to_gff {
   }
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
-    nwpn: 2
+    nwpn: 1
     constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
