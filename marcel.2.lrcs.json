@@ -1,6 +1,6 @@
 {
   "annotation.num_splits": 2,
-  "annotation.imgap_input_dir": "/global/scratch/jfroula/JAWS/img-omics-wdl/marcel_data",
+  "annotation.imgap_input_dir": "/global/cscratch1/sd/jfroula/JAWS/IMG_marcels_annotation/img-omics-wdl/marcel_data",
   "annotation.imgap_input_fasta": "Ga0399893_contigs.fna",
   "annotation.imgap_project_id": "Ga0399893",
   "annotation.imgap_project_type": "metagenome",
@@ -34,7 +34,7 @@
   "annotation.sa_gff_and_fasta_stats_bin": " /opt/omics/bin/structural_annotation/gff_and_final_fasta_stats.py",
   "annotation.sa_post_qc_bin": " /opt/omics/bin/qc/post-annotation/genome_structural_annotation_sanity.py",
   "annotation.fa_execute": true,
-  "annotation.fa_product_names_mapping_dir": "/global/scratch/jfroula/jaws-data/img/Product_Name_Mappings/latest",
+  "annotation.fa_product_names_mapping_dir": "img/Product_Name_Mappings/latest",
   "annotation.fa_ko_ec_execute": false,
   "annotation.fa_ko_ec_img_nr_db": "/global/scratch/jfroula/jaws-data/img/IMG-NR/20190607/img_nr",
   "annotation.fa_ko_ec_md5_mapping": "/global/scratch/jfroula/jaws-data/img/IMG-NR/20190607/md5Hash2Data.txt",
