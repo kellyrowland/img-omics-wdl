@@ -60,15 +60,15 @@ task gm_isolate {
   }
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
+    constraint: "haswell"
     poolname: "marcel_split1"
-    shared: 1
     node: 1
     nwpn: 1
-    constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
@@ -93,15 +93,15 @@ task gm_meta {
   }
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
+    constraint: "haswell"
     node: 1
     nwpn: 1
-    constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
@@ -138,15 +138,15 @@ task clean_and_unify {
   }
 
   runtime {
-    cluster: "cori"
-    time: "2:00:00"
-    mem: "86G"
+    cluster: "jaws_lbl_gov"
+    time: "00:20:00"
+    mem: "10G"
     poolname: "marcel_split1"
-    shared: 1
+    constraint: "haswell"
     node: 1
     nwpn: 1
-    constraint: "haswell"
-    docker: "jfroula/img-omics:0.1.0"
+    docker: "jfroula/img-omics:0.1.1"
+    cpu: 64
   }
 
   output {
