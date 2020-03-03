@@ -170,7 +170,7 @@ workflow annotation {
 }
 
 task setup {
-  String dir
+  File dir
   Int    n_splits
 
   command {
@@ -189,6 +189,6 @@ task setup {
   }
 
   output {
-    Array[String] splits = read_lines(stdout())
+    Array[File] splits = read_lines(stdout())
   }
 }

@@ -1,4 +1,5 @@
 #!/bin/bash
+<<<<<<< HEAD
 export SINGULARITY_CACHEDIR=./sif_files
 export SINGULARITY_PULLFOLDER=./sif_files
 export SINGULARITY_TMPDIR=./sif_files

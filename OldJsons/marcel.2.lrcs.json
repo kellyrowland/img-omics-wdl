@@ -1,6 +1,6 @@
 {
   "annotation.num_splits": 2,
-  "annotation.imgap_input_dir": "/global/scratch/jfroula/JAWS/img-omics-wdl/marcel_data",
+  "annotation.imgap_input_dir": "/global/cscratch1/sd/jfroula/JAWS/IMG_marcels_annotation/img-omics-wdl/marcel_data",
   "annotation.imgap_input_fasta": "Ga0399893_contigs.fna",
   "annotation.imgap_project_id": "Ga0399893",
   "annotation.imgap_project_type": "metagenome",

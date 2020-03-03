@@ -22,4 +22,12 @@ comm -13 nids aids
 
 # this worked 02/27
 on lawrencium
-java -Dconfig.file=singularity.conf -jar /global/home/groups-sw/lr_jgicloud/dev/jtm/opt/cromwell.jar run annotation.wdl -i split.1.lrcs.refdata.json
+#java -Dconfig.file=singularity.conf -jar /global/home/groups-sw/lr_jgicloud/dev/jtm/opt/cromwell.jar run annotation.wdl -i split.1.lrcs.refdata.json
+on lawrencium
+cromwell -Dconfig.file=cromwell-cori.conf run annotation.wdl -i split.1.lrcs.refdata.json
+
+# try this on monday
+# this worked
+java -Dconfig.file=cromwell-cori.conf  -jar /global/cfs/projectdirs/jaws/cli/jaws-dev/opt/cromwell.jar run main.wdl -i test.json
+# kept getting server 500 error
+jaws run submit --site=lbnl main.wdl test.json olbl
