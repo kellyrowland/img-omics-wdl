@@ -4,8 +4,8 @@ import "functional-annotation.wdl" as fa
 workflow annotation {
 
   Int     num_splits
-  String  imgap_input_dir
-  File    imgap_input_fasta
+  File    imgap_input_dir
+  String  imgap_input_fasta
   String  imgap_project_id
   String  imgap_project_type
   Int     additional_threads

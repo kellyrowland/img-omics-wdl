@@ -19,3 +19,7 @@ squeue -u jaws | tail -n +2 | awk '{print $1}' | sort -n  > nids
 # submit jaws job
 squeue -u jaws | tail -n +2 | awk '{print $1}' | sort -n  > aids
 comm -13 nids aids
+
+# this worked 02/27
+on lawrencium
+java -Dconfig.file=singularity.conf -jar /global/home/groups-sw/lr_jgicloud/dev/jtm/opt/cromwell.jar run annotation.wdl -i split.1.lrcs.refdata.json
