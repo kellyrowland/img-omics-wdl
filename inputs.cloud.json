@@ -9,7 +9,7 @@
   "annotation.sa_pre_qc_execute":false,
   "annotation.sa_pre_qc_bin": "/opt/omics/bin/qc/pre-annotation/fasta_sanity.py",
   "annotation.sa_pre_qc_rename": "yes",
-  "annotation.sa_trnascan_se_execute": false,
+  "annotation.sa_trnascan_se_execute": true,
   "annotation.sa_trnascan_se_bin": "/opt/omics/bin/tRNAscan-SE",
   "annotation.sa_trnascan_pick_and_transform_to_gff_bin": "/opt/omics/bin/structural_annotation/trna_pick_and_transform_to_gff.py",
   "annotation.sa_rfam_execute": true,

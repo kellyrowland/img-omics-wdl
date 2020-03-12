@@ -31,7 +31,7 @@ workflow trnascan {
 task trnascan_ba {
 
   String bin
-  String input_fasta
+  File input_fasta
   String project_id
   String out_dir
   Int    threads
