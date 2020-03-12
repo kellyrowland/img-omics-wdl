@@ -1,10 +1,11 @@
 workflow img_cloud {
     File input_file
+    File sub_json
     File databases="s3://bf-20191119-staging/databases.tar"
     String img_container="bfoster1/img-omics:0.1.0"
     call split {input: infile=input_file, container=img_container}
     scatter(pathname in split.files) {
-        call img_annot{input: infile=pathname,db=databases, container=img_container}
+        call img_annot{input: infile=pathname,db=databases, container=img_container, sub_j=sub_json}
     }
 }
 
@@ -12,12 +13,12 @@ workflow img_cloud {
 task split{
      File infile
      String container
-     String blocksize=120000000
+     String blocksize=20000000
      String tmp_dir="."
      runtime {
             docker: container
-            backend: "i3-120-16c-spot-ceq"
-            memory: "120 GiB"
+	    backend: "i3-120-16c-spot-ceq"
+	    memory: "120 GiB"
             cpu:  16
             maxRetries: 1
      }
@@ -37,6 +38,7 @@ task split{
 
 task img_annot{
      File infile
+     File sub_j
      File db
      String container
      String outfile = "/cromwell_root/img-omics-wdl/cromwell-executions.tar.gz"
@@ -44,7 +46,7 @@ task img_annot{
      String filename_resources ="resources.log"
      runtime {
             docker: container
-            backend: "i3-120-16c-spot-ceq"
+	    backend: "i3-120-16c-spot-ceq"	    
             memory: "120 GiB"
             cpu:  16
             maxRetries: 1
@@ -60,7 +62,7 @@ task img_annot{
 	cd /cromwell_root; ls ; tar -xf ${db} ;cd -
 	mkdir -p splits/1
 	cp ${infile} splits/1/GaXXXXXXX_contigs.fna
-	java -jar /opt/omics/bin/cromwell.jar run -i inputs.cloud.json annotation.wdl -m ${outmetadata}
+	java -jar /opt/omics/bin/cromwell.jar run -i ${sub_j} annotation.wdl -m ${outmetadata}
 	find /cromwell_root/img-omics-wdl/cromwell-executions -size +1G |  grep "/inputs/" |  xargs  rm 
 	tar -cpvzf ${outfile} /cromwell_root/img-omics-wdl/cromwell-executions
 
