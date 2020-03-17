@@ -191,7 +191,7 @@ task ko_ec {
   File   md5
   File   phylo
   Int    top_hits = 5
-  Int    min_ko_hits = 7
+  Int    min_ko_hits = 2
   Float  aln_length_ratio = 0.7
   String lastal
   String selector
