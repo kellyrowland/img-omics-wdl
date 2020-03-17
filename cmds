@@ -31,3 +31,13 @@ cromwell -Dconfig.file=cromwell-cori.conf run annotation.wdl -i split.1.lrcs.ref
 java -Dconfig.file=cromwell-cori.conf  -jar /global/cfs/projectdirs/jaws/cli/jaws-dev/opt/cromwell.jar run main.wdl -i test.json
 # kept getting server 500 error
 jaws run submit --site=lbnl main.wdl test.json olbl
+
+# lets try submitting to site directly 
+/global/home/groups-sw/lr_jgicloud/site/dev
+jaws_site_cli.py submit split.1.lrcs.refdata.json annotation.wdl --zip_file=subs_n1_t00_marcel_split1__w1.zip
+
+jaws_site_cli.py submit split.1.lrcs.refdata.json annotation.wdl --zip_file=subs_n1_t00_marcel_split1__w1_m5G.zip
+
+# This worked with SLURM
+java -Dconfig.file=cromwell-lbl.slurm.conf -jar /global/home/groups-sw/lr_jgicloud/dev/jtm/opt/cromwell.jar run main.wdl -i test.json 
+

@@ -208,15 +208,12 @@ task ko_ec {
   }
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -260,7 +257,6 @@ task smart {
         then
             hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
         fi
-        hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu ${threads}"
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
         cat ${input_fasta} | parallel --pipe --recstart '>' \
@@ -315,15 +311,12 @@ task smart {
   >>>
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -365,7 +358,6 @@ task cog {
         then
             hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
         fi  
-        hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
 		
@@ -421,15 +413,12 @@ task cog {
   >>>
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -469,7 +458,6 @@ task tigrfam {
           #then
           #    hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
           #fi
-          hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
           # Use parallel to split up the input and
           # run hmmsearch in parallel on those splits
           cat ${input_fasta} | parallel --pipe --recstart '>' \
@@ -525,15 +513,12 @@ task tigrfam {
   >>>
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -576,7 +561,6 @@ task superfam {
           then
               hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
           fi  
-          hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
           # Use parallel to split up the input and
           # run hmmsearch in parallel on those splits
           cat ${input_fasta} | parallel --pipe --recstart '>' \
@@ -629,15 +613,12 @@ task superfam {
   >>>
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -676,7 +657,6 @@ task pfam {
         then
             hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
         fi  
-        hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
         cat ${input_fasta} | parallel --pipe --recstart '>' \
@@ -731,15 +711,12 @@ task pfam {
   >>>
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -780,7 +757,6 @@ task cath_funfam {
         then
             hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
         fi
-        hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
         # Use parallel to split up the input and
         # run hmmsearch in parallel on those splits
         cat ${input_fasta} | parallel --pipe --recstart '>' \
@@ -836,15 +812,12 @@ task cath_funfam {
   >>>
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -872,15 +845,12 @@ task signalp {
   >>>
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -908,15 +878,12 @@ task tmhmm {
   >>>
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -951,15 +918,12 @@ task product_name {
   }
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
