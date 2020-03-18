@@ -41,3 +41,8 @@ jaws_site_cli.py submit split.1.lrcs.refdata.json annotation.wdl --zip_file=subs
 # This worked with SLURM
 java -Dconfig.file=cromwell-lbl.slurm.conf -jar /global/home/groups-sw/lr_jgicloud/dev/jtm/opt/cromwell.jar run main.wdl -i test.json 
 
+## email from 03/17/6:04pm
+I created four test folder under /global/projectb/sandbox/omics/gbp/test_datasets_for_jaws/.
+They've 2, 16, 36 and 329 splits respectively.
+That way you can quickly test things with the smaller datasets and have one that's a little bit bigger to toy around with.
+
