@@ -30,7 +30,7 @@ then
                 echo "Pre-QC" >> $run_folder/started_modules.log
                 qc_cmd="/usr/bin/time $imgap_bin_dir/qc/pre-annotation/simple_fasta_qc.sh "
                 qc_cmd="$qc_cmd $imgap_project_type $imgap_input_fasta "
-                qc_cmd="$qc_cmd $imgap_project_id yes"
+                qc_cmd="$qc_cmd $imgap_project_id $imgap_min_contig_length yes"
                 qced_fasta=`$qc_cmd`
                 exit_code=$?
                 if [[ $exit_code -ne 0 ]]
@@ -38,6 +38,14 @@ then
                     echo "$(date +%F_%T) - The pre-annotation qc failed! Aborting!" >&2
                     echo "Pre-Annotation QC failed!" > $run_folder/ERROR
                     exit $exit_code
+                fi
+                if [[ "$imgap_structural_annotation_pre_qc_abort_on_100_poly_N" == "True" ]]
+                then
+                    if [[ -f $run_folder/GAPS_OF_UNKNOWN_LENGTH.txt ]]
+                    then
+                        echo "$(date +%F_%T) - Input fasta contains gaps of unknown length! Aborting!" >&2
+                        exit 1
+                    fi
                 fi
                 export imgap_input_fasta=$qced_fasta
                 touch $run_folder/PRE_QC_DONE

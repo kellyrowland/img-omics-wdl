@@ -22,15 +22,12 @@ task pre_qc {
   >>>
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 	
   output {

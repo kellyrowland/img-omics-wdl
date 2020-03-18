@@ -108,7 +108,9 @@ then
         echo "SMART" >> $run_folder/started_modules.log
 		/usr/bin/time $(dirname $0)/hmmsearch_smart.sh $imgap_input_fasta \
 									$imgap_functional_annotation_smart_db \
-									$imgap_additional_threads &> $smart_log
+                                    $imgap_additional_threads \
+									$imgap_functional_annotation_parallel_hmmsearch_instances \
+                                    $imgap_functional_annotation_hmmsearch_Z_arg &> $smart_log
 		exit_code=$?
 		if [[ $exit_code -ne 0 ]]
 		then
@@ -138,7 +140,9 @@ then
         echo "COG" >> $run_folder/started_modules.log
 		/usr/bin/time $(dirname $0)/hmmsearch_cogs.sh $imgap_input_fasta \
 									$imgap_functional_annotation_cog_db \
-									$imgap_additional_threads &> $cog_log
+									$imgap_additional_threads \
+									$imgap_functional_annotation_parallel_hmmsearch_instances \
+                                    $imgap_functional_annotation_hmmsearch_Z_arg &> $cog_log
 		exit_code=$?
 		if [[ $exit_code -ne 0 ]]
 		then
@@ -171,7 +175,9 @@ then
         echo "TIGRFAM" >> $run_folder/started_modules.log
 		/usr/bin/time $(dirname $0)/hmmsearch_tigrfams.sh $imgap_input_fasta \
 									$imgap_functional_annotation_tigrfam_db \
-									$imgap_additional_threads &> $tigrfam_log
+									$imgap_additional_threads \
+									$imgap_functional_annotation_parallel_hmmsearch_instances \
+                                    $imgap_functional_annotation_hmmsearch_Z_arg &> $tigrfam_log
 		exit_code=$?
 		if [[ $exit_code -ne 0 ]]
 		then
@@ -204,7 +210,9 @@ then
         echo "SUPERFAM" >> $run_folder/started_modules.log
 		/usr/bin/time $(dirname $0)/hmmsearch_supfams.sh $imgap_input_fasta \
 								$imgap_functional_annotation_superfamily_db \
-								$imgap_additional_threads &> $supfam_log
+								$imgap_additional_threads \
+								$imgap_functional_annotation_parallel_hmmsearch_instances \
+                                $imgap_functional_annotation_hmmsearch_Z_arg &> $supfam_log
 		exit_code=$?
 		if [[ $exit_code -ne 0 ]]
 		then
@@ -238,7 +246,9 @@ then
 		/usr/bin/time $(dirname $0)/hmmsearch_pfams.sh $imgap_input_fasta \
 								$imgap_functional_annotation_pfam_db \
 								$imgap_functional_annotation_pfam_claninfo_tsv \
-								$imgap_additional_threads &> $pfam_log
+								$imgap_additional_threads \
+								$imgap_functional_annotation_parallel_hmmsearch_instances \
+                                $imgap_functional_annotation_hmmsearch_Z_arg &> $pfam_log
 		exit_code=$?
 		if [[ $exit_code -ne 0 ]]
 		then
@@ -272,7 +282,9 @@ then
 		/usr/bin/time $(dirname $0)/hmmsearch_cath_funfams.sh \
 					$imgap_input_fasta \
 					$imgap_functional_annotation_cath_funfam_db \
-					$imgap_additional_threads &> $cath_funfam_log
+					$imgap_additional_threads \
+					$imgap_functional_annotation_parallel_hmmsearch_instances \
+                    $imgap_functional_annotation_hmmsearch_Z_arg &> $cath_funfam_log
 		exit_code=$?
 		if [[ $exit_code -ne 0 ]]
 		then

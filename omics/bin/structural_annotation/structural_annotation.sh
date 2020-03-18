@@ -34,12 +34,17 @@ if [[ "$imgap_structural_annotation_trnascan_se_execute" == "True" ]]
 then
     if [[ ! -f $run_folder/TRNA_DONE ]]
     then
+        # Reducing the number of additional threads by 1/3,
+        # since cori seems to have a lot of GNU parallel thread hickups
+        # when the thread nomber is close to the number oc cores.
+        trna_threads=$(echo "$imgap_additional_threads * 0.66" | bc)
+        trna_threads=${trna_threads%.*}
         echo "$(date +%F_%T) - Predicting tRNAs now..."
         echo "TRNA" >> $run_folder/started_modules.log
         trna_log=${imgap_input_fasta%_*}_trna.log
         /usr/bin/time $sa_bin_dir/trnascan-se_trnas.sh \
                         $imgap_input_fasta $imgap_project_type \
-                        $imgap_additional_threads &> $trna_log
+                        $trna_threads &> $trna_log
         exit_code=$?
         if [[ $exit_code -ne 0 ]]
         then

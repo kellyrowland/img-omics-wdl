@@ -173,7 +173,13 @@ def parse_gff_file(gff_file):
             feature_start = int(fields[3])
             feature_end = int(fields[4])
             for i in range((feature_start - 1), feature_end):
-                coding_bps[i] = 1
+                try:
+                    coding_bps[i] = 1
+                except IndexError:
+                    print(f'Off-contig coordinate ({i+1}) reported by {tool}. '
+                          f'Contig: {seq_name} , Length: {seq_data[seq_name]["length"]}', file=sys.stderr)
+                    print('Aborting!')
+                    sys.exit(1)
             feature_length = feature_end - feature_start + 1
             if "feature_lengths" in tool_data[tool][feature_type]:
                 tool_data[tool][feature_type]["feature_lengths"].append(feature_length)

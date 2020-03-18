@@ -1,8 +1,8 @@
 {
   "annotation.num_splits": 1,
-  "annotation.imgap_input_dir": "/global/cscratch1/sd/jfroula/JAWS/IMG_marcels_annotation/img-omics-wdl-jawscompli/splits",
-  "annotation.imgap_input_fasta": "Ga0376671_contigs.fna",
-  "annotation.imgap_project_id": "Ga0376671",
+  "annotation.imgap_input_dir": "/global/scratch/jfroula/JAWS/img-omics-wdl/splits",
+  "annotation.imgap_input_fasta": "Ga0399893_contigs.fna",
+  "annotation.imgap_project_id": "Ga0399893",
   "annotation.imgap_project_type": "metagenome",
   "annotation.additional_threads": 4,
   "annotation.sa_execute": true,

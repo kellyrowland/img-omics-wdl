@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+#import sys
 
 
 parser = argparse.ArgumentParser(description="""This script parses one or more
@@ -163,9 +164,13 @@ for results_file in args.trnascan_output_files:
             continue
         if at_trna_lines:
             if line.startswith("Warning"):
+#                print(line, file=sys.stderr)
                 """This would appear before the results of a new contig and indicate which tRNA
                 on that contig has a problem. We are going to ignore that tRNA."""
-                trnas_to_ignore.add(str(int(line.split(".trna0")[1].split()[0])))
+                if ".trna0" in line:
+                    trnas_to_ignore.add(str(int(line.split(".trna0")[1].split()[0])))
+                else:
+                    trnas_to_ignore.add(str(int(line.split(".tRNA")[1].split("-")[0])))
                 continue
             fields = line.rstrip().split()
             if trnas_to_ignore and fields[1] in trnas_to_ignore:
@@ -181,6 +186,7 @@ for results_file in args.trnascan_output_files:
                 contig_results = Contig_Results(contig_name, source,
                                                 search_mode)
                 previous_contig_name = contig_name
+#            print(f'Building tRNA from line: {line}', file=sys.stderr)
             trna = tRNA(fields[2:])
             contig_results.add_trna(trna)
     if (contig_results and (contig_results.contig_name not in best_contigs_results or

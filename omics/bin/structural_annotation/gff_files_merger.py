@@ -458,6 +458,7 @@ class GFF_Files_Merger:
             if not line or line[0] == "#" or line == "\n":
                 continue
 
+#            print(f'LINE: {line}', file=sys.stderr)
             """Create a Gene object from the new GFF line."""
             gene = Gene(line.split("\t"))
 
