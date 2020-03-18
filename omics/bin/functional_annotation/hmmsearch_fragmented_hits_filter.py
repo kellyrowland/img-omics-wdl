@@ -31,7 +31,7 @@ parser.add_argument("-o", "--overlap_ratio_cutoff", nargs="?",
                     default=0.10, help="""the maximum allowed overlap ratio on
                     the shorter hit""")
 parser.add_argument("-v", "--version", action="version",
-                    version="%(prog)s 1.0.0")
+                    version="%(prog)s 1.0.1")
 args, input = parser.parse_known_args()
 
 
@@ -43,10 +43,10 @@ class Hit:
         self.model = hit_fields[2]
         self.accession = hit_fields[3]
         if self.accession == "-":
-            if self.model.startswith("SM"): # SMART
-                self.accession = self.model
-            else:                           # SuperFamily
-                self.accession = hit_fields[2][:hit_fields[2].find("/")]
+            self.accession = self.model
+        if "/" in self.accession:
+            # For Cath-FunFam remove everything in the accession from the 1st '/' on.
+            self.accession = self.accession[:self.accession.find("/")]
         self.model_length = int(hit_fields[4])
         self.full_seq_evalue = hit_fields[5]
         self.full_seq_bitscore = float(hit_fields[6])

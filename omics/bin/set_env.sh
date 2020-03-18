@@ -16,7 +16,7 @@ fi
 echo "$(date +%F_%T) - Creating env variabes from yaml conf now..."
 
 set -a   # Sets the export attribute for each variable between -a and +a.
-eval $(./print_all_yaml_key_value_pairs.py $config_yaml)
+eval $($(dirname $0)/print_all_yaml_key_value_pairs.py $config_yaml)
 # Create specific /usr/bin/time output format.
 TIME="\n-----/usr/bin/time output-----\n"
 TIME=$TIME"Cmd: %C\nCPU: %P\nMemory: %M KB (res max)\n"

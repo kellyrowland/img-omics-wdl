@@ -70,15 +70,12 @@ task fasta_len {
   }
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -102,15 +99,12 @@ task iso_big {
   }
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -133,15 +127,12 @@ task iso_small {
   }
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -164,15 +155,12 @@ task metag {
   }
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -216,15 +204,12 @@ task clean_and_unify {
   }
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {

@@ -71,20 +71,16 @@ task cmsearch {
   String out_dir
 
   command {
-    ${bin} --notextw --cut_tc --cpu ${threads} --tblout ${project_id}_rfam.tbl ${cm} ${input_fasta}
     #cp ./${project_id}_rfam.tbl ${out_dir}
   }
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -113,15 +109,12 @@ task clan_filter {
   >>>
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -142,15 +135,12 @@ task misc_and_regulatory {
   >>>
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -170,15 +160,12 @@ task rrna {
   >>>
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
@@ -199,15 +186,12 @@ task ncrna_tmrna {
   >>>
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
-    constraint: "haswell"
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {

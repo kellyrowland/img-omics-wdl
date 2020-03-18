@@ -1,3 +1,5 @@
+safe
+marcel_data
 omics
 scripts
 Ga0399893*
@@ -19,3 +21,6 @@ results_*
 notes
 runtime
 JAWS2.0
+marcel_data
+sif_files
+omics

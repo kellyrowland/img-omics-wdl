@@ -84,6 +84,6 @@ echo constraint=$constraint_e
 echo "---------------------"
 
 time_label=$(grep time: crt.wdl | head -1 | awk -F'"' '{print $2}' | awk -F':' '{print $1}')
-zip subs_n${node_e}_t${time_label}_${pool_e}_${constraint_e}_w${nwpn_e}.zip crt.wdl functional-annotation.wdl genemark.wdl prodigal.wdl rfam.wdl structural-annotation.wdl trnascan.wdl
+zip subs_n${node_e}_t${time_label}_${pool_e}_${constraint_e}_w${nwpn_e}_m${mem_e}.zip crt.wdl functional-annotation.wdl genemark.wdl prodigal.wdl rfam.wdl structural-annotation.wdl trnascan.wdl
 
-echo "*** created file subs_n${node_e}_t${time_label}_${pool_e}_${constraint_e}_w${nwpn_e}_m${mem_e}zip ***"
+echo "*** created file subs_n${node_e}_t${time_label}_${pool_e}_${constraint_e}_w${nwpn_e}_m${mem_e}.zip ***"

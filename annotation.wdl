@@ -4,8 +4,8 @@ import "functional-annotation.wdl" as fa
 workflow annotation {
 
   Int     num_splits
-  String  imgap_input_dir
-  File    imgap_input_fasta
+  File    imgap_input_dir
+  String  imgap_input_fasta
   String  imgap_project_id
   String  imgap_project_type
   Int     additional_threads
@@ -170,7 +170,7 @@ workflow annotation {
 }
 
 task setup {
-  String dir
+  File dir
   Int    n_splits
 
   command {
@@ -178,17 +178,15 @@ task setup {
   }
 
   runtime {
-    cluster: "jaws_lbl_gov"
-    time: "00:20:00"
-    mem: "10G"
+    time: "00:40:00"
+    mem: "5G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    cpu: 64
   }
 
   output {
-    Array[String] splits = read_lines(stdout())
+    Array[File] splits = read_lines(stdout())
   }
 }
