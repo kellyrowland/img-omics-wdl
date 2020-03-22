@@ -46,3 +46,7 @@ I created four test folder under /global/projectb/sandbox/omics/gbp/test_dataset
 They've 2, 16, 36 and 329 splits respectively.
 That way you can quickly test things with the smaller datasets and have one that's a little bit bigger to toy around with.
 
+## Comparitive datasets
+/global/projectb/sandbox/omics/gbp/test_datasets_for_jaws/215505/splits/  # source fasta
+/global/projectb/scratch/gbp/submissions/215505/splits/					  # tmp files I copied into splits_compare
+
