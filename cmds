@@ -1,3 +1,6 @@
+## omics dir
+wget http://portal.nersc.gov/dna/metagenome/assembly/img-scripts/omics.20200317.tar.gz
+
 # marcel 1 samples 
 java -Dconfig.file=singularity.conf -jar /global/home/groups-sw/lr_jgicloud/dev/jtm/opt/cromwell.jar run annotation.wdl -i split.1.lrcs.refdata.json
 

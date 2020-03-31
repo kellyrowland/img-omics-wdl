@@ -1,5 +1,5 @@
 {
-  "annotation.num_splits": 144,
+  "annotation.num_splits": 4,
   "annotation.imgap_input_dir": "/global/scratch/jfroula/JAWS/img-omics-wdl/marcel_data",
   "annotation.imgap_input_fasta": "Ga0376671_contigs.fna",
   "annotation.imgap_project_id": "Ga0376671",

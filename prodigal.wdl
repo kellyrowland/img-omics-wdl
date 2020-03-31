@@ -70,12 +70,13 @@ task fasta_len {
   }
 
   runtime {
-    time: "00:40:00"
-    mem: "5G"
+    time: "08:00:00"
+    mem: "10G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
+    shared: 0
   }
 
   output {
@@ -99,12 +100,13 @@ task iso_big {
   }
 
   runtime {
-    time: "00:40:00"
-    mem: "5G"
+    time: "08:00:00"
+    mem: "10G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
+    shared: 0
   }
 
   output {
@@ -127,12 +129,13 @@ task iso_small {
   }
 
   runtime {
-    time: "00:40:00"
-    mem: "5G"
+    time: "08:00:00"
+    mem: "10G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
+    shared: 0
   }
 
   output {
@@ -155,12 +158,13 @@ task metag {
   }
 
   runtime {
-    time: "00:40:00"
-    mem: "5G"
+    time: "08:00:00"
+    mem: "10G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
+    shared: 0
   }
 
   output {
@@ -204,12 +208,13 @@ task clean_and_unify {
   }
 
   runtime {
-    time: "00:40:00"
-    mem: "5G"
+    time: "08:00:00"
+    mem: "10G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
+    shared: 0
   }
 
   output {

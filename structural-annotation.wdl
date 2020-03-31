@@ -221,12 +221,13 @@ task pre_qc {
   >>>
 
   runtime {
-    time: "00:40:00"
-    mem: "5G"
+    time: "08:00:00"
+    mem: "10G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
+    shared: 0
   }
 	
   output {
@@ -256,12 +257,13 @@ task gff_merge {
   }
 
   runtime {
-    time: "00:40:00"
-    mem: "5G"
+    time: "08:00:00"
+    mem: "10G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
+    shared: 0
 	
   }
 
@@ -289,12 +291,13 @@ task fasta_merge {
   }
 
   runtime {
-    time: "00:40:00"
-    mem: "5G"
+    time: "08:00:00"
+    mem: "10G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
+    shared: 0
   }
 	
   output {
@@ -315,12 +318,13 @@ task gff_and_fasta_stats {
   }
 
   runtime {
-    time: "00:40:00"
-    mem: "5G"
+    time: "08:00:00"
+    mem: "10G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
+    shared: 0
   }
 	
 }
@@ -338,12 +342,13 @@ task post_qc {
   }
 
   runtime {
-    time: "00:40:00"
-    mem: "5G"
+    time: "08:00:00"
+    mem: "10G"
     poolname: "marcel_split1"
     node: 1
     nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
+    shared: 0
   }
 	
   output {
