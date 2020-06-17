@@ -734,7 +734,7 @@ task pfam {
 
     tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
     grep -v '^#' ${project_id}_proteins.pfam.domtblout | \
-    awk '{print $1,$3,$4,$6,$13,$14,$16,$17,$20,$21}' | \
+    awk '{print $1,$3,$5,$6,$13,$14,$16,$17,$20,$21}' | \
     sort -k1,1 -k6,6nr -k5,5n | \
     ${pfam_clan_filter} "$tool_and_version" ${pfam_claninfo_tsv} > ${project_id}_pfam.gff
     #cp ./${project_id}_pfam.gff ./${project_id}_proteins.pfam.domtblout ${out_dir}
