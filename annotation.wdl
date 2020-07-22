@@ -4,11 +4,13 @@ import "functional-annotation.wdl" as fa
 workflow annotation {
 
   Int     num_splits
-  File    imgap_input_dir
-  String  imgap_input_fasta
+  Array[File]    imgap_input_paths
+  String  imgap_input_file
+  String  output_dir = "output_dir"
   String  imgap_project_id
   String  imgap_project_type
   Int     additional_threads
+
   # structural annotation
   Boolean sa_execute
   Boolean sa_pre_qc_execute
@@ -77,10 +79,10 @@ workflow annotation {
 
   call setup {
     input:
-      n_splits = num_splits,
-      dir = imgap_input_dir
+	  file = imgap_input_file
   }
 
+#  scatter(split in imgap_input_paths) {
   scatter(split in setup.splits) {
 
     if(sa_execute) {
@@ -89,8 +91,8 @@ workflow annotation {
           imgap_project_id = imgap_project_id,
           additional_threads = additional_threads,
           imgap_project_type = imgap_project_type,
-          output_dir = split,
-          imgap_input_fasta = "${split}"+"/"+"${imgap_input_fasta}",
+          imgap_input_fasta = split,
+		  output_dir = output_dir,
           pre_qc_execute = sa_pre_qc_execute,
           pre_qc_bin = sa_pre_qc_bin,
           pre_qc_rename = sa_pre_qc_rename,
@@ -127,8 +129,8 @@ workflow annotation {
           imgap_project_id = imgap_project_id,
           imgap_project_type = imgap_project_type,
           additional_threads = additional_threads,
-          output_dir = split,
           input_fasta = s_annotate.proteins,
+		  output_dir = output_dir,
           ko_ec_execute = fa_ko_ec_execute,
           ko_ec_img_nr_db = fa_ko_ec_img_nr_db,
           ko_ec_md5_mapping = fa_ko_ec_md5_mapping,
@@ -170,12 +172,40 @@ workflow annotation {
 }
 
 task setup {
-  File dir
-  Int    n_splits
+  File file
 
-  command {
-    python -c 'for i in range(${n_splits}): print("${dir}/"+str(i+1)+"/")'
-  }
+  python <<CODE
+    import os
+    chunksize = 10*1024*1024
+
+    infile = "${file}"
+    chunk = 1
+
+    fin = open(infile)
+
+    done = False
+    while not done:
+       outf = '%s.%d' % (os.path.basename(infile), chunk)
+       print(outf)
+       fout = open(outf, 'w')
+       data = fin.read(chunksize)
+       fout.write(data)
+       if len(data) < chunksize:
+           done = True
+       while True:
+          line = fin.readline()
+          if line.startswith('>') or len(line)==0:
+             fin.seek(fin.tell()-len(line), 0)
+             break
+          fout.write(line)
+       chunk += 1
+
+    CODE
+    }
+
+    output {
+      Array[File] splits = read_lines(stdout())
+    }
 
   runtime {
     time: "08:00:00"
@@ -185,9 +215,5 @@ task setup {
     nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
-  }
-
-  output {
-    Array[File] splits = read_lines(stdout())
   }
 }

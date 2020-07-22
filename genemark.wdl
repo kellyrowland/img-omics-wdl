@@ -84,7 +84,7 @@ task gm_meta {
   String project_id
 
   command {
-    ${bin} --Meta ${model} --incomplete_at_gaps 30 \
+    ${bin} --Meta /opt/omics/bin/${model} --incomplete_at_gaps 30 \
            -o ${project_id}_genemark.gff \
            --format gff --NT ${project_id}_genemark_genes.fna \
            --AA ${project_id}_genemark_proteins.faa --seq ${input_fasta}
