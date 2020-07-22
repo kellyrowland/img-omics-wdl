@@ -37,7 +37,6 @@ task run {
   String out_dir
 
   command {
-    shifter --image=jfroula/img-omics:0.1.1 \
     java -Xmx1536m -jar /opt/omics/bin/${jar} ${input_fasta} ${project_id}_crt.out
   }
 
@@ -47,7 +46,7 @@ task run {
     poolname: "marcel_split"
     node: 1
     nwpn: 1
-#    docker: "jfroula/img-omics:0.1.1"
+    docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
 
@@ -66,13 +65,8 @@ task transform {
   String out_dir
 
   command {
-    shifter --image=jfroula/img-omics:0.1.1 \
     mv ${crt_out} ./${crt_out_local}
-
-    shifter --image=jfroula/img-omics:0.1.1 \
     tool_and_version=$(java -Xmx1536m -jar /opt/omics/bin/${jar} -version | cut -d' ' -f1,6)
-
-    shifter --image=jfroula/img-omics:0.1.1 \
     ${transform_bin} ${crt_out_local} "$tool_and_version"
   }
 
@@ -82,7 +76,7 @@ task transform {
     poolname: "marcel_split"
     node: 1
     nwpn: 1
-#    docker: "jfroula/img-omics:0.1.1"
+    docker: "jfroula/img-omics:0.1.1"
 	shared: 1
   }
 

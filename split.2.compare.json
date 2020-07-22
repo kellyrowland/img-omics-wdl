@@ -1,8 +1,7 @@
 {
   "annotation.num_splits": 2,
-  "annotation.imgap_input_file": "/global/cfs/cdirs/jaws/test/tutorial_test_data/MarcelsData/splits_compare_source/1/Ga0394140_contigs.fna",
-#  "annotation.imgap_input_paths": ["/global/cfs/cdirs/jaws/test/tutorial_test_data/MarcelsData/splits_compare_source/1/Ga0394140_contigs.fna",
-#  								   "/global/cfs/cdirs/jaws/test/tutorial_test_data/MarcelsData/splits_compare_source/2/Ga0394140_contigs.fna"],
+  "annotation.imgap_input_paths": ["/global/cfs/cdirs/jaws/test/tutorial_test_data/MarcelsData/splits_compare_source/1/Ga0394140_contigs.fna",
+  								   "/global/cfs/cdirs/jaws/test/tutorial_test_data/MarcelsData/splits_compare_source/2/Ga0394140_contigs.fna"],
   "annotation.imgap_project_id": "GGa0394140",
   "annotation.imgap_project_type": "metagenome",
   "annotation.additional_threads": 4,

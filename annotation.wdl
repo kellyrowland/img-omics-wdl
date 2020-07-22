@@ -5,7 +5,6 @@ workflow annotation {
 
   Int     num_splits
   Array[File]    imgap_input_paths
-  String  imgap_input_file
   String  output_dir = "output_dir"
   String  imgap_project_id
   String  imgap_project_type
@@ -40,6 +39,7 @@ workflow annotation {
   String  sa_fasta_merge_bin
   Boolean sa_gff_and_fasta_stats_execute
   String  sa_gff_and_fasta_stats_bin
+
   # functional annotation
   Boolean fa_execute
   String  fa_product_names_mapping_dir
@@ -77,13 +77,7 @@ workflow annotation {
   String  fa_tmhmm_decode_parser
   String  fa_product_assign_bin
 
-  call setup {
-    input:
-	  file = imgap_input_file
-  }
-
-#  scatter(split in imgap_input_paths) {
-  scatter(split in setup.splits) {
+  scatter(split in imgap_input_paths) {
 
     if(sa_execute) {
       call sa.s_annotate {
@@ -171,49 +165,3 @@ workflow annotation {
   }
 }
 
-task setup {
-  File file
-
-  python <<CODE
-    import os
-    chunksize = 10*1024*1024
-
-    infile = "${file}"
-    chunk = 1
-
-    fin = open(infile)
-
-    done = False
-    while not done:
-       outf = '%s.%d' % (os.path.basename(infile), chunk)
-       print(outf)
-       fout = open(outf, 'w')
-       data = fin.read(chunksize)
-       fout.write(data)
-       if len(data) < chunksize:
-           done = True
-       while True:
-          line = fin.readline()
-          if line.startswith('>') or len(line)==0:
-             fin.seek(fin.tell()-len(line), 0)
-             break
-          fout.write(line)
-       chunk += 1
-
-    CODE
-    }
-
-    output {
-      Array[File] splits = read_lines(stdout())
-    }
-
-  runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 1
-    docker: "jfroula/img-omics:0.1.1"
-    shared: 0
-  }
-}
