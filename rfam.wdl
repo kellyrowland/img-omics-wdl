@@ -102,7 +102,7 @@ task clan_filter {
   String out_dir
 
   command <<<
-    tool_and_version=$(${cmsearch_bin} -h | grep INFERNAL | cut -d' ' -f3)
+    tool_and_version=$(${cmsearch_bin} -h | grep INFERNAL | sed s/\#//)
     grep -v '^#' ${tbl} | \
     awk '$17 == "!" {print $1,$3,$4,$6,$7,$8,$9,$10,$11,$15,$16}' | \
     sort -k1,1 -k10,10nr -k11,11n | \
