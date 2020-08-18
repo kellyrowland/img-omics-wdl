@@ -7,7 +7,7 @@ RUN curl --silent --fail -o min.sh -L https://repo.continuum.io/miniconda/Minico
 RUN /bin/bash -c "source /miniconda3/etc/profile.d/conda.sh && conda activate && conda config --add channels conda-forge && conda config --add channels bioconda  && conda config --add channels anaconda && conda install -y curl git wget jq emacs parallel pyyaml openjdk perl-getopt-long bc procps-ng -y"
 
 #ADD omics.tar.gz /opt
-RUN cd /opt && /bin/bash -c "source /miniconda3/etc/profile.d/conda.sh && conda activate && wget http://portal.nersc.gov/dna/metagenome/assembly/img-scripts/omics.20200817.tar.gz && tar -zxvf omics.20200817.tar.gz && chmod -R 755 omics && rm omics.20200817.tar.gz"
+RUN cd /opt && /bin/bash -c "source /miniconda3/etc/profile.d/conda.sh && conda activate && wget http://portal.nersc.gov/dna/metagenome/assembly/img-scripts/omics.20200817.2013.tar.gz && tar -zxvf omics.20200817.2013.tar.gz && chmod -R 755 omics && rm omics.20200817.2013.tar.gz"
 
 RUN cd /opt/omics/bin && /bin/bash -c "source /miniconda3/etc/profile.d/conda.sh && conda activate && curl -s https://api.github.com/repos/broadinstitute/cromwell/releases/latest | jq -r .assets[].browser_download_url | grep -v wom | xargs -i curl --silent -O -L {} && ln -sf cromwell-*.jar ./cromwell.jar"
 
