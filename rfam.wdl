@@ -71,6 +71,7 @@ task cmsearch {
   String out_dir
 
   command {
+	${bin} --notextw --cut_tc --cpu ${threads} --tblout ${project_id}_rfam.tbl ${cm} ${input_fasta}
     #cp ./${project_id}_rfam.tbl ${out_dir}
   }
 
