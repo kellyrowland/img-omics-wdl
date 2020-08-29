@@ -47,7 +47,7 @@ task trnascan_ba {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -74,7 +74,7 @@ task pick_and_transform_to_gff {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }

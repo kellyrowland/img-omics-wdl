@@ -225,7 +225,7 @@ task pre_qc {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -261,7 +261,7 @@ task gff_merge {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
 	
@@ -295,7 +295,7 @@ task fasta_merge {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -322,7 +322,7 @@ task gff_and_fasta_stats {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -346,7 +346,7 @@ task post_qc {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }

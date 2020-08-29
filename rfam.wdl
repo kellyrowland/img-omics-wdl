@@ -80,7 +80,7 @@ task cmsearch {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -115,7 +115,7 @@ task clan_filter {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -142,7 +142,7 @@ task misc_and_regulatory {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -168,7 +168,7 @@ task rrna {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -195,7 +195,7 @@ task ncrna_tmrna {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }

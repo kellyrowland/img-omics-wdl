@@ -41,11 +41,11 @@ task run {
   }
 
   runtime {
-    time: "01:00:00"
+    time: "04:00:00"
     mem: "5G"
-    poolname: "marcel_split"
+    poolname: "fri-16"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -71,11 +71,11 @@ task transform {
   }
 
   runtime {
-    time: "01:00:00"
+    time: "04:00:00"
     mem: "5G"
-    poolname: "marcel_split"
+    poolname: "fri-16"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
 	shared: 1
   }

@@ -212,7 +212,7 @@ task ko_ec {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -316,7 +316,7 @@ task smart {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -419,7 +419,7 @@ task cog {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -520,7 +520,7 @@ task tigrfam {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -621,7 +621,7 @@ task superfam {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -720,7 +720,7 @@ task pfam {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -822,7 +822,7 @@ task cath_funfam {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -856,7 +856,7 @@ task signalp {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -890,7 +890,7 @@ task tmhmm {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -931,7 +931,7 @@ task product_name {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }

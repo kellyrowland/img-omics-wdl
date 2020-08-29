@@ -64,7 +64,7 @@ task gm_isolate {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -95,7 +95,7 @@ task gm_meta {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
@@ -138,7 +138,7 @@ task clean_and_unify {
     mem: "10G"
     poolname: "marcel_split1"
     node: 1
-    nwpn: 1
+    nwpn: 16
     docker: "jfroula/img-omics:0.1.1"
     shared: 0
   }
