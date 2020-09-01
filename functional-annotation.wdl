@@ -198,7 +198,7 @@ task ko_ec {
   String out_dir
 
   command {
-    ${lastal} -f blasttab+ -P ${threads} ${nr_db} ${input_fasta} 1> ${project_id}_proteins.img_nr.last.blasttab
+    /global/dna/shared/data/jfroula/Tools/memtime ${lastal} -f blasttab+ -P ${threads} ${nr_db} ${input_fasta} 1> ${project_id}_proteins.img_nr.last.blasttab
     ${selector} -l ${aln_length_ratio} -m ${min_ko_hits} -n ${top_hits} \
                 ${project_type} ${md5} ${phylo} \
                 ${project_id}_ko.tsv ${project_id}_ec.tsv \
@@ -208,13 +208,13 @@ task ko_ec {
   }
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -312,13 +312,13 @@ task smart {
   >>>
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -415,13 +415,13 @@ task cog {
   >>>
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -516,13 +516,13 @@ task tigrfam {
   >>>
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -617,13 +617,13 @@ task superfam {
   >>>
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -716,13 +716,13 @@ task pfam {
   >>>
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -818,13 +818,13 @@ task cath_funfam {
   >>>
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -852,13 +852,13 @@ task signalp {
   >>>
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -886,13 +886,13 @@ task tmhmm {
   >>>
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -927,13 +927,13 @@ task product_name {
   }
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {

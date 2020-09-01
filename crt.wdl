@@ -41,13 +41,13 @@ task run {
   }
 
   runtime {
-    time: "04:00:00"
-    mem: "5G"
-    poolname: "fri-16"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie-crt"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+	shared: 1
   }
 
   output {
@@ -71,11 +71,11 @@ task transform {
   }
 
   runtime {
-    time: "04:00:00"
-    mem: "5G"
-    poolname: "fri-16"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie-crt"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
 	shared: 1
   }

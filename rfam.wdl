@@ -76,13 +76,13 @@ task cmsearch {
   }
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -111,13 +111,13 @@ task clan_filter {
   >>>
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -138,13 +138,13 @@ task misc_and_regulatory {
   >>>
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -164,13 +164,13 @@ task rrna {
   >>>
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -191,13 +191,13 @@ task ncrna_tmrna {
   >>>
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {

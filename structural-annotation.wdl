@@ -221,13 +221,13 @@ task pre_qc {
   >>>
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 	
   output {
@@ -257,13 +257,13 @@ task gff_merge {
   }
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
 	
   }
 
@@ -291,13 +291,13 @@ task fasta_merge {
   }
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 	
   output {
@@ -318,13 +318,13 @@ task gff_and_fasta_stats {
   }
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 	
 }
@@ -342,13 +342,13 @@ task post_qc {
   }
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 	
   output {

@@ -60,13 +60,13 @@ task gm_isolate {
   }
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -91,13 +91,13 @@ task gm_meta {
   }
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
@@ -134,13 +134,13 @@ task clean_and_unify {
   }
 
   runtime {
-    time: "08:00:00"
-    mem: "10G"
-    poolname: "marcel_split1"
-    node: 1
-    nwpn: 16
+    time: "3:0:0"
+    mem: "100G"
+    poolname: "wowsie"
+    node: 10
+    nwpn: 1
     docker: "jfroula/img-omics:0.1.1"
-    shared: 0
+    shared: 1
   }
 
   output {
