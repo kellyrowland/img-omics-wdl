@@ -25,3 +25,11 @@ marcel_data
 sif_files
 test_datasets_for_jaws
 crt.json
+count_crt_rc.sh
+marcel_splits_50/
+out-1-2/
+out-10-1/
+out-6-8-tues/
+out-6-8/
+out2/
+split.2.dir-type.json
