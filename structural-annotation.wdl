@@ -161,7 +161,7 @@ workflow s_annotate {
 	#File  gff = "${output_dir}"+"/"+"${imgap_project_id}_structural_annotation.gff"
 	#File  gff = gff_merge.final_gff
 	#File  gff = post_qc.out
-	File  gff = fasta_merge.final_modified_gff
+        File?  gff = fasta_merge.final_modified_gff
     File? proteins = fasta_merge.final_proteins 
   }
 }
@@ -286,11 +286,14 @@ task fasta_merge {
   File?  prodigal_genes
   File?  prodigal_proteins
   String output_dir
+  String dollar="$"
 
   command {
     ${bin} ${final_gff} ${genemark_genes} ${prodigal_genes} 1> ${project_id}_genes.fna
     ${bin} ${final_gff} ${genemark_proteins} ${prodigal_proteins} 1> ${project_id}_proteins.faa
     #cp ./${project_id}_genes.fna ./${project_id}_proteins.faa ${output_dir}
+    cp ${final_gff} ${dollar}(basename ${final_gff}) 
+    echo ${dollar}(basename ${final_gff}) > final_gff_file.txt
   }
 
   runtime {
@@ -307,7 +310,7 @@ task fasta_merge {
   output {
     File final_genes = "${project_id}_genes.fna"
     File final_proteins = "${project_id}_proteins.faa"
-    File final_modified_gff = "${final_gff}"
+    File final_modified_gff = read_string("final_gff_file.txt")
   }
 }
 
