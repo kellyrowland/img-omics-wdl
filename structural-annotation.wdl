@@ -159,8 +159,9 @@ workflow s_annotate {
   }
   output {
 	#File  gff = "${output_dir}"+"/"+"${imgap_project_id}_structural_annotation.gff"
-	File  gff = gff_merge.final_gff
+	#File  gff = gff_merge.final_gff
 	#File  gff = post_qc.out
+	File  gff = fasta_merge.final_modified_gff
     File? proteins = fasta_merge.final_proteins 
   }
 }
@@ -306,6 +307,7 @@ task fasta_merge {
   output {
     File final_genes = "${project_id}_genes.fna"
     File final_proteins = "${project_id}_proteins.faa"
+    File final_modified_gff = "${final_gff}"
   }
 }
 
