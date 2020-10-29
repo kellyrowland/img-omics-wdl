@@ -1,11 +1,11 @@
 workflow img_cloud {
     File input_file
     File sub_json
-    File databases="s3://bf-20191119-staging/databases.tar"
-    String img_container="bfoster1/img-omics:0.1.0"
+    File databases="s3://bf-20191119-staging/databases.20201029.tar"
+    String img_container="bfoster1/img-omics:0.5.0"
     call split {input: infile=input_file, container=img_container}
     scatter(pathname in split.files) {
-        call img_annot{input: infile=pathname,db=databases, container=img_container, sub_j=sub_json}
+        call img_annot{input: infile=pathname, all_infile=input_file, db=databases, container=img_container, sub_j=sub_json}
     }
 }
 
@@ -31,13 +31,15 @@ task split{
                              'cat > '$tmp_dir'/tmp.$$.split.faa';
      }
      output {
-        Array[File] files = glob("*split.faa")
+#        Array[File] files = glob("*split.faa")
+        Array[File] files = ["tmp.1.split.faa", "tmp.2.split.faa"]
   }
 }
 
 
 task img_annot{
      File infile
+     File all_infile
      File sub_j
      File db
      String container
@@ -52,17 +54,13 @@ task img_annot{
             maxRetries: 1
      }
     command{
-	echo $(curl --fail --max-time 10 --silent http://169.254.169.254/latest/meta-data/public-hostname)
-        touch ${filename_resources};
-	curl --fail --max-time 10 --silent https://bitbucket.org/berkeleylab/jgi-meta/get/master.tar.gz | tar --wildcards -zxvf - "*/bin/resources.bash" && ./*/bin/resources.bash > ${filename_resources} &
-        sleep 30
-	
 	git clone https://github.com/kellyrowland/img-omics-wdl.git -b cloud &&	cd img-omics-wdl
 	ls /cromwell_root;
 	cd /cromwell_root; ls ; tar -xf ${db} ;cd -
 	mkdir -p splits/1
 	cp ${infile} splits/1/GaXXXXXXX_contigs.fna
-	java -jar /opt/omics/bin/cromwell.jar run -i ${sub_j} annotation.wdl -m ${outmetadata}
+	cp ${all_infile} splits/1/GaXXXXXXX_allcontigs.fna
+	java -Dconfig.file=local.conf -jar /opt/omics/bin/cromwell.jar run -i ${sub_j} annotation.wdl -m ${outmetadata}
 	find /cromwell_root/img-omics-wdl/cromwell-executions -size +1G |  grep "/inputs/" |  xargs  rm 
 	tar -cpvzf ${outfile} /cromwell_root/img-omics-wdl/cromwell-executions
 
