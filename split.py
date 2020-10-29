@@ -21,7 +21,6 @@ def split_dataset(filename, split_size, outdir):
         if os.path.exists(new_dir):        
                 shutil.rmtree(new_dir)        
         os.mkdir(new_dir)
-        import pdb;pdb.set_trace()
         try:
             fr = open(filename, 'r')
             split_file = os.path.join(new_dir, basename)
