@@ -68,7 +68,6 @@ task img_annot{
      output{
 	File fileout = outfile
 	File metadataout = outmetadata
-	File resourceout = filename_resources
      }
 }
 
