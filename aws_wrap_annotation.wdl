@@ -17,7 +17,7 @@ task split{
      String tmp_dir="."
      runtime {
             docker: container
-	    backend: "i3-120-16c-spot-ceq"
+	    backend: "i3-120D-ceq"
 	    memory: "120 GiB"
             cpu:  16
             maxRetries: 1
@@ -48,8 +48,8 @@ task img_annot{
      String filename_resources ="resources.log"
      runtime {
             docker: container
-	    backend: "i3-120-16c-spot-ceq"	    
-            memory: "120 GiB"
+	    backend: "i3-120D-ceq"
+	    memory: "120 GiB"
             cpu:  16
             maxRetries: 1
      }
