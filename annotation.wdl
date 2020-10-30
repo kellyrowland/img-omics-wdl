@@ -130,7 +130,7 @@ workflow annotation {
           additional_threads = additional_threads,
           output_dir = split,
           input_fasta = s_annotate.proteins,
-          input_contigs_fasta= input_contigs_fasta,
+          input_contigs_fasta = "${split}"+"/"+"${input_contigs_fasta}",
           ko_ec_execute = fa_ko_ec_execute,
           ko_ec_img_nr_db = fa_ko_ec_img_nr_db,
           ko_ec_md5_mapping = fa_ko_ec_md5_mapping,
