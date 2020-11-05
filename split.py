@@ -24,7 +24,8 @@ def split_dataset(filename, split_size, outdir):
         os.mkdir(new_dir)
         try:
             fr = open(filename, 'r')
-            split_file = os.path.join(new_dir, basename)
+            #split_file = os.path.join(new_dir, basename)            
+            split_file = str(split_dir) + "_" +  basename
             fw = open(split_file, 'w')
             split_files.append(split_file)
             for line in fr:
@@ -36,7 +37,8 @@ def split_dataset(filename, split_size, outdir):
                     if os.path.exists(new_dir):
                             shutil.rmtree(new_dir)
                     os.mkdir(new_dir)
-                    split_file = os.path.join(new_dir, basename)                    
+                    #split_file = os.path.join(new_dir, basename)
+                    split_file = str(split_dir) + "_" +  basename                    
                     fw = open(split_file, 'w')
                     split_files.append(split_file)
                 fw.write(line)
