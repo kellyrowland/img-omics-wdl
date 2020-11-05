@@ -13,6 +13,7 @@ def main():
 
 def split_dataset(filename, split_size, outdir):
         print('Splitting up dataset into chunks of about ' + split_size + ' MB...')
+        split_files = list()
         chunk_size = int(split_size) * 1024 * 1024
         written_bytes = 0
         basename = os.path.basename(filename)
@@ -25,6 +26,7 @@ def split_dataset(filename, split_size, outdir):
             fr = open(filename, 'r')
             split_file = os.path.join(new_dir, basename)
             fw = open(split_file, 'w')
+            split_files.append(split_file)
             for line in fr:
                 if line.startswith('>') and written_bytes >= chunk_size:
                     fw.close()
@@ -36,6 +38,7 @@ def split_dataset(filename, split_size, outdir):
                     os.mkdir(new_dir)
                     split_file = os.path.join(new_dir, basename)                    
                     fw = open(split_file, 'w')
+                    split_files.append(split_file)
                 fw.write(line)
                 written_bytes += len(line)
             fr.close()
@@ -44,7 +47,11 @@ def split_dataset(filename, split_size, outdir):
             error = 'Failed to split the dataset! - ERROR: ' + str(e)
             print(error)
             return False
-        print('Created ' + str(split_dir) + 'splits.')
+        splits_out = os.path.join(outdir,"splits_out.fof")
+        with open(splits_out, "w") as f:
+            f.write("\n".join(split_files))
+        
+        print('Created ' + str(split_dir) + ' splits. in:' + splits_out)
         return True
 
 if __name__ == "__main__":
