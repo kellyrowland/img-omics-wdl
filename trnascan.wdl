@@ -35,14 +35,20 @@ task trnascan_ba {
   String project_id
   String out_dir
   Int    threads
+  String dollar="$"
+  command <<<
+     base=${dollar}(basename ${input_fasta})
+     cp ${input_fasta} ./${project_id}_contigs.fna
+     /opt/omics/bin/structural_annotation/trnascan-se_trnas.sh ${project_id}_contigs.fna metagenome ${threads}
+  >>>
 
-  command {
-    ${bin} -B --thread ${threads} ${input_fasta} &> ${project_id}_trnascan_bacterial.out
-    ${bin} -A --thread ${threads} ${input_fasta} &> ${project_id}_trnascan_archaeal.out
-    #cp -r ./${project_id}_trnascan_*.out ${out_dir}
-  }
+#  command {
+#    ${bin} -B --thread ${threads} ${input_fasta} &> ${project_id}_trnascan_bacterial.out
+#    ${bin} -A --thread ${threads} ${input_fasta} &> ${project_id}_trnascan_archaeal.out
+#    #cp -r ./${project_id}_trnascan_*.out ${out_dir}
+#  }
 
-  runtime {
+runtime {
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
