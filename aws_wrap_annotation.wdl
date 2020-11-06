@@ -6,6 +6,7 @@ workflow img_cloud {
     call split {input: infile=input_file, container=img_container}
     scatter(pathname in split.files) {
         call img_annot{input: infile=pathname, all_infile=input_file, db=databases, container=img_container, sub_j=sub_json}
+	#call img_annot{input: infile=pathname, all_infile=input_file, container=img_container, sub_j=sub_json}
     }
 }
 
@@ -13,26 +14,29 @@ workflow img_cloud {
 task split{
      File infile
      String container
-     String blocksize=20000000
+     String blocksize=100
      String tmp_dir="."
+     String file_of_files = "splits_out.fof"
      runtime {
             docker: container
-	    backend: "i3-120D-ceq"
+	    backend: "r5-120D-ceq"
 	    memory: "120 GiB"
             cpu:  16
             maxRetries: 1
      }
     
      command{
-           blocksize=${blocksize}
-	   tmp_dir=${tmp_dir}
-           cat ${infile} | parallel --pipe --recstart '>' \
-                             --blocksize $blocksize \
-                             'cat > '$tmp_dir'/tmp.$$.split.faa';
+        git clone https://github.com/kellyrowland/img-omics-wdl.git -b cloud
+	img-omics-wdl/split.py ${infile} ${blocksize} ${tmp_dir};
+	ls 
      }
-     output {
+
+   output{
+       Array[File] files = glob("*_Ga*_contigs.fna")
+#        Array[File] files = read_lines(file_of_files) 
 #        Array[File] files = glob("*split.faa")
-        Array[File] files = ["tmp.1.split.faa", "tmp.2.split.faa"]
+#        Array[File] files = [glob("1/*.fna")[0],glob("2/*.fna")[0]]
+#        Array[File] files = glob("*/*.fna")
   }
 }
 
