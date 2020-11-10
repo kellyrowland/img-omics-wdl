@@ -4,6 +4,7 @@ workflow f_annotate {
   String  imgap_project_type
   Int     additional_threads
   String  output_dir
+  File?    input_contigs_fasta
   File    input_fasta
   Boolean ko_ec_execute
   String  ko_ec_img_nr_db
@@ -41,6 +42,10 @@ workflow f_annotate {
   String  product_assign_bin
   String  product_names_mapping_dir
 
+  call getz{
+       input: contigs=input_contigs_fasta
+  }
+  
   if(ko_ec_execute) {
     call ko_ec {
       input:
@@ -63,7 +68,7 @@ workflow f_annotate {
         input_fasta = input_fasta,
         threads = additional_threads,
         par_hmm_inst = par_hmm_inst,
-        approx_num_proteins = approx_num_proteins,
+        approx_num_proteins = getz.out,
         smart_db = smart_db,
         hmmsearch = hmmsearch_bin,
         frag_hits_filter = frag_hits_filter_bin,
@@ -77,7 +82,7 @@ workflow f_annotate {
         input_fasta = input_fasta,
         threads = additional_threads,
         par_hmm_inst = par_hmm_inst,
-        approx_num_proteins = approx_num_proteins,
+        approx_num_proteins = getz.out,
         cog_db = cog_db,
         hmmsearch = hmmsearch_bin,
         frag_hits_filter = frag_hits_filter_bin,
@@ -91,7 +96,7 @@ workflow f_annotate {
         input_fasta = input_fasta,
         threads = additional_threads,
         par_hmm_inst = par_hmm_inst,
-        approx_num_proteins = approx_num_proteins,
+        approx_num_proteins = getz.out,
         tigrfam_db = tigrfam_db,
         hmmsearch = hmmsearch_bin,
         hit_selector = hit_selector_bin,
@@ -105,7 +110,7 @@ workflow f_annotate {
         input_fasta = input_fasta,
         threads = additional_threads,
         par_hmm_inst = par_hmm_inst,
-        approx_num_proteins = approx_num_proteins,
+        approx_num_proteins = getz.out,
         superfam_db = superfam_db,
         hmmsearch = hmmsearch_bin,
         frag_hits_filter = frag_hits_filter_bin,
@@ -119,7 +124,7 @@ workflow f_annotate {
         input_fasta = input_fasta,
         threads = additional_threads,
         par_hmm_inst = par_hmm_inst,
-        approx_num_proteins = approx_num_proteins,
+        approx_num_proteins = getz.out,
         pfam_db = pfam_db,
         pfam_claninfo_tsv = pfam_claninfo_tsv,
         pfam_clan_filter = pfam_clan_filter,
@@ -134,7 +139,7 @@ workflow f_annotate {
         input_fasta = input_fasta,
         threads = additional_threads,
         par_hmm_inst = par_hmm_inst,
-        approx_num_proteins = approx_num_proteins,
+        approx_num_proteins = getz.out,
         cath_funfam_db = cath_funfam_db,
         hmmsearch = hmmsearch_bin,
         frag_hits_filter = frag_hits_filter_bin,
@@ -162,6 +167,7 @@ workflow f_annotate {
         out_dir = output_dir
     }
   }
+if(true){
   call product_name {
     input:
       project_id = imgap_project_id,
@@ -179,6 +185,24 @@ workflow f_annotate {
       tmhmm_gff = tmhmm.gff,
       out_dir = output_dir
   }
+}
+}
+
+task getz {
+     File? contigs
+     String contigs_provided = if(defined(contigs)) then "1" else "0"
+     String dollar="$"
+     command {
+          if [[ ${contigs_provided} == 1 ]]
+          then
+             echo ${dollar}(egrep -v "^>" ${contigs} | tr -d '\n' | wc -m) / 500 | bc;
+          else
+             echo 0;
+          fi
+    }
+    output {
+        String out = read_string(stdout())
+    }
 }
 
 task ko_ec {
@@ -232,8 +256,8 @@ task smart {
   String project_id
   File   input_fasta
   File   smart_db
-  Int    threads = 2
-  Int    par_hmm_inst = 1
+  Int    threads = 62
+  Int    par_hmm_inst = 15
   Int    approx_num_proteins = 0
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
@@ -241,79 +265,14 @@ task smart {
   String hmmsearch
   String frag_hits_filter
   String out_dir
-
+  String dollar="$"
   command <<<
-    if [[ ${threads} -gt ${par_hmm_inst} ]]
-    then
-        hmmsearch_threads=$(echo ${threads} / ${par_hmm_inst} | bc)
-        printf "$(date +%F_%T) - Splitting up proteins fasta into ${par_hmm_inst} "
-        printf "pieces now and then run hmmsearch on them separately with ${threads} "
-        printf "threads each against the Smart db...\n"
-        tmp_dir=.
-        filesize=$(ls -l ${input_fasta} | awk '{print $5}')
-        blocksize=$((($filesize / ${par_hmm_inst}) + 20000))
-
-        hmmsearch_base_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
-		# TODO: jeff use default -Z setting for hmmscan until approx_num_proteins gets assigned by marcel
-        if [[ ${approx_num_proteins} -gt 0 ]]
-        then
-            hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
-        fi
-        hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu ${threads}"
-        # Use parallel to split up the input and
-        # run hmmsearch in parallel on those splits
-#        cat ${input_fasta} | parallel --pipe --recstart '>' \
-#                             --blocksize $blocksize \
-#                             cat > $tmp_dir/tmp.$$.split.faa; \
-#                             $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.smart.$$.domtblout \
-#                             ${smart_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
-
-		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-		$hmmsearch_base_cmd --domtblout $tmp_dir/tmp.smart.$$.domtblout ${smart_db} ${input_fasta} 1> /dev/null
-
-        exit_code=$?
-        if [[ $exit_code -ne 0 ]]
-        then
-            echo "GNU parallel run failed! Aborting!" >&2
-            exit $exit_code
-        fi
-
-        echo "$(date +%F_%T) - Concatenating split result files now..."
-        cat $tmp_dir/tmp.smart.* > ${project_id}_proteins.smart.domtblout
-        exit_code=$?
-        if [[ $exit_code -ne 0 ]]
-        then
-            echo "Concatenating split outputs failed! Aborting!" >&2
-            exit $exit_code
-        fi
-
-        echo "$(date +%F_%T) - Deleting tmp files now..."
-        rm $tmp_dir/tmp.*
-    else
-        echo "$(date +%F_%T) - Calling hmmsearch against the SMART db now..."
-        hmmsearch_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
-        if [[ ${approx_num_proteins} -gt 0 ]]
-        then
-            hmmsearch_cmd="$hmmsearch_cmd -Z ${approx_num_proteins}"
-        fi
-        hmmsearch_cmd="$hmmsearch_cmd --domtblout ${project_id}_proteins.smart.domtblout "
-        hmmsearch_cmd="$hmmsearch_cmd ${smart_db} ${input_fasta} 1> /dev/null"
-        $hmmsearch_cmd
-        exit_code=$?
-        if [[ $exit_code -ne 0 ]]
-        then
-            echo "$(date +%F_%T) - hmmsearch failed! Aborting!" >&2
-            exit $exit_code
-        fi
-    fi
-
-    tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
-    grep -v '^#' ${project_id}_proteins.smart.domtblout | \
-    awk '{print $1,$3,$4,$5,$6,$7,$8,$13,$14,$16,$17,$20,$21}' | \
-    sort -k1,1 -k7,7nr -k6,6n | \
-    ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
-                        "$tool_and_version" > ${project_id}_smart.gff
-    #cp ./${project_id}_smart.gff ./${project_id}_proteins.smart.domtblout ${out_dir}
+     base=${dollar}(basename ${input_fasta})
+     cp ${input_fasta} ${dollar}base
+     /opt/omics/bin/functional_annotation/hmmsearch_smart.sh ${dollar}base \
+     ${smart_db} \
+     ${threads} ${par_hmm_inst} ${approx_num_proteins} \
+     ${min_domain_eval_cutoff} ${aln_length_ratio} ${max_overlap_ratio} 
   >>>
 
   runtime {
@@ -338,8 +297,8 @@ task cog {
   String project_id
   File   input_fasta
   File   cog_db
-  Int    threads = 2
-  Int    par_hmm_inst = 1
+  Int    threads = 62
+  Int    par_hmm_inst = 15
   Int    approx_num_proteins = 0
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
@@ -347,81 +306,14 @@ task cog {
   String hmmsearch
   String frag_hits_filter
   String out_dir
-
+  String dollar="$"
   command <<<
-    if [[ ${threads} -gt ${par_hmm_inst} ]]
-    then
-        number_of_parallel_instances=4
-        hmmsearch_threads=$(echo ${threads} / $number_of_parallel_instances | bc)
-        printf "$(date +%F_%T) - Splitting up proteins fasta into $number_of_parallel_instances "
-        printf "pieces now and then run hmmsearch on them separately with $hmmsearch_threads "
-        printf "threads each against the COG db...\n"
-        tmp_dir=.
-        filesize=$(ls -l ${input_fasta} | awk '{print $5}')
-        blocksize=$((($filesize / $number_of_parallel_instances) + 30000))
-
-        hmmsearch_base_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
-		# TODO: jeff use default -Z setting for hmmscan until approx_num_proteins gets assigned by marcel
-        if [[ ${approx_num_proteins} -gt 0 ]]
-        then
-            hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
-        fi  
-        hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
-        # Use parallel to split up the input and
-        # run hmmsearch in parallel on those splits
-		
-#        cat ${input_fasta} | parallel --pipe --recstart '>' \
-#                             --blocksize $blocksize \
-#                             cat > $tmp_dir/tmp.$$.split.faa;  \
-#                             $hmmsearch_base_cmd \
-#                             --domtblout $tmp_dir/tmp.cog.$$.domtblout \
-#                             ${cog_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
-
-		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-        $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cog.$$.domtblout ${cog_db} ${input_fasta} 1> /dev/null
-
-        exit_code=$?
-        if [[ $exit_code -ne 0 ]]
-        then
-            echo "GNU parallel run failed! Aborting!" >&2
-            exit $exit_code
-        fi
-        echo "$(date +%F_%T) - Concatenating split result files now..."
-        cat $tmp_dir/tmp.cog.* > ${project_id}_proteins.cog.domtblout
-        exit_code=$?
-        if [[ $exit_code -ne 0 ]]
-        then
-            echo "Concatenating split outputs failed! Aborting!" >&2
-            exit $exit_code
-        fi
-
-        echo "$(date +%F_%T) - Deleting tmp files now..."
-        rm $tmp_dir/tmp.*
-    else
-      echo "$(date +%F_%T) - Calling hmmsearch to predict COGs now..."
-      hmmsearch_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
-      if [[ ${approx_num_proteins} -gt 0 ]]
-      then
-          hmmsearch_cmd="$hmmsearch_cmd -Z ${approx_num_proteins}"
-      fi
-      hmmsearch_cmd="$hmmsearch_cmd --domtblout ${project_id}_proteins.cog.domtblout "
-      hmmsearch_cmd="$hmmsearch_cmd ${cog_db} ${input_fasta} 1> /dev/null"
-      $hmmsearch_cmd
-      exit_code=$?
-      if [[ $exit_code -ne 0 ]]
-      then
-          echo "$(date +%F_%T) - hmmsearch failed! Aborting!" >&2
-          exit $exit_code
-      fi
-    fi
-
-    tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
-    grep -v '^#' ${project_id}_proteins.cog.domtblout | \
-    awk '{print $1,$3,$4,$5,$6,$7,$8,$13,$14,$16,$17,$20,$21}' | \
-    sort -k1,1 -k7,7nr -k6,6n | \
-    ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
-                        "$tool_and_version" > ${project_id}_cog.gff
-    #cp ./${project_id}_cog.gff ./${project_id}_proteins.cog.domtblout ${out_dir}
+     base=${dollar}(basename ${input_fasta})
+     cp ${input_fasta} ${dollar}base
+     /opt/omics/bin/functional_annotation/hmmsearch_cogs.sh ${dollar}base \
+     ${cog_db} \
+     ${threads} ${par_hmm_inst} ${approx_num_proteins} \
+     ${min_domain_eval_cutoff} ${aln_length_ratio} ${max_overlap_ratio} 
   >>>
 
   runtime {
@@ -446,88 +338,22 @@ task tigrfam {
   String project_id
   File   input_fasta
   File   tigrfam_db
-  Int    threads = 2
-  Int    par_hmm_inst = 1
+  Int    threads = 62
+  Int    par_hmm_inst = 15
   Int    approx_num_proteins = 0
   Float  aln_length_ratio = 0.7
   Float  max_overlap_ratio = 0.1
   String hmmsearch
   String hit_selector
   String out_dir
-
+  String dollar="$"
   command <<<
-    if [[ ${threads} -gt ${par_hmm_inst} ]]
-      then
-          hmmsearch_threads=$(echo ${threads} / ${par_hmm_inst} | bc)
-          printf "$(date +%F_%T) - Splitting up proteins fasta into ${par_hmm_inst} "
-          printf "pieces now and then run hmmsearch on them separately with ${threads} "
-          printf "threads each against the TIGRFAM db...\n"
-          tmp_dir=.
-          filesize=$(ls -l ${input_fasta} | awk '{print $5}')
-          blocksize=$((($filesize / ${par_hmm_inst}) + 20000))
-
-          hmmsearch_base_cmd="${hmmsearch} --notextw --cut_nc"
-		  #TODO: jeff use default -Z setting for hmmscan until approx_num_proteins gets assigned by marcel
-          #if [[ ${par_hmm_inst} -gt 0 ]]
-          #then
-          #    hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
-          #fi
-          hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
-          # Use parallel to split up the input and
-          # run hmmsearch in parallel on those splits
-#          cat ${input_fasta} | parallel --pipe --recstart '>' \
-#                               --blocksize $blocksize \
-#                               cat > $tmp_dir/tmp.$$.split.faa;  \
-#                               $hmmsearch_base_cmd \
-#                               --domtblout $tmp_dir/tmp.tigrfam.$$.domtblout \
-#                                ${tigrfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
-
-		  # TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-          $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.tigrfam.$$.domtblout ${tigrfam_db} ${input_fasta} 1> /dev/null
-
-          exit_code=$?
-          if [[ $exit_code -ne 0 ]]
-          then
-              echo "GNU parallel run failed! Aborting!" >&2
-              exit $exit_code
-          fi
-
-          echo "$(date +%F_%T) - Concatenating split result files now..."
-          cat $tmp_dir/tmp.tigrfam.* > ${project_id}_proteins.tigrfam.domtblout
-          exit_code=$?
-          if [[ $exit_code -ne 0 ]]
-          then
-              echo "Concatenating split outputs failed! Aborting!" >&2
-              exit $exit_code
-          fi
-
-          echo "$(date +%F_%T) - Deleting tmp files now..."
-          rm $tmp_dir/tmp.*
-      else
-          echo "$(date +%F_%T) - Calling hmmsearch to predict TIGRFAMs now..."
-          hmmsearch_cmd="${hmmsearch} --notextw --cut_nc"
-          if [[ ${approx_num_proteins} -gt 0 ]]
-          then
-              hmmsearch_cmd="$hmmsearch_cmd -Z ${approx_num_proteins}"
-          fi
-          hmmsearch_cmd="$hmmsearch_cmd --domtblout ${project_id}_proteins.tigrfam.domtblout "
-          hmmsearch_cmd="$hmmsearch_cmd ${tigrfam_db} ${input_fasta} 1> /dev/null"
-          $hmmsearch_cmd
-          exit_code=$?
-          if [[ $exit_code -ne 0 ]]
-          then
-              echo "$(date +%F_%T) - hmmsearch failed! Aborting!" >&2
-              exit $exit_code
-          fi
-      fi
-
-    tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
-    grep -v '^#' ${project_id}_proteins.tigrfam.domtblout | \
-    awk '{print $1,$3,$4,$6,$13,$14,$16,$17,$20,$21}' | \
-    sort -k1,1 -k6,6nr -k5,5n | \
-    ${hit_selector} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
-                    "$tool_and_version" > ${project_id}_tigrfam.gff
-    #cp ./${project_id}_tigrfam.gff ./${project_id}_proteins.tigrfam.domtblout ${out_dir}
+     base=${dollar}(basename ${input_fasta})
+     cp ${input_fasta} ${dollar}base
+     /opt/omics/bin/functional_annotation/hmmsearch_tigrfams.sh ${dollar}base \
+     ${tigrfam_db} \
+     ${threads} ${par_hmm_inst} ${approx_num_proteins} \
+     ${aln_length_ratio} ${max_overlap_ratio} 
   >>>
 
   runtime {
@@ -552,8 +378,8 @@ task superfam {
   String project_id
   File   input_fasta
   File   superfam_db
-  Int    threads = 2
-  Int    par_hmm_inst = 1
+  Int    threads = 62
+  Int    par_hmm_inst = 15
   Int    approx_num_proteins = 0
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
@@ -561,79 +387,16 @@ task superfam {
   String hmmsearch
   String frag_hits_filter
   String out_dir
-
+  String dollar="$"
   command <<<
-    if [[ ${threads} -gt ${par_hmm_inst} ]]
-      then
-		  # from marcel's original code
-	      #hmmsearch_threads=$(echo $number_of_additional_threads / $number_of_parallel_hmmsearch_instances | bc)
-          hmmsearch_threads=$(echo ${threads} / ${par_hmm_inst} | bc)
-          printf "$(date +%F_%T) - Splitting up proteins fasta into ${par_hmm_inst} "
-          printf "pieces now and then run hmmsearch on them separately with $hmmsearch_threads "
-          printf "threads each against the SuperFamily db...\n"
-          tmp_dir=.
-          filesize=$(ls -l ${input_fasta} | awk '{print $5}')
-          blocksize=$((($filesize / ${par_hmm_inst}) + 20000))
+     base=${dollar}(basename ${input_fasta})
+     cp ${input_fasta} ${dollar}base
+    #Usage: hmmsearch_supfams.sh <proteins_fasta> <supfam_hmm_db> <number_of_additional_threads (default: 0)> <number_of_parallel_hmmsearch_instances (default: 0)> <approximate_number_of_total_proteins (default: 0)> <min_domain_evalue_cutoff (default 0.01)> <min_aln_length_ratio (default 0.7)> <max_overlap_ratio (default 0.1)> 
 
-          hmmsearch_base_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
-		  # TODO: jeff use default -Z setting for hmmscan until approx_num_proteins gets assigned by marcel
-          if [[ ${approx_num_proteins} -gt 0 ]]
-          then
-              hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
-          fi  
-          hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
-          # Use parallel to split up the input and
-          # run hmmsearch in parallel on those splits
-#          cat ${input_fasta} |  parallel --pipe --recstart '>' \
-#                               --blocksize $blocksize \
-#                               cat > $tmp_dir/tmp.$$.split.faa;  \
-#                               $hmmsearch_base_cmd \
-#                               --domtblout $tmp_dir/tmp.supfam.$$.domtblout \
-#                               ${superfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
-
-		  # TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-          $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.supfam.$$.domtblout ${superfam_db} ${input_fasta} 1> /dev/null
-
-          exit_code=$?
-          if [[ $exit_code -ne 0 ]]
-          then
-              echo "GNU parallel run failed! Aborting!" >&2
-              exit $exit_code
-          fi  
-
-          echo "$(date +%F_%T) - Concatenating split result files now..."
-          cat $tmp_dir/tmp.supfam.* > ${project_id}_proteins.supfam.domtblout
-          exit_code=$?
-          if [[ $exit_code -ne 0 ]]
-          then
-              echo "Concatenating split outputs failed! Aborting!" >&2
-              exit $exit_code
-          fi
-      else
-          echo "$(date +%F_%T) - Calling hmmsearch against the SuperFamily db now..."
-          hmmsearch_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
-          if [[ ${approx_num_proteins} -gt 0 ]]
-          then
-              hmmsearch_cmd="$hmmsearch_cmd -Z ${approx_num_proteins}"
-          fi  
-          hmmsearch_cmd="$hmmsearch_cmd --domtblout ${project_id}_proteins.supfam.domtblout "
-          hmmsearch_cmd="$hmmsearch_cmd ${superfam_db} ${input_fasta} 1> /dev/null"
-          $hmmsearch_cmd
-          exit_code=$?
-          if [[ $exit_code -ne 0 ]]
-          then
-              echo "$(date +%F_%T) - hmmsearch failed! Aborting!" >&2
-              exit $exit_code
-          fi  
-      fi
-
-    tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
-    grep -v '^#' ${project_id}_proteins.supfam.domtblout | \
-    awk '{print $1,$3,$4,$5,$6,$7,$8,$13,$14,$16,$17,$20,$21}' | \
-    sort -k1,1 -k7,7nr -k6,6n | \
-    ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
-                        "$tool_and_version" > ${project_id}_supfam.gff
-    #cp ./${project_id}_supfam.gff ./${project_id}_proteins.supfam.domtblout ${out_dir}
+     /opt/omics/bin/functional_annotation/hmmsearch_supfams.sh ${dollar}base \
+     ${superfam_db} \
+     ${threads} ${par_hmm_inst} ${approx_num_proteins} \
+     ${min_domain_eval_cutoff} ${aln_length_ratio} ${max_overlap_ratio} 
   >>>
 
   runtime {
@@ -654,90 +417,25 @@ task superfam {
 }
 
 task pfam {
-  
   String project_id
   File   input_fasta
   File   pfam_db
   File   pfam_claninfo_tsv
-  Int    threads = 2
-  Int    par_hmm_inst = 1
+  Int    threads = 62
+  Int    par_hmm_inst = 15
   Int    approx_num_proteins = 0
   String hmmsearch
   String pfam_clan_filter
   String out_dir
-
+  String dollar="$"
   command <<<
-    if [[ ${threads} -gt ${par_hmm_inst} ]]
-    then
-        hmmsearch_threads=$(echo ${threads} / ${par_hmm_inst} | bc)
-        printf "$(date +%F_%T) - Splitting up proteins fasta into ${par_hmm_inst} "
-        printf "pieces now and then run hmmsearch on them separately with $hmmsearch_threads "
-        printf "threads each against the Pfam db...\n"
-        tmp_dir=.
-        filesize=$(ls -l ${input_fasta} | awk '{print $5}')
-        blocksize=$((($filesize / ${par_hmm_inst}) + 20000))
-
-        hmmsearch_base_cmd="${hmmsearch} --notextw --cut_tc"
-		# TODO: jeff use default -Z setting for hmmscan until approx_num_proteins gets assigned by marcel
-        if [[ ${approx_num_proteins} -gt 0 ]]
-        then
-            hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
-        fi  
-        hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
-        # Use parallel to split up the input and
-        # run hmmsearch in parallel on those splits
-#        cat ${input_fasta} | parallel --pipe --recstart '>' \
-#                             --blocksize $blocksize \
-#                             cat > $tmp_dir/tmp.$$.split.faa;  \
-#                             $hmmsearch_base_cmd \
-#                             --domtblout $tmp_dir/tmp.pfam.$$.domtblout \
-#                             ${pfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
-
-		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-        $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.pfam.$$.domtblout ${pfam_db} ${input_fasta} 1> /dev/null
-
-        exit_code=$?
-        if [[ $exit_code -ne 0 ]]
-        then
-            echo "GNU parallel run failed! Aborting!" >&2
-            exit $exit_code
-        fi
-
-        echo "$(date +%F_%T) - Concatenating split result files now..."
-        cat $tmp_dir/tmp.pfam.* > ${project_id}_proteins.pfam.domtblout
-        exit_code=$?
-        if [[ $exit_code -ne 0 ]]
-        then
-            echo "Concatenating split outputs failed! Aborting!" >&2
-            exit $exit_code
-        fi
-
-        echo "$(date +%F_%T) - Deleting tmp files now..."
-        rm $tmp_dir/tmp.*
-    else
-        echo "$(date +%F_%T) - Calling hmmsearch to predict Pfams now..."
-        hmmsearch_cmd="${hmmsearch} --notextw --cut_tc"
-        if [[ ${approx_num_proteins} -gt 0 ]]
-        then
-            hmmsearch_cmd="$hmmsearch_cmd -Z ${approx_num_proteins}"
-        fi
-        hmmsearch_cmd="$hmmsearch_cmd --domtblout ${project_id}_proteins.pfam.domtblout "
-        hmmsearch_cmd="$hmmsearch_cmd ${pfam_db} ${input_fasta} 1> /dev/null"
-        $hmmsearch_cmd
-        exit_code=$?
-        if [[ $exit_code -ne 0 ]]
-        then
-            echo "$(date +%F_%T) - hmmsearch failed! Aborting!" >&2
-            exit $exit_code
-        fi
-    fi
-
-    tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
-    grep -v '^#' ${project_id}_proteins.pfam.domtblout | \
-    awk '{print $1,$3,$5,$6,$13,$14,$16,$17,$20,$21}' | \
-    sort -k1,1 -k6,6nr -k5,5n | \
-    ${pfam_clan_filter} "$tool_and_version" ${pfam_claninfo_tsv} > ${project_id}_pfam.gff
-    #cp ./${project_id}_pfam.gff ./${project_id}_proteins.pfam.domtblout ${out_dir}
+     base=${dollar}(basename ${input_fasta})
+     cp ${input_fasta} ${dollar}base
+     
+    #Usage: hmmsearch_pfams.sh <proteins_fasta> <pfam_hmm_db> <pfam_claninfo_tsv> <number_of_additional_threads (default: 0)>
+     /opt/omics/bin/functional_annotation/hmmsearch_pfams.sh ${dollar}base \
+     ${pfam_db} ${pfam_claninfo_tsv} \
+     ${threads} ${par_hmm_inst} ${approx_num_proteins}
   >>>
 
   runtime {
@@ -758,109 +456,31 @@ task pfam {
 }
 
 task cath_funfam {
-  
+ 
   String project_id
   File   input_fasta
   File   cath_funfam_db
-  Int    threads = 2
-  Int    par_hmm_inst = 1
-  Int    approx_num_proteins = 0
+  Int    threads=62
+  Int    par_hmm_inst=15
+  Int    approx_num_proteins=0
   Float  min_domain_eval_cutoff = 0.01
   Float  aln_length_ratio = 0.7
   Float  max_overlap_ratio = 0.1
   String hmmsearch
   String frag_hits_filter
   String out_dir
-
+  String dollar="$"
   command <<<
-    if [[ ${threads} -gt ${par_hmm_inst} ]]
-    then
-        hmmsearch_threads=$(echo ${threads} / ${par_hmm_inst} | bc)
-        printf "$(date +%F_%T) - Splitting up proteins fasta into ${par_hmm_inst} "
-        printf "pieces now and then run hmmsearch on them separately with $hmmsearch_threads "
-        printf "threads each against the Cath-FunFam db...\n"
-        tmp_dir=.
-        filesize=$(ls -l ${input_fasta} | awk '{print $5}')
-        blocksize=$((($filesize / ${par_hmm_inst}) + 20000))
-
-        hmmsearch_base_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
-		# TODO: jeff use default -Z setting for hmmscan until approx_num_proteins gets assigned by marcel
-        if [[ ${approx_num_proteins} -gt 0 ]]
-        then
-            hmmsearch_base_cmd="$hmmsearch_base_cmd -Z ${approx_num_proteins}"
-        fi
-        hmmsearch_base_cmd="$hmmsearch_base_cmd --cpu $hmmsearch_threads "
-        # Use parallel to split up the input and
-        # run hmmsearch in parallel on those splits
-#        cat ${input_fasta} | parallel --pipe --recstart '>' \
-#                             --blocksize $blocksize \
-#                             cat > $tmp_dir/tmp.$$.split.faa;  \
-#                             $hmmsearch_base_cmd \
-#                             --domtblout $tmp_dir/tmp.cath_funfam.$$.domtblout \
-#                             ${cath_funfam_db} $tmp_dir/tmp.$$.split.faa 1> /dev/null;
-
-		# TODO: jeff removed parallel command since I couldn't get it working when using the obligate shifter version
-        $hmmsearch_base_cmd --domtblout $tmp_dir/tmp.cath_funfam.$$.domtblout ${cath_funfam_db} ${input_fasta} 1> /dev/null
-
-        exit_code=$?
-        if [[ $exit_code -ne 0 ]]
-        then
-            echo "GNU parallel run failed! Aborting!" >&2
-            exit $exit_code
-        fi
-
-        echo "$(date +%F_%T) - Concatenating split result files now..."
-        cat $tmp_dir/tmp.cath_funfam.* > ${project_id}_proteins.cath_funfam.domtblout
-        exit_code=$?
-        if [[ $exit_code -ne 0 ]]
-        then
-            echo "Concatenating split outputs failed! Aborting!" >&2
-            exit $exit_code
-        fi
-
-        echo "$(date +%F_%T) - Deleting tmp files now..."
-        rm $tmp_dir/tmp.*
-    else
-        echo "$(date +%F_%T) - Calling hmmsearch to predict Cath-FunFams now..."
-        hmmsearch_cmd="${hmmsearch} --notextw --domE ${min_domain_eval_cutoff}"
-        if [[ ${approx_num_proteins} -gt 0 ]]
-        then
-            hmmsearch_cmd="$hmmsearch_cmd -Z ${approx_num_proteins}"
-        fi
-        hmmsearch_cmd="$hmmsearch_cmd --domtblout ${project_id}_proteins.cath_funfam.domtblout "
-        hmmsearch_cmd="$hmmsearch_cmd ${cath_funfam_db} ${input_fasta} 1> /dev/null"
-        $hmmsearch_cmd
-        exit_code=$?
-        if [[ $exit_code -ne 0 ]]
-        then
-            echo "$(date +%F_%T) - hmmsearch failed! Aborting!" >&2
-            exit $exit_code
-        fi
-    fi
-
-    tool_and_version=$(${hmmsearch} -h | grep HMMER | sed -e 's/.*#\(.*\)\;.*/\1/')
-    grep -v '^#' ${project_id}_proteins.cath_funfam.domtblout | \
-    awk '{print $1,$3,$4,$5,$6,$7,$8,$13,$14,$16,$17,$20,$21}' | \
-    sort -k1,1 -k7,7nr -k6,6n | \
-    ${frag_hits_filter} -a ${aln_length_ratio} -o ${max_overlap_ratio} \
-                        "$tool_and_version" > ${project_id}_cath_funfam.gff
-    #cp ./${project_id}_cath_funfam.gff ./${project_id}_proteins.cath_funfam.domtblout ${out_dir}
+     base=${dollar}(basename ${input_fasta})
+     cp ${input_fasta} ${dollar}base
+     /opt/omics/bin/functional_annotation/hmmsearch_cath_funfams.sh  ${dollar}base \
+     ${cath_funfam_db} ${threads} ${par_hmm_inst} ${approx_num_proteins} \
+     ${min_domain_eval_cutoff} ${aln_length_ratio} ${max_overlap_ratio} 
   >>>
-
-  runtime {
-    cluster: "cori"
-    time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
-    shared: 1
-    node: 1
-    nwpn: 1
-    constraint: "haswell"
-  }
-
+  
   output {
-    File gff = "${project_id}_cath_funfam.gff"
-	File domtblout = "${project_id}_proteins.cath_funfam.domtblout"
+      File gff = "${project_id}_cath_funfam.gff"
+      File domtblout = "${project_id}_proteins.cath_funfam.domtblout"
   }
 }
 

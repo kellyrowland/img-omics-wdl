@@ -5,6 +5,7 @@ workflow annotation {
 
   Int     num_splits
   String  imgap_input_dir
+  File?    input_contigs_fasta  
   File    imgap_input_fasta
   String  imgap_project_id
   String  imgap_project_type
@@ -129,6 +130,7 @@ workflow annotation {
           additional_threads = additional_threads,
           output_dir = split,
           input_fasta = s_annotate.proteins,
+          input_contigs_fasta = "${split}"+"/"+"${input_contigs_fasta}",
           ko_ec_execute = fa_ko_ec_execute,
           ko_ec_img_nr_db = fa_ko_ec_img_nr_db,
           ko_ec_md5_mapping = fa_ko_ec_md5_mapping,
