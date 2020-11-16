@@ -16,11 +16,5 @@ run.sh
 GGa0394140_proteins.faa
 Ga0394681.fasta
 cromwell_shifter.conf
-hmmsearch_cath_funfams.sh
-hmmsearch_cogs.sh
-hmmsearch_pfams.sh
-hmmsearch_smart.sh
-hmmsearch_supfams.sh
-hmmsearch_tigrfams.sh
 mo.wdl
 test
