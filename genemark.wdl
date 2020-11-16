@@ -60,6 +60,7 @@ task gm_isolate {
   }
 
   runtime {
+    docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -85,13 +86,14 @@ task gm_meta {
   String project_id
 
   command {
-    ${bin} --Meta ${model} --incomplete_at_gaps 30 \
+    ${bin} --Meta /opt/omics/bin/${model} --incomplete_at_gaps 30 \
            -o ${project_id}_genemark.gff \
            --format gff --NT ${project_id}_genemark_genes.fna \
            --AA ${project_id}_genemark_proteins.faa --seq ${input_fasta}
   }
 
   runtime {
+    docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -136,6 +138,7 @@ task clean_and_unify {
   }
 
   runtime {
+    docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"

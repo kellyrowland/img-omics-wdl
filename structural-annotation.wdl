@@ -25,7 +25,6 @@ workflow s_annotate {
   File    rfam_claninfo_tsv
   File    rfam_feature_lookup_tsv
   Boolean crt_execute
-  String  crt_cli_jar
   String  crt_transform_bin
   Boolean prodigal_execute
   String  prodigal_bin
@@ -80,7 +79,6 @@ workflow s_annotate {
   if(crt_execute) {
     call crt.crt {
       input:
-        crt_cli_jar = crt_cli_jar,
         crt_transform_bin = crt_transform_bin,
         imgap_input_fasta = imgap_input_fasta,
         imgap_project_id = imgap_project_id,
@@ -222,6 +220,7 @@ task pre_qc {
   >>>
 
   runtime {
+    docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -259,6 +258,7 @@ task gff_merge {
   }
 
   runtime {
+    docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -297,6 +297,7 @@ task fasta_merge {
   }
 
   runtime {
+    docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -326,6 +327,7 @@ task gff_and_fasta_stats {
   }
 
   runtime {
+    docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -351,6 +353,7 @@ task post_qc {
   }
 
   runtime {
+    docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"

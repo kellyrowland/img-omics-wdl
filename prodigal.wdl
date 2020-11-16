@@ -70,6 +70,7 @@ task fasta_len {
   }
 
   runtime {
+    docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -101,6 +102,7 @@ task iso_big {
   }
 
   runtime {
+    docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -131,6 +133,7 @@ task iso_small {
   }
 
   runtime {
+    docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -161,6 +164,7 @@ task metag {
   }
 
   runtime {
+    docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -212,6 +216,7 @@ task clean_and_unify {
   }
 
   runtime {
+    docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"

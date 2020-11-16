@@ -3,12 +3,10 @@ workflow crt {
   String imgap_input_fasta
   String imgap_project_id
   String output_dir
-  String crt_cli_jar
   String crt_transform_bin
 
   call run {
     input:
-      jar = crt_cli_jar,
       input_fasta = imgap_input_fasta,
       project_id = imgap_project_id,
       out_dir = output_dir
@@ -16,7 +14,6 @@ workflow crt {
 
   call transform {
     input:
-      jar = crt_cli_jar,
       transform_bin = crt_transform_bin,
       project_id = imgap_project_id,
       crt_out = run.out,
@@ -31,18 +28,18 @@ workflow crt {
 
 task run {
 
-  String jar
   File   input_fasta
   String project_id
   String out_dir
 
   command {
-    #java -Xmx1536m -jar ${jar} ${input_fasta} ${project_id}_crt.out
-    ${jar} ${input_fasta} ${project_id}_crt.out
+	jar="java -Xmx1536m -jar /opt/omics/bin/CRT-CLI.jar"
+    $jar ${input_fasta} ${project_id}_crt.out
     #cp ./${project_id}_crt.out ${out_dir}
   }
 
   runtime {
+	docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -60,7 +57,6 @@ task run {
 
 task transform {
 
-  String jar
   String transform_bin
   File   crt_out
   String project_id
@@ -69,12 +65,14 @@ task transform {
 
   command {
     mv ${crt_out} ./${crt_out_local}
-    tool_and_version=$(${jar} -version | cut -d' ' -f1,6)
+	jar="java -Xmx1536m -jar /opt/omics/bin/CRT-CLI.jar"
+    tool_and_version=$($jar -version | cut -d' ' -f1,6)
     ${transform_bin} ${crt_out_local} "$tool_and_version"
     #cp -r ./${project_id}_crt.* ${out_dir}
   }
 
   runtime {
+	docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"

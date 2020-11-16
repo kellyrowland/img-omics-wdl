@@ -76,6 +76,7 @@ task cmsearch {
   }
 
   runtime {
+	docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -112,6 +113,7 @@ task clan_filter {
   >>>
 
   runtime {
+	docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -140,6 +142,7 @@ task misc_and_regulatory {
   >>>
 
   runtime {
+	docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -167,6 +170,7 @@ task rrna {
   >>>
 
   runtime {
+	docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -195,6 +199,7 @@ task ncrna_tmrna {
   >>>
 
   runtime {
+	docker: "bfoster1/img-omics:0.1.5"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"

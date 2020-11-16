@@ -5,7 +5,7 @@ workflow annotation {
 
   Int     num_splits
   String  imgap_input_dir
-  File?    input_contigs_fasta  
+  File?   input_contigs_fasta  
   File    imgap_input_fasta
   String  imgap_project_id
   String  imgap_project_type
@@ -26,7 +26,6 @@ workflow annotation {
   File    sa_rfam_claninfo_tsv
   File    sa_rfam_feature_lookup_tsv
   Boolean sa_crt_execute
-  String  sa_crt_cli_jar
   String  sa_crt_transform_bin
   Boolean sa_prodigal_execute
   String  sa_prodigal_bin
@@ -106,7 +105,6 @@ workflow annotation {
           rfam_claninfo_tsv = sa_rfam_claninfo_tsv,
           rfam_feature_lookup_tsv = sa_rfam_feature_lookup_tsv,
           crt_execute = sa_crt_execute,
-          crt_cli_jar = sa_crt_cli_jar,
           crt_transform_bin = sa_crt_transform_bin,
           prodigal_execute = sa_prodigal_execute,
           prodigal_bin = sa_prodigal_bin,
