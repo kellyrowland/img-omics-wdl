@@ -16,3 +16,6 @@ squeue -u jaws | tail -n +2 | awk '{print $1}' | sort -n  > nids
 # submit jaws job
 squeue -u jaws | tail -n +2 | awk '{print $1}' | sort -n  > aids
 comm -13 nids aids
+
+# cmd for testing 
+java -Dconfig.file=cromwell_shifter.conf -Dbackend.providers.Local.config.dockerRoot=$(pwd)/cromwell-executions -jar $(crom) run annotation.wdl -i split.2.compare.json

@@ -49,7 +49,7 @@ task trnascan_ba {
 #  }
 
 runtime {
-    docker: "bfoster1/img-omics:0.1.5"
+    docker: "jfroula/img-omics:0.1.7"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -78,7 +78,7 @@ task pick_and_transform_to_gff {
   }
 
   runtime {
-    docker: "bfoster1/img-omics:0.1.5"
+    docker: "jfroula/img-omics:0.1.7"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
