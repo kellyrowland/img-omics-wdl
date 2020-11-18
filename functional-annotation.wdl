@@ -232,7 +232,7 @@ task ko_ec {
   }
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -270,16 +270,16 @@ task smart {
   command <<<
      base=${dollar}(basename ${input_fasta})
      cp ${input_fasta} ${dollar}base
-     /opt/omics/bin/functional_annotation/hmmsearch_smart.sh ${dollar}base \
 	 # jeff
      #/global/cscratch1/sd/jfroula/JAWS/img-omics-wdl/hmmsearch_smart.sh ${dollar}base \
+     /opt/omics/bin/functional_annotation/hmmsearch_smart.sh ${dollar}base \
      ${smart_db} \
      ${threads} ${par_hmm_inst} ${approx_num_proteins} \
      ${min_domain_eval_cutoff} ${aln_length_ratio} ${max_overlap_ratio} 
   >>>
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -314,16 +314,16 @@ task cog {
   command <<<
      base=${dollar}(basename ${input_fasta})
      cp ${input_fasta} ${dollar}base
-     /opt/omics/bin/functional_annotation/hmmsearch_cogs.sh ${dollar}base \
 	 # jeff
      #/global/cscratch1/sd/jfroula/JAWS/img-omics-wdl/hmmsearch_cogs.sh ${dollar}base \
+     /opt/omics/bin/functional_annotation/hmmsearch_cogs.sh ${dollar}base \
      ${cog_db} \
      ${threads} ${par_hmm_inst} ${approx_num_proteins} \
      ${min_domain_eval_cutoff} ${aln_length_ratio} ${max_overlap_ratio} 
   >>>
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -357,16 +357,16 @@ task tigrfam {
   command <<<
      base=${dollar}(basename ${input_fasta})
      cp ${input_fasta} ${dollar}base
-     /opt/omics/bin/functional_annotation/hmmsearch_tigrfams.sh ${dollar}base \
 	 # jeff
 	 #/global/cscratch1/sd/jfroula/JAWS/img-omics-wdl/hmmsearch_tigrfams.sh ${dollar}base \
+     /opt/omics/bin/functional_annotation/hmmsearch_tigrfams.sh ${dollar}base \
      ${tigrfam_db} \
      ${threads} ${par_hmm_inst} ${approx_num_proteins} \
      ${aln_length_ratio} ${max_overlap_ratio} 
   >>>
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -403,16 +403,16 @@ task superfam {
      cp ${input_fasta} ${dollar}base
     #Usage: hmmsearch_supfams.sh <proteins_fasta> <supfam_hmm_db> <number_of_additional_threads (default: 0)> <number_of_parallel_hmmsearch_instances (default: 0)> <approximate_number_of_total_proteins (default: 0)> <min_domain_evalue_cutoff (default 0.01)> <min_aln_length_ratio (default 0.7)> <max_overlap_ratio (default 0.1)> 
 
-     /opt/omics/bin/functional_annotation/hmmsearch_supfams.sh ${dollar}base \
 	 # jeff
      #/global/cscratch1/sd/jfroula/JAWS/img-omics-wdl/hmmsearch_supfams.sh ${dollar}base \
+     /opt/omics/bin/functional_annotation/hmmsearch_supfams.sh ${dollar}base \
      ${superfam_db} \
      ${threads} ${par_hmm_inst} ${approx_num_proteins} \
      ${min_domain_eval_cutoff} ${aln_length_ratio} ${max_overlap_ratio} 
   >>>
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -446,15 +446,15 @@ task pfam {
      cp ${input_fasta} ${dollar}base
      
     #Usage: hmmsearch_pfams.sh <proteins_fasta> <pfam_hmm_db> <pfam_claninfo_tsv> <number_of_additional_threads (default: 0)>
-     /opt/omics/bin/functional_annotation/hmmsearch_pfams.sh ${dollar}base \
 	 # jeff
      #/global/cscratch1/sd/jfroula/JAWS/img-omics-wdl/hmmsearch_pfams.sh ${dollar}base \
+     /opt/omics/bin/functional_annotation/hmmsearch_pfams.sh ${dollar}base \
      ${pfam_db} ${pfam_claninfo_tsv} \
      ${threads} ${par_hmm_inst} ${approx_num_proteins}
   >>>
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -489,15 +489,15 @@ task cath_funfam {
   command <<<
      base=${dollar}(basename ${input_fasta})
      cp ${input_fasta} ${dollar}base
-     /opt/omics/bin/functional_annotation/hmmsearch_cath_funfams.sh  ${dollar}base \
 	 # jeff
      #/global/cscratch1/sd/jfroula/JAWS/img-omics-wdl/hmmsearch_cath_funfams.sh  ${dollar}base \
+     /opt/omics/bin/functional_annotation/hmmsearch_cath_funfams.sh  ${dollar}base \
      ${cath_funfam_db} ${threads} ${par_hmm_inst} ${approx_num_proteins} \
      ${min_domain_eval_cutoff} ${aln_length_ratio} ${max_overlap_ratio} 
   >>>
   
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -533,7 +533,7 @@ task signalp {
   >>>
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -569,7 +569,7 @@ task tmhmm {
   >>>
 
   runtime {
-	docker: "jfroula/img-omics:0.1.7"
+	docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -612,7 +612,7 @@ task product_name {
   }
 
   runtime {
-	docker: "jfroula/img-omics:0.1.7"
+	docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"

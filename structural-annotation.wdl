@@ -220,7 +220,7 @@ task pre_qc {
   >>>
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -258,7 +258,7 @@ task gff_merge {
   }
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -297,7 +297,7 @@ task fasta_merge {
   }
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -327,7 +327,7 @@ task gff_and_fasta_stats {
   }
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -353,7 +353,7 @@ task post_qc {
   }
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"

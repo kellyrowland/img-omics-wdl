@@ -33,13 +33,13 @@ task run {
   String out_dir
 
   command {
-	jar="java -Xmx1536m -jar /opt/omics/bin/CRT-CLI.jar"
+    jar="java -Xmx1536m -jar /opt/omics/bin/CRT-CLI.jar"
     $jar ${input_fasta} ${project_id}_crt.out
     #cp ./${project_id}_crt.out ${out_dir}
   }
 
   runtime {
-	docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -65,14 +65,14 @@ task transform {
 
   command {
     mv ${crt_out} ./${crt_out_local}
-	jar="java -Xmx1536m -jar /opt/omics/bin/CRT-CLI.jar"
+    jar="java -Xmx1536m -jar /opt/omics/bin/CRT-CLI.jar"
     tool_and_version=$($jar -version | cut -d' ' -f1,6)
     ${transform_bin} ${crt_out_local} "$tool_and_version"
     #cp -r ./${project_id}_crt.* ${out_dir}
   }
 
   runtime {
-	docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"

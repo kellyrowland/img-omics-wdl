@@ -76,7 +76,7 @@ task cmsearch {
   }
 
   runtime {
-	docker: "jfroula/img-omics:0.1.7"
+	docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -113,7 +113,7 @@ task clan_filter {
   >>>
 
   runtime {
-	docker: "jfroula/img-omics:0.1.7"
+	docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -142,7 +142,7 @@ task misc_and_regulatory {
   >>>
 
   runtime {
-	docker: "jfroula/img-omics:0.1.7"
+	docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -170,7 +170,7 @@ task rrna {
   >>>
 
   runtime {
-	docker: "jfroula/img-omics:0.1.7"
+	docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -199,7 +199,7 @@ task ncrna_tmrna {
   >>>
 
   runtime {
-	docker: "jfroula/img-omics:0.1.7"
+	docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"

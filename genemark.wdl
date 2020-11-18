@@ -60,7 +60,7 @@ task gm_isolate {
   }
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -93,7 +93,7 @@ task gm_meta {
   }
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
@@ -138,7 +138,7 @@ task clean_and_unify {
   }
 
   runtime {
-    docker: "jfroula/img-omics:0.1.7"
+    docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
     mem: "86G"
