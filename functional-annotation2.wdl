@@ -234,8 +234,8 @@ task ko_ec {
   runtime {
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -343,8 +343,8 @@ task smart {
   runtime {
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -375,8 +375,8 @@ task cog {
   runtime {
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -481,8 +481,8 @@ task tigrfam {
   runtime {
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -524,8 +524,8 @@ task superfam {
   runtime {
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -563,8 +563,8 @@ task pfam {
   runtime {
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -627,8 +627,8 @@ task signalp {
   runtime {
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -662,8 +662,8 @@ task tmhmm {
   runtime {
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -704,8 +704,8 @@ task product_name {
   runtime {
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1

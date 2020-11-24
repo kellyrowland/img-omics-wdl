@@ -223,8 +223,8 @@ task pre_qc {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -261,8 +261,8 @@ task gff_merge {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -300,8 +300,8 @@ task fasta_merge {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -330,8 +330,8 @@ task gff_and_fasta_stats {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -356,8 +356,8 @@ task post_qc {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1

@@ -235,8 +235,8 @@ task ko_ec {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -282,8 +282,8 @@ task smart {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -326,8 +326,8 @@ task cog {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -369,8 +369,8 @@ task tigrfam {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -415,8 +415,8 @@ task superfam {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -457,8 +457,8 @@ task pfam {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -500,8 +500,8 @@ task cath_funfam {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -536,8 +536,8 @@ task signalp {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -572,8 +572,8 @@ task tmhmm {
 	docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -615,8 +615,8 @@ task product_name {
 	docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1

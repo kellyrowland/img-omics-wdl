@@ -52,8 +52,8 @@ runtime {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -81,8 +81,8 @@ task pick_and_transform_to_gff {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1

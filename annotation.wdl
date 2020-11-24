@@ -4,12 +4,14 @@ import "functional-annotation.wdl" as fa
 workflow annotation {
 
   Int     num_splits
-  String  imgap_input_dir
-  File?   input_contigs_fasta  
-  File    imgap_input_fasta
+  #String  imgap_input_dir
+  File?   input_contigs_fasta
+  String  output_dir = "."
+  Array[File]    imgap_input_paths
   String  imgap_project_id
   String  imgap_project_type
   Int     additional_threads
+
   # structural annotation
   Boolean sa_execute
   Boolean sa_pre_qc_execute
@@ -38,6 +40,7 @@ workflow annotation {
   String  sa_fasta_merge_bin
   Boolean sa_gff_and_fasta_stats_execute
   String  sa_gff_and_fasta_stats_bin
+
   # functional annotation
   Boolean fa_execute
   String  fa_product_names_mapping_dir
@@ -62,6 +65,7 @@ workflow annotation {
   String  fa_hit_selector_bin
   Boolean fa_smart_execute
   File    fa_smart_db
+  File?   fa_input_contigs_fasta
   Int?    fa_par_hmm_inst
   Int?    fa_approx_num_proteins
   String  fa_hmmsearch_bin
@@ -75,13 +79,13 @@ workflow annotation {
   String  fa_tmhmm_decode_parser
   String  fa_product_assign_bin
 
-  call setup {
-    input:
-      n_splits = num_splits,
-      dir = imgap_input_dir
-  }
+  #call setup {
+  #  input:
+  #    n_splits = num_splits,
+  #    dir = imgap_input_dir
+  #}
 
-  scatter(split in setup.splits) {
+  scatter(split in imgap_input_paths) {
 
     if(sa_execute) {
       call sa.s_annotate {
@@ -89,8 +93,8 @@ workflow annotation {
           imgap_project_id = imgap_project_id,
           additional_threads = additional_threads,
           imgap_project_type = imgap_project_type,
-          output_dir = split,
-          imgap_input_fasta = "${split}"+"/"+"${imgap_input_fasta}",
+          imgap_input_fasta = split,
+		  output_dir = output_dir,
           pre_qc_execute = sa_pre_qc_execute,
           pre_qc_bin = sa_pre_qc_bin,
           pre_qc_rename = sa_pre_qc_rename,
@@ -126,15 +130,14 @@ workflow annotation {
           imgap_project_id = imgap_project_id,
           imgap_project_type = imgap_project_type,
           additional_threads = additional_threads,
-          output_dir = split,
           input_fasta = s_annotate.proteins,
-          input_contigs_fasta = "${split}"+"/"+"${input_contigs_fasta}",
           ko_ec_execute = fa_ko_ec_execute,
           ko_ec_img_nr_db = fa_ko_ec_img_nr_db,
           ko_ec_md5_mapping = fa_ko_ec_md5_mapping,
           ko_ec_taxon_to_phylo_mapping = fa_ko_ec_taxon_to_phylo_mapping,
           lastal_bin = fa_lastal_bin,
           selector_bin = fa_selector_bin,
+		  output_dir = output_dir,
           smart_execute = fa_smart_execute,
           smart_db = fa_smart_db,
           par_hmm_inst = fa_par_hmm_inst,
@@ -169,15 +172,15 @@ workflow annotation {
   }
 }
 
-task setup {
-  String dir
-  Int    n_splits
-
-  command {
-    python -c 'for i in range(${n_splits}): print("${dir}/"+str(i+1)+"/")'
-  }
-
-  output {
-    Array[String] splits = read_lines(stdout())
-  }
-}
+#task setup {
+#  String dir
+#  Int    n_splits
+#
+#  command {
+#    python -c 'for i in range(${n_splits}): print("${dir}/"+str(i+1)+"/")'
+#  }
+#
+#  output {
+#    Array[String] splits = read_lines(stdout())
+#  }
+#}

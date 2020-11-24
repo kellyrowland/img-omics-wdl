@@ -73,8 +73,8 @@ task fasta_len {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -105,8 +105,8 @@ task iso_big {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -136,8 +136,8 @@ task iso_small {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -167,8 +167,8 @@ task metag {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1
@@ -219,8 +219,8 @@ task clean_and_unify {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata"
     shared: 1
     node: 1
     nwpn: 1

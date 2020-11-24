@@ -42,8 +42,8 @@ task run {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata-crt"
     shared: 1
     node: 1
     nwpn: 1
@@ -75,8 +75,8 @@ task transform {
     docker: "jfroula/img-omics:0.1.8"
     cluster: "cori"
     time: "1:00:00"
-    mem: "86G"
-    poolname: "justtest"
+    mem: "118G"
+    poolname: "maggowata-crt"
     shared: 1
     node: 1
     nwpn: 1
