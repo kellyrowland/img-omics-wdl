@@ -1,0 +1,9 @@
+{
+    "img_cloud.input_file": "s3://bf-20191119-staging/Ga0400806_contigs.fna",
+    "img_cloud.sub_json": "s3://bf-20191119-staging/inputs.cloud.20201029.json",
+    "img_cloud.databases": "s3://bf-20191119-staging/databases.20201029.tar",
+    "img_cloud.img_container": "bfoster1/img-omics:0.1.5",
+    "img_cloud.mb_split": 10
+}
+    
+
