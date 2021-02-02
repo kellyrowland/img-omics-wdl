@@ -4,6 +4,7 @@ import argparse
 import os
 import re
 import sys
+import json
 from datetime import datetime
 from statistics import median, mean, stdev
 
@@ -18,7 +19,7 @@ seq_data = {}
 tool_data = {}
 total_predicted_genes = 0
 gaps_data = []
-
+final_json={}
 N_STRETCH = "N" * 100
 
 
@@ -237,8 +238,9 @@ get_sequences_and_their_lengths(args.fna_file)
 parse_gff_file(args.gff_file)
 
 
-stats_out_file = args.fna_file[:args.fna_file.rfind("_")]
-stats_out_file += "_structural_annotation_stats.tsv"
+stats_out_file_prefix = args.fna_file[:args.fna_file.rfind("_")]
+stats_json_out_file = stats_out_file_prefix + "_structural_annotation_stats.json"
+stats_out_file = stats_out_file_prefix + "_structural_annotation_stats.tsv"
 fw = open(stats_out_file, "w")
 
 
@@ -248,19 +250,22 @@ for seq_name in seq_data.keys():
     lengths_list.append(seq_data[seq_name]["length"])
 stats_dict = get_stats_dict(lengths_list)
 lengths_list.clear()
-stats_dict["Data type"] = "'final_fasta'"
 
 """ Remember how many bps got processed in total. """
 processed_bps = stats_dict["Number of bps"]
 
 """ Start putting together 1st table. """
 table_title = "Processed Sequences Statistics"
+final_json[table_title] = dict()
 table_columns = ["Data type", "Number of seqs", "Number of bps", \
                  "Length shortest seq", "Length longest seq", \
                  "Average length", "Median length", \
                  "Standard deviation"]
+final_json[table_title]['final_fasta']=stats_dict.copy()
+stats_dict["Data type"] = "'final_fasta'"
 table_data = []
 table_data.append(stats_dict)
+
 
 tmp_lengths_list = []
 print(str(datetime.now()) +
@@ -274,6 +279,7 @@ for seq_name in seq_data.keys():
         tmp_lengths_list.append(seq_data[seq_name]["length"])
 stats_dict = get_stats_dict(lengths_list)
 lengths_list.clear()
+final_json[table_title]['sequences_with_genes']=stats_dict.copy()
 stats_dict["Data type"] = "'sequences_with_genes'"
 table_data.append(stats_dict)
 
@@ -286,9 +292,12 @@ if lengths_list:
           " - Calculating stats for sequences without genes now...")
     stats_dict = get_stats_dict(lengths_list)
     lengths_list.clear()
+    final_json[table_title]['sequences_without_genes']=stats_dict.copy()
     stats_dict["Data type"] = "'sequences_without_genes'"
     table_data.append(stats_dict)
     bps_on_sequences_without_genes = stats_dict["Number of bps"]
+
+
 
 """ Write first table. """
 write_table(fw, table_title, table_columns, table_data)
@@ -297,6 +306,7 @@ table_columns.clear()
 
 """ Start putting together 2nd table. """
 table_title = "Predicted Genes Statistics"
+final_json[table_title] = dict()
 table_columns.extend(["Feature type", "Prediction method", \
                       "Number of predicted features", \
                       "Number of seqs", "Number of bps", \
@@ -306,7 +316,10 @@ table_columns.extend(["Feature type", "Prediction method", \
 table_data.clear()
 
 for tool in tool_data.keys():
+    tool_stat=dict()
     for feature_type in tool_data[tool]:
+        if feature_type not in final_json[table_title]:
+            final_json[table_title][feature_type]=[]
         print(str(datetime.now()) + " - Calculating stats for " +
               feature_type + " predicted by " + tool + " now...")
         stats_dict = get_stats_dict(
@@ -315,6 +328,8 @@ for tool in tool_data.keys():
         stats_dict["Number of seqs"] = (
                 len(tool_data[tool][feature_type]["found_on_seqs"].keys()))
         stats_dict["Prediction method"] = "'" + tool + "'"
+        tool_stat[tool]=stats_dict.copy()
+        final_json[table_title][feature_type].append(tool_stat)
         stats_dict["Feature type"] = "'" + feature_type + "'"
         table_data.append(stats_dict)
 """ Write 2nd table to file. """
@@ -324,6 +339,7 @@ table_columns.clear()
 
 """ Work on third table. """
 table_title = "General Quality Info"
+final_json[table_title] = dict()
 table_columns.extend(["Coding density", "Genes per 1M bp", "Seqs per 1M bp"])
 table_data.clear()
 
@@ -335,17 +351,24 @@ genes_per_million_bp = round((total_predicted_genes * 1000000 / processed_bps),
 stats_dict["Genes per 1M bp"] = str(genes_per_million_bp)
 seqs_per_million_bp = round((len(seq_data) * 1000000 / processed_bps), 2)
 stats_dict["Seqs per 1M bp"] = str(seqs_per_million_bp)
+final_json[table_title]=stats_dict.copy()
 table_data.append(stats_dict)
 write_table(fw, table_title, table_columns, table_data)
 
 if gaps_data:
     """ Work on fourth table. """
     table_title = "Long Intergenic Regions"
+    final_json[table_title] = dict()
     table_columns.clear()
     table_columns.extend(["Seq name", "Gap start", "Gap end", "Gap length"])
+    final_json[table_title]=gaps_data.copy()
     write_table(fw, table_title, table_columns, gaps_data)
 
 fw.close()
 
+with open(stats_json_out_file, 'w') as outfile:
+    json.dump(final_json, outfile,indent=4)
+
 print(str(datetime.now()) + " - All stats have been calculated and successfully stored.")
+
 
