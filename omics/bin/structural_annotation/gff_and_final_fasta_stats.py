@@ -327,9 +327,9 @@ for tool in tool_data.keys():
         stats_dict["Number of predicted features"] = stats_dict["Number of seqs"]
         stats_dict["Number of seqs"] = (
                 len(tool_data[tool][feature_type]["found_on_seqs"].keys()))
-        stats_dict["Prediction method"] = "'" + tool + "'"
         tool_stat[tool]=stats_dict.copy()
         final_json[table_title][feature_type].append(tool_stat)
+        stats_dict["Prediction method"] = "'" + tool + "'"
         stats_dict["Feature type"] = "'" + feature_type + "'"
         table_data.append(stats_dict)
 """ Write 2nd table to file. """
